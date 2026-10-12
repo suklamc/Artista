@@ -1,0 +1,22 @@
+{
+	"class": "menu",
+	"rows": [
+		{
+			"cols": [
+				{
+					"class": "col-12",
+					"controls": {
+						"name": {
+							"type": "text",
+							"label": "name",
+							"popover": {
+								"title": "",
+								"content": "megamenu-submenu-name-popover-content"
+							}								
+						}
+					}
+				}
+			]
+		}
+	]
+}

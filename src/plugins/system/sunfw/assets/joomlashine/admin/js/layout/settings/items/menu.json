@@ -1,0 +1,285 @@
+{
+	"class": "menu",
+	"rows": [
+		{
+			"cols": [
+				{
+					"class": "col-12 separator-after",
+					"controls": {
+						"name": {
+							"type": "text",
+							"label": "name",
+							"popover": {
+								"title": "",
+								"content": "layout-menu-name-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"menu-type": {
+							"type": "menu-type",
+							"label": "menu",
+							"popover": {
+								"title": "",
+								"content": "layout-menu-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"menu-item": {
+							"type": "menu-item",
+							"label": "base-item",
+							"popover": {
+								"title": "",
+								"content": "layout-menu-base-item-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"menu-start-level": {
+							"type": "select",
+							"label": "start-level",
+							"options": [
+								{ "value": "1", "label": "1" },
+								{ "value": "2", "label": "2" },
+								{ "value": "3", "label": "3" },
+								{ "value": "4", "label": "4" },
+								{ "value": "5", "label": "5" },
+								{ "value": "6", "label": "6" },
+								{ "value": "7", "label": "7" },
+								{ "value": "8", "label": "8" },
+								{ "value": "9", "label": "9" },
+								{ "value": "10", "label": "10" }
+							],
+							"default": "1",
+							"popover": {
+								"title": "",
+								"content": "layout-menu-start-level-item-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class": "col-12 separator-after",
+					"controls": {
+						"menu-end-level": {
+							"type": "select",
+							"label": "end-level",
+							"options": [
+								{ "value": "0", "label": "all" },
+								{ "value": "1", "label": "1" },
+								{ "value": "2", "label": "2" },
+								{ "value": "3", "label": "3" },
+								{ "value": "4", "label": "4" },
+								{ "value": "5", "label": "5" },
+								{ "value": "6", "label": "6" },
+								{ "value": "7", "label": "7" },
+								{ "value": "8", "label": "8" },
+								{ "value": "9", "label": "9" },
+								{ "value": "10", "label": "10" }
+							],
+							"default": "0",
+							"popover": {
+								"title": "",
+								"content": "layout-menu-end-level-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"menu-show-icon": {
+							"type": "checkbox",
+							"label": "show-icon",
+							"value": 1,
+							"default": 1,
+							"popover": {
+								"title": "",
+								"content": "layout-menu-show-icon-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"menu-show-description": {
+							"type": "checkbox",
+							"label": "show-description",
+							"value": 1,
+							"default": 1,
+							"popover": {
+								"title": "",
+								"content": "layout-menu-show-description-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"menu-show-submenu": {
+							"type": "checkbox",
+							"label": "show-submenu",
+							"value": 1,
+							"default": 0,
+							"popover": {
+								"title": "",
+								"content": "layout-menu-show-submenu-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"menu-sub-effect": {
+							"type": "select",
+							"label": "menu-sub-effect",
+							"options": [
+								{ "value": "1", "label": "none" },
+								{ "value": "2", "label": "fading" },
+								{ "value": "3", "label": "slide" }
+							],
+							"default": "1",
+							"popover": {
+								"title": "",
+								"content": "layout-menu-sub-effect-popover-content"
+							}
+						}
+					},
+					"requires": {
+						"menu-show-submenu": 1
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"menu-mobile-target": {
+							"type": "checkbox",
+							"label": "mobile-target",
+							"value": 1,
+							"default": 1,
+							"popover": {
+								"title": "",
+								"content": "layout-menu-mobile-target-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"icon-mobile":{
+							"type":"icon-selector",
+							"label":"layout-menu-mobile-icon",
+							"default": "fa-bars",
+							"popover": {
+								"title": "",
+								"content": "layout-menu-mobile-icon-popover-content"
+							}
+						}
+					},
+					"requires": {
+						"menu-mobile-target": 1
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"icon-mobile-color": {
+							"type": "color-picker",
+							"label": "layout-menu-mobile-icon-color",
+							"popover": {
+								"title": "",
+								"content": "layout-mobile-icon-color-popover-content"
+							}
+						}
+					},
+					"requires": {
+						"menu-mobile-target": 1
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"icon-mobile-background-color": {
+							"type": "color-picker",
+							"label": "layout-menu-mobile-icon-background-color",
+							"popover": {
+								"title": "",
+								"content": "layout-menu-mobile-icon-background-color-popover-content"
+							}
+						}
+					},
+					"requires": {
+						"menu-mobile-target": 1
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"icon-mobile-size": {
+							"type": "slider",
+							"label": "layout-menu-mobile-icon-size",
+							"default": 18,
+							"suffix": "px",
+							"popover": {
+								"title": "",
+								"content": "layout-mobile-icon-size-popover-content"
+							}
+						}
+					},
+					"requires": {
+						"menu-mobile-target": 1
+					}
+				},
+				{
+					"class": "col-12 separator-before display-in-layout",
+					"controls": {
+						"visible_in": {
+							"type": "visible-in",
+							"check-none": false,
+							"label": "display-in-layout",
+							"options": [
+								{ "value": "lg", "label": "desktop" },
+								{ "value": "md", "label": "laptop" },
+								{ "value": "sm", "label": "tablet" },
+								{ "value": "xs", "label": "smartphone" },
+								{ "value": "small-smartphone", "label": "small smartphone" }
+							],
+							"default": [ "lg", "md", "sm", "xs", "small-smartphone" ],
+							"popover": {
+								"title": "",
+								"content": "layout-menu-display-in-layout-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class": "col-12 separator-before",
+					"controls": {
+						"class": {
+							"type": "text",
+							"label": "custom-classes",
+							"popover": {
+								"title": "",
+								"content": "layout-menu-custom-classes-popover-content"
+							}
+						}
+					}
+				}
+			]
+		}
+	]
+}

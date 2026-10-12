@@ -1,0 +1,211 @@
+// form contact
+.jsn-uniform{
+  .checkboxes{
+    margin-left: 20px;
+  }
+  .ui-datepicker-trigger{
+    border-radius: 0;
+    border-bottom: 1px solid #d0d0d0;
+    padding: 6px 20px;
+  }
+}
+.form-contact {
+  .control-group {
+    margin-bottom: 20px;
+    zoom: 1;
+    &:before {
+      display: table;
+      line-height: 0;
+      content: "";
+    }
+    &:after {
+      display: table;
+      line-height: 0;
+      content: "";
+      clear: both;
+    }
+  }
+  .control-label {
+    @include rtl-float-left();
+    width: 160px;
+    padding-top: 5px;
+    @include rtl-text-align-right();
+  }
+  .controls {
+    display: inline-block;
+    @include rtl-padding-left(20px);
+    width: calc(100% - 180px);
+
+    input, textarea {
+      display: block;
+      width: 100%;
+    }
+
+  }
+  .help-block {
+    margin-bottom: 0;
+  }
+  input + .help-block, select + .help-block, textarea + .help-block, .uneditable-input + .help-block, .input-prepend + .help-block, .input-append + .help-block {
+    margin-top: 10px;
+  }
+  .form-actions {
+    @include rtl-padding-left(180px);
+  }
+}
+
+/*=========Subcribe Form==================*/
+.jsn-form-subscribe {
+  .jsn-uniform {
+    padding: 60px 0;
+    .intro-form {
+      font-size: 16px;
+      font-family: 'Questrial', sans-serif;
+      width: 30%;
+      @include rtl-float-left();
+      margin-top: 8px;
+    }
+    form {
+      display: inline-block;
+      width: 66.67%;
+    }
+    .intro-form {
+      h3 {
+        font-size: 35px;
+        font-weight: 700;
+        color: #414141;
+        margin: -8px 0 5px;
+      }
+      span {
+        font-size: 16px;
+        line-height: 24px;
+        color: #54646f;
+        margin: 0;
+      }
+    }
+    .jsn-row-container {
+      .jsn-container-left {
+        display: flex;
+        .control-group {
+          padding: 0 !important;
+          max-width: 300px;
+          .controls {
+            @include rtl-margin-right(40px);
+          }
+        }
+      }
+    }
+    .control-group {
+      width: 50%;
+      input {
+        width: 100% !important;
+        width: 100% !important;
+        max-width: 240px;
+        min-width: 240px;
+        padding: 5px 0;
+      }
+    }
+    .jsn-form-content {
+      float: left;
+      font-family: Questrial;
+      font-size: 16px;
+    }
+    .jsn-row-container {
+      margin-top: -5px !important;
+      @include rtl-margin-right(-10px);
+      .form-actions {
+        padding-left: 40px !important;
+      }
+    }
+    .jsn-form-submit {
+      margin: 4px 0 0;
+      padding: 11.5px 20px;
+      color: #fff;
+      text-transform: uppercase;
+      font-size: 16px;
+      font-family: Montserrat;
+      font-weight: 700;
+      @include rtl-margin-right(60px);
+    }
+
+    @media(max-width: $screen-md-max) and (min-width: $screen-sm-min) {
+      .control-group input {
+        max-width: 190px;
+        min-width: 180px;
+      }
+      .intro-form {
+        margin-top: 15px;
+        h3 {
+          font-size: 32px;
+        }
+      }
+    }
+    @media(max-width: $screen-md-min) {
+      .intro-form {
+        width: 100%;
+      }
+      form {
+        width: 100%;
+      }
+    }
+    @media(max-width: $screen-xs-max) {
+      .jsn-container-left {
+        flex-direction: column;
+      }
+      .btn-toolbar.pull-right {
+        float: left !important;
+        margin-top: 20px;
+      }
+      .control-group input {
+        width: 100%;
+      }
+    }
+  }
+
+}
+
+@media(max-width: $screen-xs-max) {
+  .jsn-form-subscribe .jsn-uniform .intro-form h3 {
+    font-size: 32px;
+  }
+  .profile-edit .control-group .controls {
+    margin-left: 0 !important;
+    .btn#helpsite-refresh {
+      margin-left: 0 !important;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  /*=======Subcribe form=======*/
+  .jsn-form-subscribe {
+    .jsn-uniform {
+      .intro-form {
+        width: 100%;
+      }
+      form {
+        width: 100%;
+      }
+    }
+    #jsn_form_2.jsn-master {
+      .jsn-row-container {
+        margin: 0;
+        padding: 0;
+      }
+      .jsn-bootstrap {
+        .jsn-form-content .control-group {
+          width: 100%;
+        }
+        .form-actions {
+          position: inherit;
+          margin-top: 30px;
+        }
+      }
+    }
+  }
+}
+.jsn-uniform.jsn-master .jsn-row-container.form-horizontal .jsn-form-content div.controls{
+  margin-left: 0;
+  textarea {
+    box-sizing: border-box;
+  }
+}

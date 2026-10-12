@@ -1,0 +1,125 @@
+{
+	"class":"extras-settings",
+	"title":"coming-soon-settings",
+	"rows":[
+		{
+			"cols":[
+				{
+					"class":"col-12",
+					"controls":{
+						"enabled":{
+							"type":"checkbox",
+							"value":1,
+							"label":"enable-coming-soon",							
+							"popover": {
+								"title": "",
+								"content": "enable-coming-soon-popover-content"
+							}							
+						}
+					}
+				}
+			]
+		},
+		{
+			"cols":[
+				{
+					"class":"col-12",
+					"controls":{
+						"page-title":{
+							"type":"text",
+							"label":"coming-soon-page-title",							
+							"popover": {
+								"title": "",
+								"content": "coming-soon-page-title-popover-content"
+							}							
+						}
+					}
+				}
+			],
+			"requires":{
+				"enabled":1
+			}
+		},
+		{
+			"cols":[
+				{
+					"class":"col-12",
+					"controls":{
+						"page-content":{
+							"type":"textarea",
+							"rows":5,
+							"label":"coming-soon-page-content",							
+							"popover": {
+								"title": "",
+								"content": "coming-soon-page-content-popover-content"
+							}							
+						}
+					}
+				}
+			],
+			"requires":{
+				"enabled":1
+			}
+		},
+		{
+			"cols":[
+				{
+					"class":"col-12",
+					"controls":{
+						"deadline":{
+							"type":"date",
+							"label":"coming-soon-count-down",
+							"popover": {
+								"title": "",
+								"content": "coming-soon-count-down-popover-content"
+							}							
+						}
+					}
+				}
+			],
+			"requires":{
+				"enabled":1
+			}
+		},
+		{
+			"cols":[
+				{
+					"class":"col-12",
+					"controls":{
+						"logo":{
+							"type":"image-selector",
+							"label":"coming-soon-logo",
+							"popover": {
+								"title": "",
+								"content": "coming-soon-logo-popover-content"
+							}							
+						}
+					}
+				}
+			],
+			"requires":{
+				"enabled":1
+			}
+		},
+		{
+			"cols":[
+				{
+					"class":"col-12",
+					"controls":{
+						"background-image":{
+							"type":"image-selector",
+							"label":"coming-soon-background-image",
+							"popover": {
+								"title": "",
+								"content": "coming-soon-background-image-popover-content"
+							}								
+						}
+					}
+				}
+			],
+			"requires":{
+				"enabled":1
+			}
+		}
+	]
+}

@@ -1,0 +1,126 @@
+
+
+
+//
+// Style Menu Joomla
+// --------------------------------------------------
+
+//IconMoon
+@font-face {
+  font-family: 'IcoMoon';
+  src: url('../../../../../../media/jui/fonts/IcoMoon.eot');
+  src: url('../../../../../../media/jui/fonts/IcoMoon.eot?#iefix') format('embedded-opentype'), url('../../../../../../media/jui/fonts/IcoMoon.woff') format('woff'), url('../../../../../../media/jui/fonts/IcoMoon.ttf') format('truetype'), url('../../../../../../media/jui/fonts/IcoMoon.svg#IcoMoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+[data-icon]:before {
+  font-family: 'IcoMoon';
+  content: attr(data-icon);
+  speak: none;
+}
+[class^="icon-"],
+[class*=" icon-"] {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: .25em;
+  line-height: 14px;
+}
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+  font-family: 'IcoMoon';
+  font-style: normal;
+  speak: none;
+}
+[class^="icon-"].disabled,
+[class*=" icon-"].disabled {
+  font-weight: normal;
+}
+.icon-joomla:before {
+  content: "\e200";
+}
+
+.icon-user:before {
+  content: "\22";
+}
+.icon-users:before {
+  content: "\e01f";
+}
+
+// Base Style
+
+body > form {
+  margin-top: 40px;
+}
+
+body {
+  > nav {
+    background-color: #10223e;
+
+    .nav > li {
+      > a {
+        &:hover, &:focus {
+          background-color: transparent;
+        }
+      }
+    }
+
+    .collapse {
+      display: block;
+    }
+
+    a {
+      font-size: 14px;
+      color: #fff;
+      font-weight: 300;
+    }
+
+    .disabled {
+      cursor: default;
+      background-image: none;
+      opacity: 0.65;
+      filter: alpha(opacity=65);
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
+      color: #d9d9d9;
+    }
+
+    .nav-collapse {
+      visibility: visible;
+    }
+
+    .btn.btn-navbar.collapsed {
+      display: none;
+    }
+
+  }
+}
+
+.navbar .admin-logo {
+  float: left;
+  padding: 10px 0px 0px 0px;
+  font-size: 16px;
+  color: #555;
+}
+
+.navbar .brand.hidden-desktop.hidden-tablet {
+  display: none;
+}
+
+.navbar .brand.visible-desktop.visible-tablet {
+  padding-top: 10px;
+  float: right;
+}
+
+#menu {
+  float: left;
+  > li {
+    display: inline-block;
+  }
+}
+
+
+.collapse {
+  display: none;
+}

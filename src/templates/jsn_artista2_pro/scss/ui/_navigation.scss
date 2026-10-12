@@ -1,0 +1,217 @@
+/* =============== MENU - DIV MENU =============== */
+ul.menu-divmenu {
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+ul.menu-divmenu li {
+  margin: 0;
+  padding: 0 0.5em;
+  display: inline-block;
+  a {
+    padding: 0 5px;
+  }
+}
+
+ul.menu-divmenu li:first-child {
+  padding-left: 0;
+}
+
+/* =============== MENU - DEFAULT =============== */
+ul.nav.menu {
+  li a {
+    // color: #414141;
+    &:hover {
+      background: transparent;
+    }
+    > i.fa {
+      @include rtl-padding-right(5px);
+    }
+    span.description {
+      display: block;
+      font-size: 90%;
+    }
+  }
+}
+
+.nav > li > a {
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+
+ul.nav.hidden-icon li a i.fa {
+  display: none !important;
+}
+
+ul.nav.hidden-description li a span.description {
+  display: none !important;
+}
+
+.hidden-center-logo {
+  .jsn-center-logo {
+    display: none !important;
+  }
+}
+
+/* =============== MENU - TREE MENU =============== */
+ul.nav[class*='menu-treemenu'] {
+  li {
+    a {
+      display: block;
+      //color: #394A5C;
+      padding: 8px 0px;
+      &:hover {
+        text-decoration: none;
+        background: transparent;
+      }
+      &.get-it {
+
+      }
+    }
+    &:first-child {
+      margin-top: 0;
+    }
+    ul.nav-child {
+      list-style-type: none;
+      @include rtl-padding-left(25px);
+    }
+    > span.separator {
+      padding: 12px 20px;
+      display: block;
+    }
+  }
+  > li > a {
+    font-weight: bold;
+    padding: 5px 0px;
+  }
+}
+
+/* =============== MENU - SIDE MENU =============== */
+
+ul.nav.hidden-icon li a i.fa {
+  display: none !important;
+}
+
+ul.nav.hidden-description li a span.description {
+  display: none !important;
+}
+
+ul.nav[class*='menu-sidemenu'] {
+  > li > a {
+    font-weight: normal;
+    &:hover, &:focus {
+      background: transparent;
+    }
+  }
+  li {
+    position: relative;
+    padding: 0;
+    > a {
+      display: block;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease-in-out;
+      color: #333;
+      padding: 8px 0px;
+      //border-bottom: 1px solid #dedede;
+      &.get-it {
+        padding-top: 8px;
+        padding-bottom: 20px;
+        &:not(.btn-outline) {
+          //color: #fff;
+          &:hover {
+            //color: #fff;
+          }
+        }
+
+      }
+      &.get-it {
+        border-bottom: none;
+      }
+    }
+    &:hover > ul {
+      visibility: visible;
+      opacity: 1;
+      transition-delay: 0.2s;
+    }
+    @media (min-width: $screen-sm-min) {
+      ul {
+        position: absolute;
+        top: 0;
+        padding: 8px 20px;
+        @include rtl-left(calc(100% + 21px));
+        right: auto;
+        min-width: 240px;
+        list-style-type: none !important;
+        border: 1px solid #E7EAEE;
+        background: #fff;
+        visibility: hidden;
+        opacity: 0;
+        transition: all 0.3s ease-in-out;
+        z-index: 900;
+        margin: 0;
+      }
+      &.parent > a {
+        position: relative;
+        &:after {
+          content: '\f105';
+          font-family: FontAwesome;
+          position: absolute;
+          top: 50%;
+          @include rtl-right(0px);
+          transform: translateY(-50%);
+        }
+      }
+    }
+    @media (max-width: $screen-xs-max) {
+      ul {
+        display: none;
+        padding: 0;
+        list-style: none;
+        li {
+          &:first-child {
+            border-top: 1px solid #dedede;
+          }
+          a {
+            padding-left: 50px;
+          }
+        }
+
+      }
+      &.parent > a {
+        position: relative;
+        &:after {
+          content: '\f107';
+          font-family: FontAwesome;
+          position: absolute;
+          @include rtl-right(30px);
+        }
+      }
+    }
+  }
+}
+
+.module-style.layout-right, .sunfw-pos-right .module-style {
+  ul.nav[class*='menu-sidemenu'] li ul {
+    @include rtl-right(auto);
+    @include rtl-left(-200px);
+  }
+}
+
+//RTL Side Menu
+@media (min-width: $screen-sm-min) {
+  .sunfw-direction-rtl ul.nav[class*='menu-sidemenu'] li {
+    ul {
+      right: calc(100% + 1px);
+      left: auto;
+    }
+    &.parent > a:after {
+      content: '\f104';
+      top: 50%;
+      @include rtl-left(10px);
+      right: auto;
+      transform: translateY(-50%);
+    }
+  }
+}

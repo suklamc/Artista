@@ -1,0 +1,44 @@
+{
+	"class":"extras-settings",
+	"title":"custom-404-settings",
+	"rows":[
+		{
+			"cols":[
+				{
+					"class":"col-12",
+					"controls":{
+						"enabled":{
+							"type":"checkbox",
+							"value":1,
+							"label":"enable-custom-404",							
+							"popover": {
+								"title": "",
+								"content": "enable-custom-404-popover-content"
+							}							
+						}
+					}
+				}
+			]
+		},
+		{
+			"cols":[
+				{
+					"class":"col-12",
+					"controls":{
+						"article":{
+							"type":"article-selector",
+							"label":"custom-404-article",							
+							"popover": {
+								"title": "",
+								"content": "custom-404-article-popover-content"
+							}							
+						}
+					}
+				}
+			],
+			"requires":{
+				"enabled":1
+			}
+		}
+	]
+}

@@ -1,0 +1,137 @@
+{
+	"class":"section-settings",
+	"title":"section-settings",
+	"rows":[
+		{
+			"cols":[
+				{
+					"class":"col-12 separator-after",
+					"controls":{
+						"name":{
+							"type":"text",
+							"label":"name",
+							"popover": {
+								"title": "",
+								"content": "layout-section-name-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"full_width":{
+							"type":"checkbox",
+							"label":"enable-full-width",
+							"value":1,
+							"default":1,
+							"popover": {
+								"title": "",
+								"content": "layout-section-enable-full-width-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class":"col-12 separator-after",
+					"controls":{
+						"enable_sticky":{
+							"type":"checkbox",
+							"label":"enable-sticky",
+							"value":1,
+							"default":0,
+							"popover": {
+								"title": "",
+								"content": "layout-section-enable-sticky-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"margin":{
+							"type":"spacing-settings",
+							"label":"margin",
+							"popover": {
+								"title": "",
+								"content": "layout-section-margin-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class":"col-12 separator-after",
+					"controls":{
+						"padding":{
+							"type":"spacing-settings",
+							"label":"padding",
+							"popover": {
+								"title": "",
+								"content": "layout-section-padding-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class":"col-12 separator-after display-in-layout",
+					"controls":{
+						"visible_in":{
+							"type":"visible-in",
+
+							"check-none":false,
+							"label":"Display in layouts",
+							"options":[
+								{
+									"value":"lg",
+									"label":"Desktop"
+								},
+								{
+									"value":"md",
+									"label":"Laptop"
+								},
+								{
+									"value":"sm",
+									"label":"Tablet"
+								},
+								{
+									"value": "xs",
+									"label": "Smartphone"
+								},
+								{
+									"value": "small-smartphone",
+									"label": "Small Smartphone"
+								}
+							],
+							"default":[
+								"lg",
+								"md",
+								"sm",
+								"xs",
+								"small-smartphone"
+							],
+							"popover": {
+								"title": "",
+								"content": "layout-section-display-in-layouts-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"class":{
+							"type":"text",
+							"label":"custom-classes",
+							"popover": {
+								"title": "",
+								"content": "layout-section-custom-classes-popover-content"
+							}
+						}
+					}
+				}
+			]
+		}
+	],
+	"hidden-in-panel":true
+}

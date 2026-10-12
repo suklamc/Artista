@@ -1,0 +1,291 @@
+.items-border > li {
+	border-bottom: 1px solid rgba(151, 151, 151, 0.1);
+}
+
+
+// Fix JSN ImageShow Theme Masonry.
+@media (max-width: $screen-xs-max) {
+	[id*='jsn-thememasonry-container'] .jsn-is-msnry-grid {
+	     width: 100% !important; 
+	}
+}
+
+@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+	.jsn-is-msnry-grid {
+	    margin: 0 auto;
+	}
+}
+
+
+li.imgOutline.thumbnail.height-80.width-80.center {
+	float: left;
+	padding-top:20px;
+}
+.thumbnails-media .icon-folder-2:before {
+	font: normal normal normal 31px/1 FontAwesome;
+	width: 38px;
+	height: 31px;
+	display: inline-block;
+	content: "\f07b";
+	color:#005e8d;
+  }
+#ModalSelectItem_jform_params_base,
+#ModalSelectItem_jform_params_login,
+#ModalSelectItem_jform_params_logout
+{
+    width: 90%;
+    margin: 30px 5%;
+    overflow: hidden;  
+      .modal-body{
+        padding: 0px;
+        iframe{
+            width:100%;
+            border: none;
+            height: 70vh;
+        
+        }
+    }
+    .modal-footer{
+        display: none;
+    }
+    .close.novalidate{
+        margin-top: 10px;
+        margin-right: 10px;
+    }
+    .modal-header{
+        background: #fff;
+        display: block;
+    }
+}
+.sunfw-view-items.sunfw-layout-modal{
+    .container-popup{
+         padding:20px;
+    }
+}
+.tab-pane{  
+	#pagebuilder4-editor-switcher {
+		input {
+			display: none;
+		}
+		label.btn {
+			border: 1px solid #f9524f;
+			padding-left: 21px !important;
+			color:#000;
+			border-radius: 0px;
+			background: none !important;
+			max-width: 300px;
+			&.active{
+				color:#fff;
+				background:#f9524f !important
+			}
+		}
+	}
+  
+	#editor-xtd-buttons{
+		float: none;
+	}
+  
+  }
+
+
+  body.sunfw-com-media.sunfw-view-images{
+	.well{
+		background-color: #f5f5f5;
+		> .row-fluid:after{
+			content:'';
+			display: block;
+			clear: both;
+		}
+		> .row-fluid{
+			display: flex;
+			align-items: center;
+			.span8{
+				width: 55%;
+				button.btn,
+				button.btn:hover
+				{
+					border:none !important;
+				}
+			}
+			.span4{
+				width: 45%;
+				margin-top: 16px;
+				button.btn,
+				button.btn:hover
+				{
+					border:none !important;
+				}
+			}
+		}
+	}
+}
+.com_media #uploadForm.form-horizontal .controls {
+	button.btn,
+	button.btn:hover
+	{
+		border:none !important;
+	}
+}
+.accordion-heading {
+	padding: 10px 0;
+}
+
+.accordion-group {
+	margin-bottom: 2px;
+	border: 1px solid #e5e5e5;
+	border-radius: 4px;
+	.accordion-heading {
+		padding: 0;
+		line-height: 1;
+		a {
+		display: block;
+		padding: 15px 15px;
+	}
+	}
+}
+.accordion-group .accordion-body{
+	padding-left: 20px;
+}
+body.sunfw-com-media.sunfw-view-images .well input[type="file"] {
+    display: inline-block;
+}
+#sbox-window .sbox-content-iframe iframe{
+	max-height: 100%;
+}
+
+  .form-horizontal .control-label {
+	text-align: left;
+	
+  }
+  .radio input[type="radio"], .radio-inline input[type="radio"], 
+  .checkbox input[type="checkbox"], .checkbox-inline input[type="checkbox"] {
+    position: relative;
+	margin-left: 0;
+  }
+  .radio label, .checkbox label {
+	margin-right: 20px;
+	padding-left:0px;
+}
+
+.icon-remove {
+	font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+	text-rendering: auto;
+	&:before{
+		content: "\f00d";
+	}
+}
+
+.btn.jmodedit {
+	background: #FFF;
+	border: 1px solid #CCC;
+	padding: 6px 10px;
+	width: 33px !important;
+	height: 33px !important;
+	-webkit-border-radius:4px;
+	-moz-border-radius:4px;
+	border-radius:4px;
+	.icon-edit:before {
+	  content: "\f044";
+	  font-size: 14px;
+	  line-height: 1;
+	  color: #333;
+	  font-family: FontAwesome;
+	}
+  }
+
+html{
+	overflow-y: auto !important;
+}
+.nav-tabs.nav-stacked .control-label{
+    padding-left: 10px;
+}
+.calendar-container table {
+	max-width: 350px;
+}
+.logo-link-color a{
+	color:#414141;
+}
+
+
+
+.item-page.edit #images .input-prepend.input-append .modal.btn {
+    position: absolute;
+    display: inline-block;
+    z-index: 1;
+    max-width: 75px;
+    border-width: 0 0 0 1px;
+    border-color: #e7e9e9;
+    border-style: solid;
+    right: 41px;
+    left: 255px;
+    padding: 9px 15px;
+    bottom: 1px;
+    color: #000;
+    font-weight: normal;
+}
+.item-page.edit .input-append input[type="text"] + a + a.btn.hasTooltip {
+	padding: 8px 10px !important;
+    border: 1px solid #ccc;
+    vertical-align: top;
+    border-width: 1px 1px 1px 0;
+    border-style: solid;
+    border-color: #e7e9e9;
+    width: 40px;
+    color: #1b212e;
+    background: #fff;
+    height: 40px;
+}
+.icon-remove {
+	font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+	text-rendering: auto;
+	&:before{
+		content: "\f00d";
+	}
+}
+.sunfw-com-config #modules-form #options .input-append .btn {
+    padding: 8px 15px;
+    border: 1px solid #D1D6DE;
+    display: inline-block;
+    position: relative;
+    margin-left: -1px;
+    vertical-align: top;
+    line-height: 1.5;
+    height: 40px;
+}
+.sunfw_section_section_top .row .col-xs-12:first-child ul li:last-child{
+	margin-left:0px !important;
+}
+.jsn-footer-top{
+	border-bottom: 1px solid #333333;
+  }
+
+ @media (max-width: 480px) {
+	.jsn-uniform .form-actions .btn-toolbar .btn {
+    	font-size: inherit;
+	}
+}
+li.imgOutline.thumbnail.height-80.width-80.center > a {
+	color: #000;
+}
+input[type="file"][hidden] {
+    display: none;
+}
+body.sunfw-com-media.sunfw-view-images .well > .row-fluid input,
+body.sunfw-com-media.sunfw-view-images .well > .row-fluid .chzn-container-single .chzn-single  {
+	background: #fff;
+	background-color: #fff !important;
+	border-color: #333 !important;
+}
+body.sunfw-com-media,
+body.sunfw-com-media .thumbnails-media .thumbnail {
+	background-color: #fff;
+}
+.item-page.edit #publishing .control-group {
+	float: none !important;
+}
+
+.item-page.edit form#adminForm {
+	padding: 10px;
+}

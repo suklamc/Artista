@@ -1,0 +1,11 @@
+
+@mixin session($bg, $color, $link-color, $link-hover ) {
+	background-color: $bg;
+	color: $color;
+	a {
+		color: $link-color;
+		&:hover {
+			color: $link-hover;
+		}
+	}
+}

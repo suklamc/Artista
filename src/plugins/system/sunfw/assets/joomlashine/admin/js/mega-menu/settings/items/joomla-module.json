@@ -1,0 +1,57 @@
+{
+	"class": "joomla-module",
+	"rows": [
+		{
+			"cols": [
+				{
+					"class": "col-12",
+					"controls": {
+						"name": {
+							"type": "text",							
+							"label": "name",
+							"popover": {
+								"title": "",
+								"content": "megamenu-module-name-popover-content"
+							}								
+						}
+					}
+				}
+			]
+		},
+		{
+			"cols": [
+				{
+					"class": "col-12",
+					"controls": {
+						"module": {
+							"type": "module-selector",
+							"label": "module",
+							"popover": {
+								"title": "",
+								"content": "megamenu-module-module-popover-content"
+							}							
+						}
+					}
+				}
+			]
+		},
+		{
+			"class": "separator-before",
+			"cols": [
+				{
+					"class": "col-12",
+					"controls": {
+						"class": {
+							"type": "text",
+							"label": "custom-classes",
+							"popover": {
+								"title": "",
+								"content": "megamenu-module-custom-classes-popover-content"
+							}							
+						}
+					}
+				}
+			]
+		}
+	]
+}

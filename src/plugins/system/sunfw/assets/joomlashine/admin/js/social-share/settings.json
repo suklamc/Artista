@@ -1,0 +1,143 @@
+{
+	"class":"extras-settings",
+	"title":"social-share-settings",
+	"rows":[
+		{
+			"cols":[
+				{
+					"class":"col-12",
+					"controls":{
+						"enabled":{
+							"type":"checkbox",
+							"value":1,
+							"label":"enable-social-share",
+							"popover": {
+								"title": "",
+								"content": "enable-social-share-popover-content"
+							}							
+						}
+					}
+				}
+			]
+		},
+		{
+			"cols":[
+				{
+					"class":"col-12",
+					"controls":{
+						"text":{
+							"label":"social-share-text",
+							"type":"text",
+							"default":"Social Share:",
+							"popover": {
+								"title": "",
+								"content": "social-share-text-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"buttons":{
+							"label":"social-share-buttons",
+							"popover": {
+								"title": "",
+								"content": "social-share-buttons-popover-content"
+							},							
+							"type":"checkbox",
+							"check-none":false,
+							"options":[
+								{
+									"label":"Facebook",
+									"value":"facebook"
+								},
+								{
+									"label":"Twitter",
+									"value":"twitter"
+								},
+								{
+									"label":"Google+",
+									"value":"google-plus"
+								},
+								{
+									"label":"Pinterest",
+									"value":"pinterest"
+								},
+								{
+									"label":"LinkedIn",
+									"value":"linkedin"
+								}
+							],
+							"default":[
+								"facebook",
+								"twitter",
+								"google-plus",
+								"pinterest",
+								"linkedin"
+							]
+						}
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"buttons-position":{
+							"label":"social-share-buttons-position",
+							"popover": {
+								"title": "",
+								"content": "social-share-buttons-position-popover-content"
+							},							
+							"type":"select",
+							"default":"bottom-left",
+							"options":[
+								{
+									"label":"top-left",
+									"value":"top-left"
+								},
+								{
+									"label":"top-center",
+									"value":"top-center"
+								},
+								{
+									"label":"top-right",
+									"value":"top-right"
+								},
+								{
+									"label":"bottom-left",
+									"value":"bottom-left"
+								},
+								{
+									"label":"bottom-center",
+									"value":"bottom-center"
+								},
+								{
+									"label":"bottom-right",
+									"value":"bottom-right"
+								}
+							]
+						}
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"categories":{
+							"label":"social-share-category",
+							"type":"content-category",
+							"multiple":true,
+							"default":["all"],
+							"popover": {
+								"title": "",
+								"content": "social-share-category-popover-content"
+							}							
+						}
+					}
+				}
+			],
+			"requires":{
+				"enabled":1
+			}
+		}
+	]
+}

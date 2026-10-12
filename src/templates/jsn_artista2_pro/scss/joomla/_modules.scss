@@ -1,0 +1,115 @@
+/*!
+ * Sun Framework
+ * Copyright 2016 Joomlashine.
+ * @file _modules.scss
+ */
+
+
+// Menu Styles
+// --------------------------------------------------
+
+ul.nav > li > a i.fa {
+  padding-right: 5px;
+}
+.sunfw-direction-rtl ul.nav > li > a i.fa {
+  padding-right: 0;
+  padding-left: 5px;
+}
+
+.breadcrumb {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  background: none;
+  text-align: center;
+}
+.jsn-is-msnry-grid-item img[class*="jsn-ismsnry-"]{
+  width: 100%;
+}
+.border-item{
+    > div {
+      @media(min-width:$screen-sm-min) {
+      border: none;
+      &:nth-child(1) {
+        border-right: 1px solid rgba(151, 151, 151, 0.4);
+
+      }
+      &:nth-child(2) {
+        border-bottom: 1px solid rgba(151, 151, 151, 0.4);
+        margin-bottom: -1px;
+
+      }
+      &:nth-child(3) {
+        border-top: 1px solid rgba(151, 151, 151, 0.4);
+
+      }
+      &:nth-child(4) {
+        border-left: 1px solid rgba(151, 151, 151, 0.4);
+        margin-left: -1px;
+
+      }
+    }
+      @media(max-width:$screen-xs-max){
+        border-bottom: 2px solid rgba(151, 151, 151, 0.4);
+
+      }
+  }
+}
+
+/*================Search Module================*/
+.search-module{
+  input#mod-search-searchword{
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #d0d0d0;
+    outline: none;
+    box-shadow: none;
+    padding: 0;
+  }
+  button.btn{
+    margin-top: 30px;
+    font-weight: bold;
+    font-family: Montserrat;
+  }
+}
+
+/*================Stick module position============*/
+div[class*=sunfw-pos-stick-] {
+  position: fixed;
+  z-index: 8888;
+}
+
+.sunfw-pos-stick-lefttop {
+  @include rtl-left(0);
+}
+
+.sunfw-pos-stick-righttop {
+  @include rtl-right(0);
+}
+
+.sunfw-pos-stick-leftmiddle {
+  @include rtl-left(0);
+  top: 50%;
+  transform: translateY(-50%);
+
+}
+
+.sunfw-pos-stick-rightmiddle {
+  @include rtl-right(0);
+  top: 50%;
+  transform: translateY(-50%);
+
+}
+
+.sunfw-pos-stick-leftbottom {
+  @include rtl-left(0);
+  bottom: 0
+}
+
+.sunfw-pos-stick-rightbottom {
+  @include rtl-right(0);
+  bottom: 0;
+}
+.cc-theme-block.cc-type-info.cc-top{
+  z-index: 9999;
+}

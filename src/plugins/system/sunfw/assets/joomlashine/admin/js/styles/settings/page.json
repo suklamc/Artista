@@ -1,0 +1,51 @@
+{
+	"class": "outer-page-settings",
+	"rows": [
+		{
+			"cols": [
+				{
+					"class": "col-12",
+					"controls": {
+						"outer-background-color": {
+							"type": "color-picker",							
+							"label": "background-color",
+							"popover": {
+								"title": "",
+								"content": "style-outer-page-background-color-popover-content"
+							}								
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"outer-background-image": {
+							"type": "image-selector",							
+							"label": "background-image",
+							"popover": {
+								"title": "",
+								"content": "style-outer-page-background-image-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"outer-background-image-settings": {
+							"type": "background-image-settings",							
+							"label": "background-image-settings",
+							"popover": {
+								"title": "",
+								"content": "style-outer-page-background-image-setting-popover-content"
+							}							
+						}
+					},
+					"requires": {
+						"outer-background-image": [ "!=", "" ]
+					}
+				}
+			]
+		}
+	]
+}

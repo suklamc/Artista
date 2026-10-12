@@ -1,0 +1,70 @@
+{
+	"class": "image",
+	"rows": [
+		{
+			"cols": [
+				{
+					"class": "col-12",
+					"controls": {
+						"name": {
+							"type": "text",
+							"label": "name",
+							"popover": {
+								"title": "",
+								"content": "megamenu-image-name-popover-content"
+							}							
+						}
+					}
+				}
+			]
+		},
+		{
+			"cols": [
+				{
+					"class": "col-sm-12",
+					"controls": {
+						"image": {
+							"type": "image-selector",
+							"label": "image",
+							"popover": {
+								"title": "",
+								"content": "megamenu-image-image-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class": "col-sm-12",
+					"controls": {
+						"alt": {
+							"type": "text",
+							"label": "alt-text",
+							"popover": {
+								"title": "",
+								"content": "megamenu-image-alt-text-popover-content"
+							}							
+						}
+					}
+				}
+			]
+		},
+		{
+			"class": "separator-before",
+			"cols": [
+				{
+					"class": "col-12",
+					"controls": {
+						"class": {
+							"type": "text",
+							"label": "custom-classes",
+							"popover": {
+								"title": "",
+								"content": "megamenu-image-custom-classes-popover-content"
+							}							
+						}
+					}
+				}
+			]
+		}
+	]
+}

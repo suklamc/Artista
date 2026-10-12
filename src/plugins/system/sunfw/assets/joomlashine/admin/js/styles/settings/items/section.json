@@ -1,0 +1,64 @@
+{
+	"class": "section-settings",
+	"rows": [
+		{
+			"cols": [
+				{
+					"class": "col-12",
+					"controls": {
+						"background-color": {
+							"type": "color-picker",							
+							"label": "background-color",
+							"popover": {
+								"title": "",
+								"content": "style-section-background-color-popover-content"
+							}								
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"background-image": {
+							"type": "image-selector",							
+							"label": "background-image",
+							"popover": {
+								"title": "",
+								"content": "style-section-background-image-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"background-image-settings": {
+							"type": "background-image-settings",
+							"label": "background-image-settings",
+							"popover": {
+								"title": "",
+								"content": "style-section-background-image-settings-popover-content"
+							}							
+						}
+					},
+					"requires": {
+						"background-image": [ "!=", "" ]
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"border": {
+							"type": "border-settings",							
+							"label": "border",
+							"popover": {
+								"title": "",
+								"content": "style-section-border-popover-content"
+							}								
+						}
+					}
+				}
+			]
+		}
+	]
+}

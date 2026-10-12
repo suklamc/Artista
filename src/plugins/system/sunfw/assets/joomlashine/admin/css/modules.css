@@ -1,0 +1,73 @@
+/**
+ * @version    $Id$
+ * @package    SUN Framework
+ * @author     JoomlaShine Team <support@joomlashine.com>
+ * @copyright  Copyright (C) 2012 JoomlaShine.com. All Rights Reserved.
+ * @license    GNU/GPL v2 or later http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Websites: http://www.joomlashine.com
+ * Technical Support:  Feedback - http://www.joomlashine.com/contact-us/get-support.html
+ */
+
+iframe {
+	border: 1px solid #ccc;
+}
+#adminForm.form-select-module {
+	margin-top: 0;
+	padding-top: 8px;
+}
+.searchtools-container-filters {
+	display: inline-block;
+	padding-bottom: 5px;
+	padding-top: 5px;
+}
+.searchtools-container-filters .searchtools-field-filter {
+	float: left;
+	padding: 8px 0;
+}
+.searchtools-container-filters .searchtools-field-filter:first-child {
+	padding-top: 0;
+}
+.searchtools-results {
+	display: block;
+}
+.searchtools-results table {
+	font-size: 12px;
+	text-align: center;
+}
+.searchtools-results table thead th {
+	text-align: center;
+}
+.searchtools-results table .align-left,
+.searchtools-results table .thead th.align-left {
+	text-align: left;
+}
+.searchtools-results table i {
+	color: #666;
+}
+.searchtools-container-filters > div {
+	display: block;
+	clear: both;
+	width: 100%;
+	position: relative;
+}
+.searchtools-container-filters i.fa-search {
+	font-size: 13px;
+	position: absolute;
+	right: 15px;
+	top: 10px;
+}
+.searchtools-container-filters select {
+	border: 1px solid #ccc;
+	height: 30px;
+	min-width: 150px;
+	width: 100%;
+	padding: 0 0 0 10px;
+}
+.searchtools-container-filters select option {
+	border-right: 1px solid #cccccc;
+	padding: 5px 10px;
+}
+.searchtools-container-filters .clearfix .btn{
+	margin-top: 10px;
+}

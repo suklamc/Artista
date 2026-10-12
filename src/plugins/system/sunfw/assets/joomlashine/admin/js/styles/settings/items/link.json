@@ -1,0 +1,35 @@
+{
+	"class": "link-settings",
+	"rows": [
+		{
+			"cols": [
+				{
+					"class": "col-12",
+					"controls": {
+						"link-color": {
+							"type": "color-picker",
+							"label": "normal-color",
+							"popover": {
+								"title": "",
+								"content": "style-link-normal-color-popover-content"
+							}								
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"link-hover-color": {
+							"type": "color-picker",
+							"label": "hover-color",
+							"popover": {
+								"title": "",
+								"content": "style-link-hover-color-popover-content"
+							}							
+						}
+					}
+				}
+			]
+		}
+	]
+}

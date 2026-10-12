@@ -1,0 +1,56 @@
+{
+	"class": "link-settings",
+	"rows": [
+		{
+			"cols": [
+				{
+					"class": "col-12",
+					"controls": {
+						"custom": {
+							"type": "checkbox",							
+							"label": "use-custom-settings",
+							"value": 1,
+							"popover": {
+								"title": "",
+								"content": "style-use-custom-settings-popover-content"
+							}								
+						}
+					}
+				}
+			]
+		},
+		{
+			"cols": [
+				{
+					"class": "col-12",
+					"controls": {
+						"link-color": {
+							"type": "color-picker",							
+							"label": "normal-color",
+							"popover": {
+								"title": "",
+								"content": "style-link-normal-color-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"link-color-hover": {
+							"type": "color-picker",							
+							"label": "hover-color",
+							"popover": {
+								"title": "",
+								"content": "style-link-hover-color-popover-content"
+							}							
+						}
+					}
+				}
+			],
+			"requires": {
+				"custom": 1
+			}
+		}
+	]
+}

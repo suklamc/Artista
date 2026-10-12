@@ -1,0 +1,137 @@
+label {
+  font-weight: normal;
+  span.star {
+    color: #F95050;
+  }
+  &.radio {
+    font-size: 13px;
+  }
+}
+
+//select[multiple], select[size],
+//select, textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"] {
+  height: 35px;
+  padding: 0 10px;
+  font-size: 14px;
+  color: #414141 !important;
+  border: none;
+  background: transparent !important;
+  border: none;
+  border-bottom: 1px solid #d0d0d0;
+  transition: border-color ease-in-out .15s;
+  outline: 0;
+  box-shadow: none;
+  border-radius: 0;
+  -webkit-border-radius: 0;
+  &:focus {
+    border-color: #d0d0d0;
+    box-shadow: none;
+  }
+  &[aria-invalid="true"] {
+    border-color: #F95050;
+  }
+}
+
+input[type="text"] {
+  max-width: 280px;
+}
+
+.radio input[type="radio"] {
+  position: relative;
+  margin: 0 15px 0px 0px;
+}
+
+textarea {
+  padding: 10px;
+  height: auto;
+  border: 1px solid rgba(65, 65, 65, 0.2);
+}
+
+input[disabled], select[disabled], textarea[disabled], input[readonly], select[readonly], textarea[readonly] {
+  cursor: not-allowed;
+  background-color: #F0F2F5;
+}
+
+select[name="user_rating"] {
+  border: 1px solid #979797;
+  background: transparent;
+}
+
+.jsn-master .jsn-input-small-fluid {
+  max-width: 280px;
+}
+
+.btn-mini[name="submit_vote"]:hover {
+  background: rgba(65, 65, 65, 0.8) !important;
+}
+
+.jsn-uniform {
+  form {
+    .jsn-input-date {
+      .controls {
+        .input-append.jsn-inline {
+          position: relative;
+        }
+        input {
+          min-width: 280px;
+          background-color: rgba(206, 206, 206, 0.1) !important;
+        }
+        button.ui-datepicker-trigger {
+          background: transparent;
+          position: absolute;
+          right: 0;
+          &:hover, &:focus {
+            outline: none;
+          }
+        }
+      }
+
+    }
+    .message-box {
+      .blank-required {
+        @media(min-width: $screen-sm-min) {
+          width: 50%;
+        }
+        textarea {
+          padding: 10px;
+        }
+      }
+    }
+  }
+}
+
+#login-form {
+  .userdata {
+    .input-group .form-control {
+      box-shadow: none;
+    }
+    input[type="text"]:focus {
+      border-color: #959595;
+    }
+    button {
+      padding: 10.5px 30px;
+    }
+    .input-group-addon {
+      padding: 6px 12px 6px 0;
+      border-color: rgba(65, 65, 65, 0.2);
+      &:first-child {
+        border-width: 0px 0px 1px 0px;
+        background: transparent;
+      }
+    }
+  }
+}

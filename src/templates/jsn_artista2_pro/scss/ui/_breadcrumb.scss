@@ -1,0 +1,38 @@
+.breadcrumb {
+  padding: 8px 0;
+  background-color: transparent;
+  margin: 0 -2px;
+  font-size: 1em;
+  line-height: 25px;
+
+  li a:hover {
+    //color: #8899AC;
+    text-decoration: underline;
+  }
+  span.divider {
+    display: none;
+  }
+  li + li:before {
+    content: '\f105';
+    font-family: 'FontAwesome';
+    color: #394a5c;
+  }
+  li:first-child + li:before {
+    display: none;
+  }
+}
+
+.dark-bg {
+  li + li:before {
+    content: '\f105';
+    font-family: 'FontAwesome';
+    color: #fff;
+  }
+  .breadcrumb {
+    padding: 0;
+    li > span[itemprop="name"],
+    > .active {
+      color: #fff;
+    }
+  }
+}

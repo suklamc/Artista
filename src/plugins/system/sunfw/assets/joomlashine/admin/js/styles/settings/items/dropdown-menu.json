@@ -1,0 +1,129 @@
+{
+	"class": "menu-settings",
+	"rows": [
+		{
+			"cols": [
+				{
+					"class": "col-12",
+					"controls": {
+						"font-size": {
+							"type": "slider",
+							"label": "font-size",
+							"default": 12,
+							"suffix": "px",
+							"popover": {
+								"title": "",
+								"content": "style-dropdown-menu-font-size-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"text-transform": {
+							"type": "select",
+							"label": "text-transform",
+							"options": [
+								{
+									"label": "none",
+									"value": "none"
+								},
+								{
+									"label": "text-transform-capitalize",
+									"value": "capitalize"
+								},
+								{
+									"label": "text-transform-uppercase",
+									"value": "uppercase"
+								},
+								{
+									"label": "text-transform-lowercase",
+									"value": "lowercase"
+								}
+							],
+							"popover": {
+								"title": "",
+								"content": "style-dropdown-menu-text-transform-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"width-dropdown": {
+							"type": "slider",
+							"label": "dropdown-width",
+							"min": 150,
+							"max": 650,
+							"default": 200,
+							"suffix": "px",
+							"popover": {
+								"title": "",
+								"content": "style-dropdown-menu-dropdown-width-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class": "col-12 separator-after",
+					"controls": {
+						"background-color": {
+							"type": "color-picker",
+							"label": "background-color",
+							"popover": {
+								"title": "",
+								"content": "style-dropdown-menu-normal-state-background-color-popover-content"
+							}								
+						}
+					}
+				}				
+			]
+		},
+		{
+			"title": "style-menu-item-title",
+			"cols": [
+				{
+					"class": "col-12",
+					"controls": {
+						"color": {
+							"type": "color-picker",
+							"label": "style-menu-item-link-color",
+							"popover": {
+								"title": "",
+								"content": "style-dropdown-menu-normal-state-link-color-popover-content"
+							}								
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"link-color-hover": {
+							"type": "color-picker",
+							"label": "style-menu-item-link-color-hover",
+							"popover": {
+								"title": "",
+								"content": "style-dropdown-menu-active-state-link-color-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"background-color-hover": {
+							"type": "color-picker",
+							"label": "style-menu-item-background-color-hover",
+							"popover": {
+								"title": "",
+								"content": "style-dropdown-menu-active-state-background-color-popover-content"
+							}								
+						}
+					}
+				}
+			]
+		}
+	]
+}

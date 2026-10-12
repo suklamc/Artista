@@ -1,0 +1,301 @@
+/* ============================ */
+$main-color: false !default;
+@if ($main-color != false) {
+  div[data-pf-type="Body"],
+  div[data-pf-type="body"]{ 
+    .sunfw-tx-mc {
+      color: $main-color;
+    }
+    .sunfw-tx-mc-h:hover {
+      color: $main-color;
+    }
+    .sunfw-bg-mc {
+      background-color: $main-color;
+    }
+    .sunfw-bg-mc-h:hover {
+      background-color: $main-color;
+    }
+    .sunfw-bd-mc {
+      border-color: $main-color;
+    }
+    .sunfw-bd-mc-h:hover {
+      border-color: $main-color;
+    }
+  }
+  .sunfw-content {
+    .main-color {
+      color: $main-color;
+    }
+  }
+  ul {
+    &.newsfeed,
+    &.archive-module,
+    &.relateditems,
+    &.categories-module,
+    &.category-module,
+    &.mostread,
+    &.latestnews,
+    &.latestusers {
+      li {
+        color: $main-color;
+        a * {
+          color: $main-color;
+        }
+      }
+    }
+    &.categories-module ul {
+      li {
+        color: $main-color;
+      }
+    }
+  }
+  .item-page.edit #com-content-formTabs > li {
+    &.active {
+      > a:hover,
+      > a {
+        border-color: $main-color;
+        color: $main-color;
+      }
+    }
+    &:hover a {
+      color: $main-color;
+    }
+  }
+  .label-info[href]:hover,
+  .label-info[href]:focus,
+  .content_rating + form input[name="submit_vote"] {
+    background: $main-color;
+  }
+  ul.nav[class*='menu-treemenu'] li a:hover {
+    color: $main-color;
+  }
+  .color-img img {
+    background-color: $main-color;
+  }
+  ul {
+    &.nav[class*='menu-treemenu'] {
+      li {
+        &.active,
+        &.current {
+          > a {
+            color: $main-color;
+          }
+        }
+      }
+    }
+  }
+  ul.nav.menu li a:hover,
+  .btn.btn-plain:hover {
+    color: $main-color;
+  }
+  .bg-2nd-subcolor {
+    background-color: darken(desaturate(adjust-hue($main-color, 8.5042%), 76.5101%), 20.7843%);
+  }
+
+  nav.navbar.sunfw-menu-head ul.navbar-nav {
+    > li {
+      > span.nav-header:hover {
+        color: $main-color;
+      }
+      &:hover,
+      &.active {
+        > a {
+          color: $main-color;
+        }
+      }
+    }
+  }
+  /*================Artista================*/
+  .text-main-color,
+  .title-dot > span:after {
+    color: $main-color !important;
+  }
+  .bg-main-color {
+    background: $main-color !important;
+  }
+  button[name="Search"] {
+    background: $main-color;
+  }
+  .readmore {
+    a {
+      color: $main-color;
+    }
+  }
+  .color-main {
+    color: $main-color !important;
+  }
+  .main-menu.special {
+    nav.navbar.sunfw-menu-head ul.navbar-nav > li > a.get-it {
+      background: $main-color;
+    }
+  }
+  .tab-gallery > nav a[data-active="true"] {
+    border: 1px solid $main-color !important;
+  }
+  .art-heading:hover {
+    color: $main-color !important;
+  }
+  .color-link {
+    color: $main-color !important;
+  }
+  .btn.btn-outline {
+    border-color: $main-color;
+  }
+  .counting-up .counter{
+    color: $main-color;
+  }
+  .page-header h2 a:hover{
+    color: $main-color;
+  }
+  ul.pager li > {
+    a, span{
+      &:hover, &:focus{
+        background: $main-color;
+      }
+    }
+  }
+}
+
+/* ============================ Sub Color ============================ */
+$sub-color: false !default;
+@if ($sub-color != false) {
+  div[data-pf-type="Body"],
+  div[data-pf-type="body"]{ 
+    .sunfw-tx-sc {
+      color: $sub-color;
+    }
+    .sunfw-tx-sc-h:hover {
+      color: $sub-color;
+    }
+    .sunfw-bg-sc {
+      background-color: $sub-color;
+    }
+    .sunfw-bg-sc-h:hover {
+      background-color: $sub-color;
+    }
+    .sunfw-bd-sc {
+      border-color: $sub-color;
+    }
+    .sunfw-bd-sc-h:hover {
+      border-color: $sub-color;
+    }
+  }
+  &.nav[class*='menu-'] {
+    li a.get-it {
+      &.btn-primary {
+        &:hover {
+          background-color: $sub-color;
+        }
+      }
+    }
+  }
+  nav.navbar.sunfw-menu-head ul.navbar-nav {
+    > li {
+      > a.get-it {
+        &.btn-primary {
+          &:hover,
+          &:focus {
+            background-color: $sub-color;
+          }
+        }
+      }
+    }
+  }
+  .btn.bg-main-color:hover {
+    background: $sub-color !important;
+  }
+  .main-menu.special {
+    nav.navbar.sunfw-menu-head ul.navbar-nav > li > a.get-it:hover {
+      background: $sub-color;
+    }
+  }
+}
+
+$btn-primary-bg: #337ab7 !default;
+$btn-primary-color: #ffffff !default;
+
+$btn-primary-bg-hover: #286090 !default;
+$btn-primary-color-hover: #ffffff !default;
+
+$btn-default-bg:  #ffffff !default;
+$btn-default-color:  #333333 !default;
+
+$btn-default-bg-hover:  #e6e6e6 !default;
+$btn-default-color-hover:  #333333 !default;
+
+@function set_default_value($default_value, $assigned_value)
+{
+	@if $assigned_value == false or $assigned_value == custom
+	{
+		@return $default_value;
+	}
+	@return $assigned_value;
+}
+
+div[data-pf-type="Body"],
+div[data-pf-type="body"] {
+	.btn-default {
+		background-color: set_default_value(#ffffff, $btn-default-bg);
+		color: set_default_value(#000, $btn-default-color);
+	}
+	.btn-default:hover {
+		background-color: set_default_value(#e6e6e6 , $btn-default-bg-hover);
+		color: set_default_value(#000, $btn-default-color-hover);
+	}
+	.btn-primary {
+		background-color: set_default_value(#337ab7, $btn-primary-bg);
+		color: set_default_value(#ffffff, $btn-primary-color);
+	}
+	.btn-primary:hover {
+		background-color: set_default_value(#286090 ,$btn-primary-bg-hover);
+		color: set_default_value(#ffffff, $btn-primary-color-hover);
+	}
+	.btn-info {
+		background-color: #5bc0de;
+		color: #fff;
+	}
+	.btn-info:hover {
+		background-color: #31b0d5;
+	}
+	.btn-danger,
+	.btn-error {
+		background-color: #d9534f;
+		color: #fff;
+	}
+	.btn-danger:hover,
+	.btn-error:hover {
+		background-color: #c9302c;
+	}
+	.btn-secondary {
+		background-color: #6c757d;
+		color: #fff;
+	}
+	.btn-secondary:hover {
+		background-color: #5a6268;
+	}
+	.btn-success {
+		background-color: #5cb85c;
+		color: #fff;
+	}
+	.btn-success:hover {
+		background-color: #449d44;
+	}
+	.btn-warning {
+		background-color: #FF9C00;
+		color: #fff;
+	}
+	.btn-warning:hover {
+		background-color: #cc7d00;
+	}
+	.btn-dark {
+		background-color: #343a40;
+		color: #fff;
+	}
+	.btn-dark:hover {
+		background-color: #23272b;
+	}
+	.btn-link {
+		background: none;
+		color: #007bff;
+	}
+}

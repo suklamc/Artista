@@ -1,0 +1,87 @@
+/**
+ * @version    $Id$
+ * @package    SUN Framework
+ * @author     JoomlaShine Team <support@joomlashine.com>
+ * @copyright  Copyright (C) 2012 JoomlaShine.com. All Rights Reserved.
+ * @license    GNU/GPL v2 or later http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Websites: http://www.joomlashine.com
+ * Technical Support:  Feedback - http://www.joomlashine.com/contact-us/get-support.html
+ */
+
+.jsn-bootstrap4 .fade.show {
+    opacity: 1;
+}
+.jsn-bootstrap4 div.modal, .jsn-bootstrap4 div.modal.fade {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin-left: initial;
+    border: initial;
+    border-radius: initial;
+    box-shadow: initial;
+    outline: 0;
+    width: initial;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, .5);
+    background-clip: initial;
+}
+.jsn-bootstrap4 .modal .modal-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin: 0;
+    transform: translate3d(-50%, -50%, 0);
+}
+@media (min-width: 992px) {
+    .jsn-bootstrap4 .modal-dialog {
+        max-width: 800px;
+        margin: 30px auto;
+    }
+}
+.jsn-bootstrap4 .modal-content {
+    border: none;
+    position: relative;
+}
+.jsn-bootstrap4 .modal-header {
+    padding: 12px 16px;
+    background-color: #F5F5F5;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid #DDDDDD;
+    border-radius: 3px 3px 0 0;
+    position: relative;
+    z-index: 99;
+}
+.jsn-bootstrap4 .modal-header .modal-title {
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: capitalize;
+    text-align: left;
+}
+.jsn-bootstrap4 .modal-body {
+    width: auto;
+    background-color: #FEFEFE;
+    box-shadow: inset -1px 0 0 0 #DDDDDD, inset 1px 0 0 0 #DDDDDD, 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+.jsn-bootstrap4 .modal-footer {
+    padding: 8px 16px;
+    background-color: #F5F5F5;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid #DDDDDD;
+    border-radius: 0 0 3px 3px;
+}
+
+.jsn-bootstrap4 .modal .modal-dialog .btn {
+    line-height: 1;
+    padding: 8px 12px;
+}
+
+/* Feedback modal */
+.jsn-feedback-modal .jsn-feedback-form > .px-3 {
+    padding: 0 !important;
+}
+.jsn-feedback-modal .jsn-feedback-form .row-title {
+    margin-bottom: 0 !important;
+}

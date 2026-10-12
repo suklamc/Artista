@@ -1,0 +1,194 @@
+{
+	"class":"offcanvas-settings",
+	"title":"offcanvas-settings",
+	"rows":[
+		{
+			"cols":[
+				{
+					"class":"col-12",
+					"controls":{
+						"width":{
+							"type":"slider",
+							"label":"width",
+							"default":300,
+							"max":500,
+							"min":50,
+							"suffix":"px",
+							"popover": {
+								"title": "",
+								"content": "show-offcanvas-width-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class":"col-12 separator-after",
+					"controls":{
+						"padding":{
+							"type":"spacing-settings",
+							"label":"padding",
+							"popover": {
+								"title": "",
+								"content": "show-offcanvas-padding-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"show-toggle":{
+							"type":"checkbox",
+							"label":"show-offcanvas-toggle",
+							"value":1,
+							"default":1,
+							"popover": {
+								"title": "",
+								"content": "show-offcanvas-toggle-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"icon":{
+							"type":"icon-selector",
+							"label":"show-offcanvas-icon",
+							"default": "fa-bars",
+							"popover": {
+								"title": "",
+								"content": "show-offcanvas-icon-popover-content"
+							}
+						}
+					},
+					"requires": {
+						"show-toggle":1
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"icon-background-color": {
+							"type": "color-picker",
+							"label": "show-offcanvas-icon-background-color",
+							"popover": {
+								"title": "",
+								"content": "show-offcanvas-icon-background-color-popover-content"
+							}
+						}
+					},
+					"requires": {
+						"show-toggle": 1
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"anchor-position":{
+							"type":"select",
+							"label":"toggle-position",
+							"default":"middle",
+							"options":[
+								{
+									"label":"top",
+									"value":"top"
+								},
+								{
+									"label":"middle",
+									"value":"middle"
+								},
+								{
+									"label":"bottom",
+									"value":"bottom"
+								}
+							]
+						}
+					},
+					"requires": {
+						"show-toggle":1
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"effect":{
+							"type":"select",
+							"label":"effect",
+							"options":[
+								{
+									"value":"effect-right-push",
+									"label":"push"
+								},
+								{
+									"value":"effect-right-slide",
+									"label":"slide"
+								}
+							]
+						}
+					},
+					"requires": {
+						"show-toggle":1
+					}
+				},
+				{
+					"class":"col-12 separator-before display-in-layout",
+					"controls":{
+						"visible_in":{
+							"type":"checkbox",
+							"check-none":false,
+							"label":"Display in layouts",
+							"options":[
+								{
+									"value":"lg",
+									"label":"Desktop"
+								},
+								{
+									"value":"md",
+									"label":"Laptop"
+								},
+								{
+									"value":"sm",
+									"label":"Tablet"
+								},
+								{
+									"value": "xs",
+									"label": "Smartphone"
+								},
+								{
+									"value": "small-smartphone",
+									"label": "Small Smartphone"
+								}
+							],
+							"default":[
+								"lg",
+								"md",
+								"sm",
+								"xs",
+								"small-smartphone"
+							],
+							"popover": {
+								"title": "",
+								"content": "show-offcanvas-display-in-layout-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class":"col-12 separator-before",
+					"controls":{
+						"class-prefix":{
+							"type":"text",
+							"label":"custom-classes",
+							"popover": {
+								"title": "",
+								"content": "show-offcanvas-custom-class-popover-content"
+							}
+						}
+					}
+				}
+			]
+		}
+	],
+	"hidden-in-panel":true
+}

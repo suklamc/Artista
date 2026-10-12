@@ -1,0 +1,39 @@
+{
+	"class": "heading-settings",
+	"rows": [
+		{
+			"cols": [
+				{
+					"class": "col-12",
+					"controls": {
+						"main-color": {
+							"type": "color-picker",
+							"label": "main-color",
+							"default": "#E70200",
+							"custom_only": true,
+							"popover": {
+								"title": "",
+								"content": "style-main-color-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"sub-color": {
+							"type": "color-picker",
+							"label": "sub-color",
+							"default": "#F86201",
+							"custom_only": true,
+							"popover": {
+								"title": "",
+								"content": "style-sub-color-popover-content"
+							}							
+						}
+					}
+				}
+			]
+		}
+	]
+}

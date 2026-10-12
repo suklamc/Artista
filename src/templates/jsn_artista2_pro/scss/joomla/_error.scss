@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:700,800,900|Questrial');
+
+.jsn-error-page {
+  text-align: center;
+  #content {
+    position: absolute;
+    @include rtl-left(0);
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-family: "Lato", Arial;
+    .table{
+      border: none;
+    }
+    .content-inner{
+      h3{
+        text-align: center;
+        font-size: 80px;
+        color: rgb(32, 32, 32);
+        font-family: Montserrat;
+        font-weight: 800;
+        margin-bottom: 0px;
+      }
+    }
+  }
+  .jsn-error-heading {
+    font-family: Montserrat;
+    font-size: 80px;
+    font-weight: 800;
+    color: #212020;
+  }
+  .jsn-error-text {
+    font-weight: normal;
+    text-align: center;
+    font-size: 30px;
+    font-family: Questrial;
+    color: rgb(62, 59, 60);
+    margin-bottom: 15px;
+  }
+  .goto-home{
+    font-family: Montserrat;
+    font-size: 14px;
+    font-weight: 500;
+    a{
+      text-transform: uppercase;
+      margin-top: 30px;
+      padding: 15px 17px;
+      display: inline-block;
+      line-height: 1;
+      border-radius: 3px;
+      color: #fff;
+      background-color: #e65e56;
+      &:hover{
+        background-color: #c44845;
+      }
+    }
+  }
+}
+
+body.no-layout {
+  height: 100vh;
+  .body {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.jsn-error {
+  .page-header, .footer {
+    display: none;
+  }
+  .well {
+    background-color: #fff;
+    box-shadow: none;
+    border: 0;
+  }
+}
+@media(max-width:480px){
+  .jsn-error-page #content .content-inner h3{
+    font-size: 40px;
+  }
+}

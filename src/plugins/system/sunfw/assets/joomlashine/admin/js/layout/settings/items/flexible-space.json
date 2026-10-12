@@ -1,0 +1,57 @@
+{
+	"class": "flexible-space",
+	"rows": [
+		{
+			"cols": [
+				{
+					"class": "col-12 separator-after",
+					"controls": {
+						"name": {
+							"type": "text",
+							"label": "name",
+							"popover": {
+								"title": "",
+								"content": "layout-flexible-space-name-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class": "col-12 separator-after display-in-layout",
+					"controls": {
+						"visible_in": {
+							"type": "visible-in",
+							"check-none": false,
+							"label": "display-in-layout",
+							"options": [
+								{ "value": "lg", "label": "desktop" },
+								{ "value": "md", "label": "laptop" },
+								{ "value": "sm", "label": "tablet" },
+								{ "value": "xs", "label": "smartphone" },
+								{ "value": "small-smartphone", "label": "small smartphone" }
+							],
+							"default": [ "lg", "md", "sm", "xs", "small-smartphone" ],
+							"popover": {
+								"title": "",
+								"content": "layout-flexible-space-display-in-layout-popover-content"
+							}
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"class": {
+							"type": "text",
+							"label": "custom-classes",
+							"popover": {
+								"title": "",
+								"content": "layout-flexible-space-custom-classes-popover-content"
+							}
+						}
+					}
+				}
+			]
+		}
+	]
+}

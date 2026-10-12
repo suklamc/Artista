@@ -1,0 +1,227 @@
+{
+	"class":"system-settings py-3",
+	"rows":[
+		{
+			"cols":[
+				{
+					"class":"col-4",
+					"groups":[
+						{
+							"title":"general-group",
+							"controls":{
+								"sunfwfavicon":{
+									"type":"image-selector",
+									"label":"fav-icon",
+									"popover": {
+										"title": "",
+										"content": "system-fav-icon-popover-content"
+									}									
+								},
+								"cdn_url":{
+									"type":"text",
+									"label":"cdn-url",
+									"placeholder":"https://cdn.your_doomain.com",
+									"popover": {
+										"title": "",
+										"content": "system-cdn-url-popover-content"
+									}									
+								}
+							}
+						},
+						{
+							"title":"assets-compression",
+							"class":"assets-compression",
+							"rows":[
+								{
+									"cols":[
+										{
+											"class":"col-6",
+											"controls":{
+												"compression":{
+													"type":"checkbox",
+													"label":"compression-target",													
+													"popover": {
+														"title": "",
+														"content": "system-compression-target-popover-content"
+													},												
+													"inline":true,
+													"options":[
+														{
+															"value":"css",
+															"label":"compress-css"
+														},
+														{
+															"value":"js",
+															"label":"compress-js"
+														}
+													]
+												}
+											}
+										},
+										{
+											"class":"col-6",
+											"controls":{
+												"maxCompressionSize":{
+													"type":"text",
+													"label":"max-compression-size",
+													"popover": {
+														"title": "",
+														"content": "system-max-compression-size-popover-content"
+													},													
+													"suffix":"KB",
+													"default":100
+												}
+											}
+										},
+										{
+											"class":"col-12",
+											"controls":{
+												"cacheDirectory":{
+													"type":"text",
+													"label":"cache-directory",
+													"popover": {
+														"title": "",
+														"content": "system-cache-directory-popover-content"
+													},														
+													"suffix":"verify",
+													"default":"cache"
+												}
+											}
+										},
+										{
+											"class":"col-12",
+											"controls":{
+												"compressionExclude":{
+													"type":"textarea",
+													"rows":6,
+													"label":"exclude-from-compression",
+													"popover": {
+														"title": "",
+														"content": "system-exclude-from-compression-popover-content"
+													}													
+												}
+											}
+										},
+										{
+											"class":"col-6",
+											"controls":{
+												"minifyHTML":{
+													"type":"checkbox",
+													"label":"minify-html",													
+													"value":"1",
+													"popover": {
+														"title": "",
+														"content": "system-minify-html-popover-content"
+													}													
+												}
+											}
+										},
+										{
+											"class":"col-6",
+											"controls":{
+												"moveJSToBottom":{
+													"type":"checkbox",
+													"label":"move-js-to-bottom",
+													"value":"1",
+													"popover": {
+														"title": "",
+														"content": "system-move-js-to-bottom-popover-content"
+													}													
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"class":"col-4",
+					"groups": [
+						{
+							"title":"custom-code",
+							"controls":{
+								"customAfterOpeningHeadTag":{
+									"type":"textarea",
+									"rows":4,
+									"label":"at-begin-of-head-tag",
+									"popover": {
+										"title": "",
+										"content": "system-at-begin-of-head-tag-popover-content"
+									}									
+								},
+								"customBeforeEndingHeadTag":{
+									"type":"textarea",
+									"rows":4,
+									"label":"at-end-of-head-tag",
+									"popover": {
+										"title": "",
+										"content": "system-at-end-of-head-tag-popover-content"
+									}									
+								},
+								"customAfterOpeningBodyTag":{
+									"type":"textarea",
+									"rows":4,
+									"label":"at-begin-of-body-tag",
+									"popover": {
+										"title": "",
+										"content": "system-at-begin-of-body-tag-popover-content"
+									}									
+								},
+								"customBeforeEndingBodyTag":{
+									"type":"textarea",
+									"rows":4,
+									"label":"at-end-of-body-tag",
+									"popover": {
+										"title": "",
+										"content": "system-at-end-of-body-tag-popover-content"
+									}									
+								}
+							}
+						}
+					]
+				},
+				{
+					"class":"col-4",
+					"groups": [
+						{
+							"title":"custom-files",
+							"controls":{
+								"customCSSFiles":{
+									"type":"custom-file",
+									"rows":10,
+									"label":"custom-css-files",
+									"allowedExtensions": [".css"],
+									"rootFolder": "css",
+									"invalidFileFormatMessage": "system-custom-css-files-invalid-file-format-message",
+									"suffix": "add-buton-label",
+									"placeholder": "enter-file-name-or-file-url",
+									"default":"custom/custom.css",
+									"popover": {
+										"title": "",
+										"content": "system-custom-css-files-popover-content"
+									}									
+								},
+								"customJSFiles":{
+									"type":"textarea",
+									"rows":11,
+									"label":"custom-js-files",
+									"popover": {
+										"title": "",
+										"content": "system-custom-js-files-popover-content"
+									}										
+								}
+							}
+						}
+					]
+				}
+			]
+		}
+	],
+	"controls":{
+		"niche-style":{
+			"type":"hidden"
+		}
+	}
+}

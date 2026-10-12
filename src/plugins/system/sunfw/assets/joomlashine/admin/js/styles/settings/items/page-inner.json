@@ -1,0 +1,48 @@
+{
+	"class": "inner-page-settings",
+	"rows": [
+		{
+			"cols": [
+				{
+					"class": "col-12",
+					"controls": {
+						"inner-background-color": {
+							"type": "color-picker",
+							"label": "background-color",
+							"popover": {
+								"title": "",
+								"content": "style-inner-page-background-color-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"inner-border": {
+							"type": "border-settings",
+							"label": "border",
+							"popover": {
+								"title": "",
+								"content": "style-inner-page-border-settings-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"inner-box-shadow": {
+							"type": "box-shadow-settings",
+							"label": "box-shadow",
+							"popover": {
+								"title": "",
+								"content": "style-inner-page-box-shadow-settings-popover-content"
+							}							
+						}
+					}
+				}
+			]
+		}
+	]
+}

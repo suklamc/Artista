@@ -1,0 +1,115 @@
+//
+// Utility classes
+// --------------------------------------------------
+
+
+// Floats
+// -------------------------
+
+.clearfix {
+  @include clearfix;
+}
+.center-block {
+  @include center-block;
+}
+.pull-right {
+  float: right !important;
+}
+.pull-left {
+  float: left !important;
+}
+
+
+// Toggling content
+// -------------------------
+
+// Note: Deprecated .hide in favor of .hidden or .sr-only (as appropriate) in v3.0.1
+.hide {
+  display: none !important;
+}
+.show {
+  display: block !important;
+}
+.invisible {
+  visibility: hidden;
+}
+.text-hide {
+  @include text-hide;
+}
+
+
+// Hide from screenreaders and browsers
+//
+// Credit: HTML5 Boilerplate
+
+.hidden {
+  display: none !important;
+}
+
+
+// For Affix plugin
+// -------------------------
+
+.affix {
+  position: fixed;
+}
+
+.border {
+  border: 1px solid #E4E6C3;
+}
+
+.border-left {
+  border-left: 1px solid #E4E6C3;
+}
+
+.border-right {
+  border-right: 1px solid #E4E6C3;
+}
+
+.border-bottom {
+  border-bottom: 1px solid #E4E6C3;
+}
+
+@for $i from 0 through 60 {
+  .font-size-#{$i} { font-size: 1px * $i !important; } 
+  .line-height-#{$i} { line-height: 1px * $i !important; } 
+}
+
+
+
+@for $i from 0 through 15 {
+  .padding-#{$i * 5} { padding: 5px * $i !important; } 
+  .padding-top-#{$i * 5} { padding-top: 5px * $i !important; } 
+  .padding-bottom-#{$i * 5} { padding-bottom: 5px * $i !important; } 
+  .padding-left-#{$i * 5} { padding-left: 5px * $i !important; } 
+  .padding-right-#{$i * 5} { padding-right: 5px * $i !important;; } 
+}
+
+
+@for $i from 0 through 15 {
+  .margin-#{$i * 5} { margin: 5px * $i !important; }
+  .margin-top-#{$i * 5} { margin-top: 5px * $i !important; }
+  .margin-bottom-#{$i * 5} { margin-bottom: 5px * $i !important; }
+  .margin-left-#{$i * 5} { margin-left: 5px * $i !important; }
+  .margin-right-#{$i * 5} { margin-right: 5px * $i !important; }
+}
+
+
+@for $i from 0 through 15 {
+  .top-#{$i * 5} { top: 5px * $i !important; }
+  .bottom-#{$i * 5} { bottom: 5px * $i !important; }
+  .left-#{$i * 5} { left: 5px * $i !important; }
+  .right-#{$i * 5} { right: 5px * $i !important; }
+}
+
+@for $i from 0 through 30 {
+  .width-#{$i * 5} { width: 5px * $i !important; }
+}
+
+.display-inline {
+  display: inline-block;
+}
+
+.width-full {
+  width: 100% !important;
+}

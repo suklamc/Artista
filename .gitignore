@@ -1,0 +1,15 @@
+# Build output
+/dist/
+/build/tmp/
+
+# Per-site files the framework generates; never ship these
+src/templates/*/css/*_[0-9a-f]*.css
+src/templates/*/css/core/*_[0-9a-f]*.css
+src/templates/*/css/custom/custom.css
+src/templates/*/backups/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

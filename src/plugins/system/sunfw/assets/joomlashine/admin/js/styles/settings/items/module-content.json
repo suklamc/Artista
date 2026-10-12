@@ -1,0 +1,40 @@
+{
+	"class": "content-settings",
+	"rows": [
+		{
+			"cols": [
+				{
+					"class": "col-12",
+					"controls": {
+						"color": {
+							"type": "color-picker",
+							"label": "color",
+							"popover": {
+								"title": "",
+								"content": "style-module-content-color-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"font-size": {
+							"type": "slider",
+							"label": "font-size",
+							"min": 0,
+							"max": 50,
+							"step": 1,
+							"default": 13,
+							"suffix": "px",
+							"popover": {
+								"title": "",
+								"content": "style-module-content-font-size-popover-content"
+							}							
+						}
+					}
+				}
+			]
+		}
+	]
+}

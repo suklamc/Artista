@@ -1,0 +1,202 @@
+{
+	"class":"extras-settings",
+	"title":"cookie-law-settings",
+	"rows":[
+		{
+			"cols":[
+				{
+					"class":"col-12",
+					"controls":{
+						"enabled":{
+							"type":"checkbox",
+							"value":1,							
+							"label":"enable-cookie-consent",
+							"popover": {
+								"title": "",
+								"content": "enable-cookie-consent-popover-content"
+							}							
+						}
+					}
+				}
+			]
+		},
+		{
+			"cols":[
+				{
+					"class":"col-12 separator-before",
+					"controls":{
+						"style":{
+							"label":"style",							
+							"popover": {
+								"title": "",
+								"content": "cookie-law-style-popover-content"
+							},							
+							"type":"select",
+							"options":[
+								{
+									"label":"light",
+									"value":"light"
+								},
+								{
+									"label":"dark",
+									"value":"dark"
+								}
+							]
+						}
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"banner-placement":{
+							"label":"banner-placement",							
+							"popover": {
+								"title": "",
+								"content": "cookie-law-banner-placement-popover-content"
+							},								
+							"type":"select",
+							"options":[
+								{
+									"label":"top",
+									"value":"top"
+								},
+								{
+									"label":"bottom",
+									"value":"bottom"
+								},
+								{
+									"label":"floating-right",
+									"value":"floating"
+								},
+								{
+									"label":"floating-left",
+									"value":"floating-left"
+								}
+							]
+						}
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"message_type":{
+							"label":"message",							
+							"popover": {
+								"title": "",
+								"content": "cookie-law-message-popover-content"
+							},								
+							"type":"select",
+							"default":"text",
+							"options":[
+								{
+									"label":"text",
+									"value":"text"
+								},
+								{
+									"label":"article",
+									"value":"article"
+								}
+							]
+						}
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"message":{
+							"label":"",
+							"type":"textarea",
+							"rows":5,
+							"default":"This website uses cookies to ensure you get the best experience on our website.",
+							"placeholder":"This website uses cookies to ensure you get the best experience on our website."
+						}
+					},
+					"requires":{
+						"message_type":"text"
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"article":{
+							"label":"",
+							"type":"article-selector"
+						}
+					},
+					"requires":{
+						"message_type":"article"
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"read-more-button-text":{
+							"label":"read-more-button-text",							
+							"type":"text",
+							"default":"Privacy Policy",
+							"placeholder":"Privacy Policy",
+							"popover": {
+								"title": "",
+								"content": "cookie-law-read-more-button-text-popover-content"
+							}							
+						}
+					},
+					"requires":{
+						"message_type":"text"
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"cookie-policy-link":{
+							"label":"cookie-policy-link",							
+							"type":"text",
+							"placeholder":"http://www.yourcompany.com/",
+							"popover": {
+								"title": "",
+								"content": "cookie-law-cookie-policy-link-popover-content"
+							}								
+						}
+					},
+					"requires":{
+						"message_type":"text"
+					}
+				},
+				{
+					"class":"col-12 separator-before",
+					"controls":{
+						"accept-button-text":{
+							"label":"accept-button-text",							
+							"type":"text",
+							"default":"I agree",
+							"placeholder":"I agree",
+							"popover": {
+								"title": "",
+								"content": "cookie-law-accept-button-text-popover-content"
+							}								
+						}
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"cookie-law-accept-script":{
+							"label":"accept-script",							
+							"type":"accept-script",
+							"editor":"none",
+							"buttonText":"set-script",
+							"modalTitle":"accept-script",
+							"popover": {
+								"title": "",
+								"content": "cookie-law-accept-script-popover-content"
+							}							
+						}
+					}
+				}
+			],
+			"requires":{
+				"enabled":1
+			}
+		}
+	]
+}

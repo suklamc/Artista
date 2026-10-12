@@ -1,0 +1,293 @@
+ul.sunfw-tpl-menu {
+  // Menu Description
+  .menudescription {
+    display: block;
+    font-size: 12px;
+    text-transform: initial;
+  }
+  li > span.nav-header > span.menudescription{
+    display: block !important;
+  }
+  // Menu icon
+  li > a > i {
+    @include rtl-padding-right(5px);
+  }
+  li > .nav-header > i {
+    @include rtl-padding-right(5px);
+  }
+  .nav-header > i[class*="fa-"] {
+    margin-right: 8px;
+  }
+  > li {
+    position: relative;
+    &.megamenu {
+      position: static;
+    }
+    &.right {
+      > ul {
+        @include rtl-right(0);
+      }
+    }
+    &.left {
+      > ul {
+        @include rtl-left(0);
+      }
+    }
+    &.center {
+      > ul {
+        @include rtl-left(50%);
+        @include rtl-translateX(-50%);
+      }
+
+    }
+    &.full-width {
+      position: static;
+      > ul {
+        @include rtl-left(0);
+      }
+    }
+    > ul {
+      //background: #fff;
+      z-index: 1;
+    }
+  }
+  //Megamenu
+  > li.megamenu {
+    ul.sunfw-megamenu-sub-menu {
+      position: absolute;
+      padding: 0;
+      border: none;
+      width: 100%;
+      z-index: 999;
+      .sunfw-mega-menu {
+        width: 100%;
+        ul.menu {
+          li a {
+            color: rgba(255, 255, 255, 0.4);
+            display: block;
+            border-bottom: 1px solid rgba(151, 151, 151, 0.1);
+            &.non-border{
+              border: none;
+            }
+          }
+        }
+        @media(min-width: $screen-sm-min) {
+          .megamenu-item:after {
+            content: '';
+            width: 1px;
+            background: rgba(255, 255, 255, 0.15);
+            //min-height: 300px;
+            height: 100%;
+            right: 0;
+            position: absolute;
+            top: 0;
+          }
+        }
+
+      }
+      .modulecontainer {
+        > h3 {
+          clear: both;
+          color: #fff;
+          font-size: 15px;
+          font-weight: normal;
+          margin-top: 5px;
+          padding: 15px 0 10px;
+          margin-bottom: 0;
+          text-transform: uppercase;
+          font-family: Questrial;
+          -webkit-font-smoothing: antialiased;
+          border-bottom: 1px solid rgba(151, 151, 151, 0.1);
+        }
+        > ul > li {
+          padding: 0;
+          list-style: none;
+          //border-bottom: 1px solid rgba(151, 151, 151, 0.1);
+          &.parent a {
+            span.caret:before {
+              content: '\f105';
+              @include rtl-right(0px);
+            }
+          }
+          ul {
+            opacity: 0;
+            position: absolute;
+            width: 100%;
+            display: none;
+            @include rtl-left(100%);
+            top: 0;
+            list-style: none;
+            background: #2b2b2b;
+            border: 1px solid rgba(151, 151, 151, 0.1);
+            padding: 0 20px;
+            li {
+              padding: 0;
+              //border-bottom: 1px solid rgba(151, 151, 151, 0.1);
+            }
+          }
+          &:hover ul {
+            opacity: 1;
+            display: block;
+            z-index: 9;
+            //left: 100%!important;
+          }
+          a {
+            padding: 10px 0px;
+            color: rgba(255, 255, 255, 0.4);
+          }
+        }
+        li.parent > a > span.caret {
+          @include rtl-right(5px);
+          float: right;
+        }
+        #login-form {
+          padding-top: 15px;
+          #form-login-remember, .checkbox {
+            margin-bottom: 5px;
+          }
+          ul.unstyled {
+            display: none;
+            position: relative;
+            opacity: 1;
+          }
+        }
+      }
+      ul {
+        max-width: 100%;
+      }
+      .sunfw-item, .sunfw-item .module-style > div {
+        > ul {
+          display: block;
+          position: relative;
+          width: 100%;
+          right: 0;
+          ul {
+            position: absolute;
+            width: 100%;
+          }
+          li:hover > ul {
+            display: block;
+            left: 100%;
+            top: 0;
+            a {
+              width: 100%;
+              display: block;
+            }
+          }
+        }
+      }
+      .sunfw-social {
+        ul {
+          position: relative;
+          left: 0;
+        }
+      }
+      li a:hover,
+      li a:focus{
+        background: transparent;
+      }
+    }
+  }
+
+}
+
+  #menu_item_menu .modulecontainer ul.nav-child {
+  list-style: none;
+
+}
+// Menu Responsive
+@media (max-width: 1024px) {
+  ul.sunfw-tpl-menu .sunfw-submenu-flipback .sunfw-mega-menu ul {
+    @include rtl-right(0);
+  }
+}
+
+@media (max-width: $screen-sm-max) and (min-width: $screen-sm-min) {
+  ul.sunfw-tpl-menu > li.megamenu ul.sunfw-megamenu-sub-menu .modulecontainer > ul > li a {
+    padding: 10px;
+  }
+
+}
+
+@media (max-width: 767px) {
+  ul.sunfw-tpl-menu {
+    > li.megamenu {
+      position: relative;
+      ul.sunfw-megamenu-sub-menu {
+        width: 100% !important;
+        border: none;
+        .modulecontainer ul .menuShow {
+          border: none;
+          padding: 0 15px;
+          background: transparent;
+          display: block !important;
+          left: 0 !important;
+          opacity: 1;
+        }
+      }
+      .sunfw-mega-menu {
+        [class*="col-xs-"] {
+          width: 100%;
+          padding: 0;
+        }
+        .row {
+          margin: 0;
+        }
+        ul.menu {
+          display: block !important;
+          @include rtl-left(0 !important);
+          &.unstyled {
+            display: none !important;
+          }
+        }
+        h3 {
+          margin-top: 0;
+          padding: 10px 15px;
+        }
+      }
+    }
+
+    li {
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+    .caret {
+      border: none;
+      width: 48px;
+      top: 0;
+      position: absolute;
+      @include rtl-right(0);
+      height: 100%;
+      text-align: center;
+      margin-top: 0;
+      background: transparent;
+      &:before {
+        content: "\f105" !important;
+        font-family: "FontAwesome";
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 14px;
+        vertical-align: middle;
+        position: relative;
+        top: 50% !important;
+        transform: translateY(-50%);
+        display: block;
+      }
+      &.open:before {
+        content: "\f107" !important;
+      }
+    }
+  }
+  //  Fixed Menu
+  .sunfw-menu-head.navbar-default .navbar-nav > li > a {
+    padding: 10px 15px;
+  }
+
+  // RTL
+  .sunfw-direction-rtl {
+    ul.sunfw-tpl-menu .caret:before {
+      content: "\f104";
+    }
+  }
+
+}

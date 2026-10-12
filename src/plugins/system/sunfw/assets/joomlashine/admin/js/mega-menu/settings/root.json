@@ -1,0 +1,144 @@
+{
+	"class":"container-settings",
+	"title":"container-settings",
+	"rows":[
+		{
+			"class":"separator-after",
+			"cols":[
+				{
+					"class":"col-12",
+					"controls":{
+						"full":{
+							"type":"checkbox",
+							"value":1,
+							"label":"fixed-width",
+							"popover": {
+								"title": "",
+								"content": "megamenu-fixed-width-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"width":{
+							"type":"text",
+							"label":"submenu-width",
+							"suffix":"px",
+							"default":600						
+						}
+					},
+					"requires":{
+						"full":1
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"align":{
+							"type":"select",
+							"popover": {
+								"title": "",
+								"content": "megamenu-submenu-align-popover-content"
+							},							
+							"label":"submenu-align",
+							"options":[
+								{
+									"label":"left",
+									"value":"left"
+								},
+								{
+									"label":"center",
+									"value":"center"
+								},
+								{
+									"label":"right",
+									"value":"right"
+								}
+							]
+						}
+					},
+					"requires":{
+						"full":1
+					}
+				}
+			]
+		},
+		{
+			"class":"separator-after",
+			"cols":[
+				{
+					"class":"col-12",
+					"controls":{
+						"padding":{
+							"type":"spacing-settings",
+							"label":"padding",
+							"popover": {
+								"title": "",
+								"content": "megamenu-padding-popover-content"
+							}							
+						}
+					}
+				}
+			]
+		},
+		{
+			"cols":[
+				{
+					"class":"col-12",
+					"controls":{
+						"backgroundColor":{
+							"type":"color-picker",
+							"label":"background-color",
+							"format":"rgb",
+							"popover": {
+								"title": "",
+								"content": "megamenu-background-color-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"backgroundImage":{
+							"type":"image-selector",
+							"label":"background-image",
+							"popover": {
+								"title": "",
+								"content": "megamenu-background-image-popover-content"
+							}								
+						}
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"backgroundImageSettings":{
+							"type":"background-image-settings",
+							"label":"background-image-settings",
+							"popover": {
+								"title": "",
+								"content": "megamenu-background-image-settings-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"border":{
+							"type":"border-settings",
+							"label":"border",
+							"popover": {
+								"title": "",
+								"content": "megamenu-border-popover-content"
+							}							
+						}
+					}
+				}
+			]
+		}
+	]
+}

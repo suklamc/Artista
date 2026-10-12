@@ -1,0 +1,278 @@
+{
+	"class":"page-settings",
+	"title":"page-settings",
+	"rows":[
+		{
+			"cols":[
+				{
+					"class":"col-12",
+					"controls":{
+						"enable_responsive":{
+							"type":"checkbox",
+							"label":"enable-responsive",
+							"value":1,							
+							"popover": {
+								"title": "",
+								"content": "layout-page-enable-responsive-popover-content"
+							}								
+						}
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"show_desktop_switcher":{
+							"type":"checkbox",
+							"label":"desktop-switcher",
+							"value":1,
+							"popover": {
+								"title": "",
+								"content": "layout-page-show-desktop-switcher-popover-content"
+							}							
+						}
+					},
+					"requires":{
+						"enable_responsive":1
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"enable_boxed_layout":{
+							"type":"checkbox",
+							"label":"boxed-layout",
+							"value":1,
+							"default":0,
+							"popover": {
+								"title": "",
+								"content": "layout-page-enable-boxed-layout-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"width_boxed_layout":{
+							"type":"boxed-layout",
+							"label":"boxed-layout-width",
+							"suffix":"px",
+							"default":960
+						}
+					},
+					"requires":{
+						"enable_boxed_layout":1
+					}
+				},
+				{
+					"class":"col-12 separator-after",
+					"controls":{
+						"margin":{
+							"type":"spacing-settings",
+							"label":"margin",							
+							"suffix":"px",
+							"popover": {
+								"title": "",
+								"content": "layout-page-margin-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"go_to_top":{
+							"type":"checkbox",
+							"label":"show-go-to-top",							
+							"value":1,
+							"default":0,
+							"popover": {
+								"title": "",
+								"content": "layout-page-show-go-to-top-popover-content"
+							}								
+						}
+					}
+				},
+				{
+					"class":"col-12 settingIcon-go-top",
+					"controls":{
+						"icon_go_to_top":{
+							"type":"checkbox",
+							"label":"icon",							
+							"inline":true,
+							"multiple":false,
+							"options":[
+								{
+									"class":"hidden",
+									"label":"<i class='fa fa-arrow-circle-o-up fa-2x'></i>",
+									"value":"fa fa-arrow-circle-o-up"
+								},
+								{
+									"class":"hidden",
+									"label":"<i class='fa fa-arrow-up fa-2x'></i>",
+									"value":"fa fa-arrow-up"
+								},
+								{
+									"class":"hidden",
+									"label":"<i class='fa fa-long-arrow-up fa-2x'></i>",
+									"value":"fa-long-arrow-up"
+								}
+							],
+							"default":"fa-ban",
+							"popover": {
+								"title": "",
+								"content": "layout-page-go-to-top-icon-popover-content"
+							}							
+						}
+					},
+					"requires":{
+						"go_to_top":1
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"text_go_to_top":{
+							"type":"text",
+							"label":"text",							
+							"default":"Go to top",
+							"popover": {
+								"title": "",
+								"content": "layout-page-go-to-top-text-popover-content"
+							}								
+						}
+					},
+					"requires":{
+						"go_to_top":1
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"color_go_to_top":{
+							"type":"color-picker",
+							"label":"text-color",
+							"popover": {
+								"title": "",
+								"content": "layout-page-go-to-top-text-color-popover-content"
+							}							
+						}
+					},
+					"requires":{
+						"go_to_top":1
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"hover_color_go_to_top":{
+							"type":"color-picker",
+							"label":"text-hover-color",
+							"popover": {
+								"title": "",
+								"content": "layout-page-go-to-top-text-hover-color-popover-content"
+							}
+						}
+					},
+					"requires":{
+						"go_to_top":1
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"bg_go_to_top":{
+							"type":"color-picker",							
+							"label":"background-color",
+							"popover": {
+								"title": "",
+								"content": "layout-page-go-to-top-background-color-popover-content"
+							}							
+						}
+					},
+					"requires":{
+						"go_to_top":1
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"bg_hover_go_to_top":{
+							"type":"color-picker",
+							"label":"background-hover-color",
+							"popover": {
+								"title": "",
+								"content": "layout-page-go-to-top-background-hover-color-popover-content"
+							}
+						}
+					},
+					"requires":{
+						"go_to_top":1
+					}
+				},
+				{
+					"class":"col-12",
+					"controls":{
+						"ps_go_to_top":{
+							"type":"select",
+							"label":"positions",
+							"options":[
+								{
+									"label":"right",
+									"value":"right"
+								},
+								{
+									"label":"center",
+									"value":"center"
+								},
+								{
+									"label":"left",
+									"value":"left"
+								}
+							],
+							"popover": {
+								"title": "",
+								"content": "layout-page-go-to-top-position-popover-content"
+							}							
+						}
+					},
+					"requires":{
+						"go_to_top":1
+					}
+				},
+				{
+					"class":"col-12 separator-before",
+					"controls":{
+						"show_branding_link":{
+							"type":"checkbox",
+							"label":"show-branding-link",							
+							"value":1,
+							"popover": {
+								"title": "",
+								"content": "layout-page-show-branding-link-popover-content"
+							}							
+						}
+					}
+				},
+				
+				{
+					"class":"col-12",
+					"controls":{
+						"branding_link_text":{
+							"type":"editor",
+							"label":"branding-link-text",							
+							"default":"",
+							"popover": {
+								"title": "",
+								"content": "layout-page-branding-link-text-popover-content"
+							}							
+						}
+					},
+					"requires":{
+						"show_branding_link":1
+					}
+				}
+			]
+		}
+	]
+}

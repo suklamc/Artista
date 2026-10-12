@@ -1,0 +1,81 @@
+{
+	"class": "module-settings",
+	"rows": [
+		{
+			"cols": [
+				{
+					"class": "col-12",
+					"controls": {
+						"padding": {
+							"type": "spacing-settings",
+							"label": "padding",
+							"popover": {
+								"title": "",
+								"content": "style-module-padding-popover-content"
+							}							
+						}
+					}
+				}
+			]
+		},
+		{
+			"cols": [
+				{
+					"class": "col-12",
+					"controls": {
+						"background-color": {
+							"type": "color-picker",
+							"label": "background-color",
+							"popover": {
+								"title": "",
+								"content": "style-module-background-color-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"background-image": {
+							"type": "image-selector",
+							"label": "background-image",
+							"popover": {
+								"title": "",
+								"content": "style-module-background-image-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"background-image-settings": {
+							"type": "background-image-settings",
+							"label": "background-image-settings",
+							"popover": {
+								"title": "",
+								"content": "style-module-background-image-settings-popover-content"
+							}							
+						}
+					},
+					"requires": {
+						"background-image": [ "!=", "" ]
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"border": {
+							"type": "border-settings",							
+							"label": "border",
+							"popover": {
+								"title": "",
+								"content": "style-module-border-popover-content"
+							}							
+						}
+					}
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,119 @@
+{
+	"class": "primary-button-settings",
+	"rows": [
+		{
+			"title": "normal-state",
+			"cols": [
+				{
+					"class": "col-12",
+					"controls": {
+						"btn-primary-bg": {
+							"type": "color-picker",							
+							"label": "background-color",
+							"popover": {
+								"title": "",
+								"content": "style-primary-button-background-color-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"btn-primary-border-all": {
+							"type": "border-settings",
+							"label": "border",
+							"popover": {
+								"title": "",
+								"content": "style-primary-button-border-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class": "col-12 border-item-bottom pd-item-bt-30",
+					"controls": {
+						"btn-primary-box-shadow": {
+							"type": "box-shadow-settings",
+							"label": "box-shadow",
+							"popover": {
+								"title": "",
+								"content": "style-primary-button-box-shadow-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"btn-primary-color": {
+							"type": "color-picker",							
+							"label": "text-color",
+							"popover": {
+								"title": "",
+								"content": "style-primary-button-text-color-popover-content"
+							}								
+						}
+					}
+				},
+				{
+					"class": "col-12 separator-after",
+					"controls": {
+						"btn-primary-text-shadow": {
+							"type": "text-shadow-settings",							
+							"label": "text-shadow",
+							"popover": {
+								"title": "",
+								"content": "style-primary-button-text-shadow-popover-content"
+							}								
+						}
+					}
+				}
+			]
+		},
+		{
+			"title": "hover-state",
+			"cols": [
+				{
+					"class": "col-12",
+					"controls": {
+						"btn-primary-bg-hover": {
+							"type": "color-picker",							
+							"label": "background-color",
+							"popover": {
+								"title": "",
+								"content": "style-primary-button-background-color-hover-popover-content"
+							}								
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"btn-primary-border-hover": {
+							"type": "color-picker",							
+							"label": "border-color-hover",
+							"popover": {
+								"title": "",
+								"content": "style-primary-button-border-color-hover-popover-content"
+							}							
+						}
+					}
+				},
+				{
+					"class": "col-12",
+					"controls": {
+						"btn-primary-color-hover": {
+							"type": "color-picker",							
+							"label": "text-color",
+							"popover": {
+								"title": "",
+								"content": "style-primary-button-text-color-hover-popover-content"
+							}							
+						}
+					}
+				}
+			]
+		}
+	]
+}
