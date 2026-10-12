@@ -450,41 +450,6 @@ class PlgSystemSunFw extends JPlugin
 	}
 
 	/**
-	 * Implement onBeforeRender event handler.
-	 *
-	 * @return  void
-	 */
-	public function onBeforeRender()
-	{
-		// Check if we should ask user feedback for why they want to uninstall our product.
-		if ($this->user->id && ($request = $this->input->get('jsn', null, 'array')))
-		{
-			if ($request['action'] === 'feedback' && $request['type'] === 'uninstall' && !empty($request['template']))
-			{
-				// Make sure component is not uninstalled.
-				$dbo = JFactory::getDbo();
-				$eid = $dbo->setQuery(
-					$dbo->getQuery(true)
-						->select('extension_id')
-						->from('#__extensions')
-						->where("type = 'template'")
-						->where('element = ' . $dbo->quote($request['template']))
-				)->loadResult();
-
-				if ((int) $eid)
-				{
-					// Load necessary assets.
-					SunFwHelper::loadAssets(false, true);
-				}
-				else
-				{
-					$this->input->set('jsn', null);
-				}
-			}
-		}
-	}
-
-	/**
 	 * Implement onAfterRender event handler.
 	 *
 	 * @return  void
@@ -507,19 +472,6 @@ class PlgSystemSunFw extends JPlugin
 				"<div id='sunfw-extra-options' data-render='ExtraOptions' data-url='{$ajaxBase}'></div></body>",
 				$buffer
 			);
-		}
-
-		// Check if we should ask user feedback for why they want to uninstall our product.
-		if ($this->user->id && ($request = $this->input->get('jsn', null, 'array')))
-		{
-			if ($request['action'] === 'feedback' && $request['type'] === 'uninstall' && !empty($request['template']))
-			{
-				$buffer = str_replace(
-					'</body>',
-					SunFwHelper::renderFeedbackModal($request['template']) . '</body>',
-					$buffer
-				);
-			}
 		}
 
 		// Fix conflict modal on Bootstrap 4
@@ -727,95 +679,6 @@ class PlgSystemSunFw extends JPlugin
 	}
 
 	/**
-	 * Handle onExtensionBeforeUninstall event.
-	 *
-	 * @param   int  $eid  ID of the extension just uninstalled.
-	 *
-	 * @return  void
-	 */
-	public function onExtensionBeforeUninstall($eid)
-	{
-		// Get extension data.
-		$dbo = JFactory::getDbo();
-		$ext = $dbo->setQuery("SELECT * FROM #__extensions WHERE extension_id = {$eid};")->loadObject();
-
-		// Check if a JSN template that depends on JSN Sun Framework is being uninstalled.
-		if ($ext && $ext->type === 'template')
-		{
-			// Make sure the template being uninstalled not belonging to a default style.
-			$dbo->setQuery(
-				$dbo->getQuery(true)
-					->select('COUNT(*)')
-					->from('#__template_styles')
-					->where('template = ' . $dbo->quote($ext->element))
-					->where('home != 0')
-			);
-
-			if ((int) $dbo->loadResult() > 0)
-			{
-				return;
-			}
-
-			// Parse the template's manifest cache.
-			$info = json_decode($ext->manifest_cache);
-
-			if (stripos($info->author, 'JoomlaShine') !== false
-				&& stripos($info->copyright, 'JoomlaShine') !== false)
-			{
-				// Found a JSN template that is being uninstalled, check if it depends on JSN Sun Framework.
-				$xml = JPATH_ROOT . "/templates/{$ext->element}/templateDetails.xml";
-
-				if (JFile::exists($xml) && ($xml = simplexml_load_file($xml))
-					&& isset($xml->group) && (string) $xml->group === 'sunfw')
-				{
-					// Check if the template that is being uninstalled has a valid token.
-					$params = SunFwHelper::getExtensionParams('template', $ext->element);
-
-					if ($params && !empty($params['token']))
-					{
-						// Check if the current screen is extension manager.
-						if ($this->option === 'com_installer' && $this->view === 'manage' && $this->task === 'manage.remove')
-						{
-							// Make sure this is not an Ajax request.
-							if (!array_key_exists('HTTP_X_REQUESTED_WITH', $_SERVER)
-								|| strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) !== 'xmlhttprequest')
-							{
-								// If there is only 1 template being uninstalled, ask for feedback.
-								$dbo->setQuery(
-									$dbo->getQuery(true)
-										->select('COUNT(*)')
-										->from('#__extensions')
-										->where("type = 'template'")
-										->where('extension_id IN (' . implode(',', $this->input->get('cid', array(), 'array')) . ')')
-								);
-
-								if ((int) $dbo->loadResult() === 1)
-								{
-									$url = isset($_SERVER['HTTP_REFERER'])
-										? $_SERVER['HTTP_REFERER']
-										: JRoute::_('index.php?option=com_installer&view=manage');
-
-									$url .= (strpos($url, '?') === false ? '?' : '&')
-										. "jsn[action]=feedback&jsn[type]=uninstall&jsn[template]={$ext->element}";
-
-									$this->app->redirect($url);
-								}
-							}
-						}
-
-						// Let JoomlaShine know there is a template uninstalled.
-						$client = new SunFwAjaxFeedback($ext->element);
-
-						$client->sendUninstallFeedbackAction(true);
-
-						unset($client);
-					}
-				}
-			}
-		}
-	}
-
-	/**
 	 * Handle Ajax requests.
 	 *
 	 * @return  void
@@ -932,15 +795,4 @@ class PlgSystemSunFw extends JPlugin
 		return false;
 	}
 
-	/**
-	 * Method to add a message to the top message.
-	 *
-	 * @return  (array) $item
-	 */
-	public function SunFwGetComponentAlerts()
-	{
-	    $link = sprintf(SUNFW_GETTING_STARTED_SERIES_URL, 'top-message');
-	    $gettingStartedSeriesMessage = array('id' => 'getting-started-series', 'type' => 'info', 'data' => JText::sprintf('SUNFW_GETTING_STARTED_TOP_MESSAGE', $link));
-        return $gettingStartedSeriesMessage;
-	}
 }

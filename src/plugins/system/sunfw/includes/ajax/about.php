@@ -46,7 +46,9 @@ class SunFwAjaxAbout extends SunFwAjax
 			'templateThumb' => "{$root}/templates/{$this->templateName}/template_preview.png",
 			'templateRelease' => date('M d, Y', strtotime($templateManifest->creationDate)),
 			'enableThumbnailLink' => SunFwHelper::getBrandSetting('showTplThumbnailLink', 1),
-			'showCopyright' => SunFwHelper::getBrandSetting('showTplCopyrightContent', 1),
+			// The copyright line links to joomlashine.com, which JoomlaShine no longer owns.
+			// Attribution stays in the source file headers.
+			'showCopyright' => 0,
 			'textMapping' => array(
 				'framework' => JText::_('SUNFW_FRAMEWORK'),
 				'template' => JText::_('SUNFW_TEMPLATE'),

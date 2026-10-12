@@ -245,8 +245,6 @@ class SunFwAdmin
 			'renderHtml'
 		));
 
-		// Validate license.
-		SunFwValidatelicense::validate($this->template, 'assets/joomlashine/admin/js/helpers.js');
 	}
 
 	/**

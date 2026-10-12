@@ -302,15 +302,11 @@ class SunFwHelper
 							// Load library for compliling SCSS to CSS.
 							include_once SUNFW_PATH . '/libraries/3rd-party/scssphp/scss.inc.php';
 
-							// Install the default structure.
-							JFactory::getApplication()->input->set('structure_id', $defaultStructure);
-
-							$installer = new SunFwAjaxSampleData($template, $id);
-
-							$installer->installStructureAction();
+							// Install the default structure bundled with the template.
+							SunFwStructure::install($template, $id, $defaultStructure);
 
 							// Re-get style data.
-							return self::getSunFwStyle($id);
+							return self::getSunFwStyle($id, true);
 						}
 					}
 				}
@@ -641,22 +637,6 @@ class SunFwHelper
 	}
 
 	/**
-	 * Download templates information data from JoomlaShine server
-	 *
-	 * @return  object
-	 */
-	public static function getVersionData()
-	{
-		if (empty(self::$versionData))
-		{
-			self::$versionData = SunFwHttp::get(SUNFW_VERSIONING_URL . '?category=cat_template');
-		}
-
-		// Return result
-		return self::$versionData;
-	}
-
-	/**
 	 * Check Open SSL
 	 * @return boolean
 	 */
@@ -697,274 +677,6 @@ class SunFwHelper
 	}
 
 	/**
-	 * List all modified files that are being updated.
-	 *
-	 * @param   string  $template  The template name
-	 * @param   string  $path      Path to downloaded template update package
-	 *
-	 * @return  mixed
-	 */
-	public static function getModifiedFilesBeingUpdated($template, $path)
-	{
-		$modifiedFiles = array();
-
-		// Get list of files being updated
-		if ($filesBeingUpdated = self::getFilesBeingUpdated($template, $path))
-		{
-			// Merge difference type of modification
-			if (version_compare(phpversion(), '8.0.0', '<'))
-			{
-			    $filesBeingUpdated = call_user_func_array('array_merge', $filesBeingUpdated);
-			}
-			else
-			{
-			    $filesBeingUpdated = array_merge(array(), ...array_values($filesBeingUpdated));
-			}
-
-			// Now check if any file being updated is manually modified by user
-			foreach (self::getModifiedFiles($template) as $k => $v)
-			{
-				if ($k != 'delete')
-				{
-					foreach ($v as $file)
-					{
-						if (in_array($file, $filesBeingUpdated))
-						{
-							$modifiedFiles[] = $file;
-						}
-					}
-				}
-			}
-		}
-
-		return $modifiedFiles;
-	}
-
-	/**
-	 * List all files that are being updated.
-	 *
-	 * @param   string  $template  The template name
-	 * @param   string  $path      Path to downloaded template update package
-	 *
-	 * @return  mixed
-	 */
-	public static function getFilesBeingUpdated($template, $path)
-	{
-		jimport('joomla.filesystem.archive');
-
-		// Extract template update package
-		$file = $path;
-		$path = dirname($file) . '/' . substr(basename($file), 0, -4);
-
-		if (!JArchive::extract($file, $path))
-		{
-			throw new Exception(JText::_('SUNFW_ERROR_DOWNLOAD_PACKAGE_FILE_NOT_FOUND'));
-		}
-
-		// Read checksum file included in update package
-		$checksumFile = $path . '/template/template.checksum';
-
-		// Backward compatible
-		if (!file_exists($checksumFile))
-		{
-			$checksumFile = $path . '/template.checksum';
-		}
-
-		if (!is_readable($checksumFile))
-		{
-			return false;
-		}
-
-		$files = file_get_contents($checksumFile);
-		$newHash = array();
-
-		// Parse all hash data from checksum file
-		foreach (explode("\n", $files) as $line)
-		{
-			$line = trim($line);
-
-			if (!empty($line) and strpos($line, "\t") !== false)
-			{
-				list($path, $hash) = explode("\t", $line);
-				$newHash[$path] = $hash;
-			}
-		}
-
-		// Read checksum file of currently installed template
-		$checksumFile = JPATH_SITE . "/templates/{$template}/template.checksum";
-
-		if (is_readable($checksumFile))
-		{
-			$files = file_get_contents($checksumFile);
-			$oldHash = array();
-
-			// Parse all hash data from checksum file
-			foreach (explode("\n", $files) as $line)
-			{
-				$line = trim($line);
-
-				if (!empty($line) and strpos($line, "\t") !== false)
-				{
-					list($path, $hash) = explode("\t", $line);
-					$oldHash[$path] = $hash;
-				}
-			}
-
-			// Preset some arrays
-			$addedFiles = array();
-			$changedFiles = array();
-			$removedFiles = array();
-
-			foreach ($oldHash as $path => $checkum)
-			{
-				// Check if file is removed
-				if (!isset($newHash[$path]))
-				{
-					$removedFiles[] = $path;
-				}
-
-				// Check if file is changed
-				elseif (isset($newHash[$path]) && $checkum != $newHash[$path])
-				{
-					$changedFiles[] = $path;
-				}
-			}
-
-			foreach ($newHash as $path => $checkum)
-			{
-				// Check if file is newly added
-				if (!isset($oldHash[$path]))
-				{
-					$addedFiles[] = $path;
-				}
-			}
-
-			return array(
-				'add' => $addedFiles,
-				'edit' => $changedFiles,
-				'delete' => $removedFiles
-			);
-		}
-
-		return array(
-			'edit' => array_keys($newHash)
-		);
-	}
-
-	/**
-	 * List all modified files of the template
-	 *
-	 * @param   string  $template  The template name
-	 *
-	 * @return  mixed
-	 */
-	public static function getModifiedFiles($template)
-	{
-		jimport('joomla.filesystem.folder');
-
-		// Find all files in template folder
-		$templatePath = JPATH_SITE . "/templates/{$template}";
-		$currentFiles = JFolder::files($templatePath, '.', true, true);
-
-		// Define pattern of file to be excluded
-		$exclude = '#(/*backups?/|template\.checksum|template\.defines\.php|templateDetails\.xml|editions\.json|\.svn|CVS|language)#';
-
-		foreach ($currentFiles as $k => $file)
-		{
-			// Fine-tune file path
-			$file = str_replace(DIRECTORY_SEPARATOR, '/', str_replace('\\', '/', $file));
-			$file = ltrim(substr($file, strlen($templatePath)), '/');
-
-			if (preg_match($exclude, $file))
-			{
-				unset($currentFiles[$k]);
-			}
-			else
-			{
-				$currentFiles[$k] = $file;
-			}
-		}
-
-		// Read checksum file.
-		$checksumFile = $templatePath . '/template.checksum';
-
-		if (is_file($checksumFile))
-		{
-			$files = file_get_contents($checksumFile);
-			$hashTable = array();
-
-			// Parse all hash data from checksum file
-			foreach (explode("\n", $files) as $line)
-			{
-				$line = trim($line);
-
-				if (!empty($line) and strpos($line, "\t") !== false)
-				{
-					list($path, $hash) = explode("\t", $line);
-					$hashTable[$path] = $hash;
-				}
-			}
-
-			// Check state of current files
-			$addedFiles = array();
-			$changedFiles = array();
-			$deletedFiles = array();
-			$originalFiles = array();
-
-			foreach ($currentFiles as $file)
-			{
-				if (JFile::exists($file))
-				{
-					$fileMd5 = md5_file($file);
-
-					// Checking file is added
-					if (!isset($hashTable[$file]))
-					{
-						$addedFiles[] = $file;
-					}
-
-					// Checking file is changed
-					elseif (isset($hashTable[$file]) && $fileMd5 != $hashTable[$file])
-					{
-						$changedFiles[] = $file;
-					}
-
-					// Checking file is original
-					elseif (isset($hashTable[$file]) && $fileMd5 == $hashTable[$file])
-					{
-						$originalFiles[] = $file;
-					}
-				}
-			}
-
-			$templateFiles = array_merge($addedFiles, $changedFiles, $originalFiles);
-			$templateFiles = array_unique($templateFiles);
-
-			// Find all deleted files
-			foreach (array_keys($hashTable) as $item)
-			{
-				if (!preg_match($exclude, $item))
-				{
-					if (!in_array($item, $templateFiles))
-					{
-						$deletedFiles[] = $item;
-					}
-				}
-			}
-
-			return array(
-				'add' => $addedFiles,
-				'edit' => $changedFiles,
-				'delete' => $deletedFiles
-			);
-		}
-
-		return array(
-			'edit' => array_values($currentFiles)
-		);
-	}
-
-	/**
 	 * Find latest backup file
 	 *
 	 * @param   string  $template  Name of template to find backup files
@@ -990,32 +702,6 @@ class SunFwHelper
 		}
 
 		return $backupFile;
-	}
-
-	/**
-	 * Get sample data definition for a template.
-	 *
-	 * @param   string  $id  Template's identified name at JoomlaShine.
-	 *
-	 * @return  array
-	 */
-	public static function getSampleDataList($template)
-	{
-		static $samples;
-
-		// Get template info.
-		$template = SunFwRecognization::detect($template);
-
-		if (!isset($samples) || !isset($samples[$template->id]))
-		{
-			// Get sample data definition.
-			$samples[$template->id] = SunFwHttp::get(
-				"https://www.joomlashine.com/sunfwdata/sampledata/templates/{$template->id}.json",
-				3600
-			);
-		}
-
-		return $samples[$template->id] ? $samples[$template->id] : array();
 	}
 
 	/**
@@ -2006,31 +1692,6 @@ class SunFwHelper
 		}
 
 		return '';
-	}
-
-	/**
-	 * Render feedback modal.
-	 *
-	 * @param   string  $template  Template name.
-	 * @param   string  $inline    Whether to load all neccessary assets inline?
-	 *
-	 * @return  string
-	 */
-	public static function renderFeedbackModal($template, $inline = false)
-	{
-		// Define base Ajax URL.
-		$ajaxBase = 'index.php?option=com_ajax&format=json&group=system&plugin=sunfw';
-		$ajaxBase .= "&context=feedback&action=get&template_name={$template}";
-		$ajaxBase .= '&' . JSession::getFormToken() . '=1';
-		$ajaxBase = JRoute::_($ajaxBase, false);
-
-		// Generate HTML code for rendering feedback modal.
-		$html = "<div id='sunfw-uninstall-feedback' data-render='ComponentFeedback' data-url='{$ajaxBase}'></div>";
-
-		// Load necessary assets.
-		$html .= self::loadAssets(false, $inline ? true : false, $inline);
-
-		return $html;
 	}
 
 	public static function getLayoutItemList($styleID)

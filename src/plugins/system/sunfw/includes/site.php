@@ -613,95 +613,25 @@ class SunFwSite
 	}
 
 	/**
-	 * Render back-link to JoomlaShine.
+	 * Render the footer credit line.
+	 *
+	 * Only the site's own credit text (Layout > Settings > branding link text) is shown, and only
+	 * when the branding link is switched on. The old JoomlaShine back-links are gone: that domain
+	 * no longer belongs to JoomlaShine.
 	 *
 	 * @return  void
 	 */
 	public static function renderBrandingLink()
 	{
-		// Get settings.
 		$renderer = self::getInstance();
+		$settings = !empty($renderer->layout['settings']) ? $renderer->layout['settings'] : array();
 
-		if (!empty($renderer->layout['settings']) && array_key_exists('show_branding_link', $renderer->layout['settings']) &&
-			 empty($renderer->layout['settings']['show_branding_link']))
+		if (empty($settings['show_branding_link']) || empty($settings['branding_link_text']))
 		{
 			return;
 		}
 
-		// Backward compatible.
-		elseif (!empty($renderer->system_data) && array_key_exists('showBrandingLink', $renderer->system_data) &&
-			 empty($renderer->system_data['showBrandingLink']) && ( empty($renderer->layout['settings']) ||
-			 !array_key_exists('show_branding_link', $renderer->layout['settings']) ||
-			 empty($renderer->layout['settings']['show_branding_link']) ))
-		{
-			return;
-		}
-
-		if (!empty($renderer->layout['settings']) && !empty($renderer->layout['settings']['branding_link_text']))
-		{
-			$backLink = $renderer->layout['settings']['branding_link_text'];
-		}
-		else
-		{
-			// Get back-link from plugin params.
-			$params = SunFwHelper::getExtensionParams('plugin', 'sunfw', 'system');
-
-			if (empty($params['branding-link']))
-			{
-				// Define back-links.
-				$backLinks = array(
-					'Template by JoomlaShine' => 9900,
-					'Template from <a href="https://www.joomlashine.com" target="_blank">https://www.joomlashine.com</a>' => 5,
-					'Other JoomlaShine Products at <a href="https://www.joomlashine.com/joomla-extensions.html" target="_blank">https://www.joomlashine.com/joomla-extensions.html</a>' => 5,
-					'<a href="https://www.joomlashine.com/joomla-templates.html" target="_blank">JSN Theme</a> by JoomlaShine' => 10,
-					'This template is <a href="https://www.joomlashine.com/joomla-templates.html" target="_blank">JoomlaShine Product</a>' => 10,
-					'<a href="https://www.joomlashine.com/joomla-templates.html" target="_blank">Joomla Templates</a> from JoomlaShine' => 5,
-					'<a href="https://www.joomlashine.com/joomla-templates.html" target="_blank">JSN Template by JoomlaShine</a>' => 5,
-					'More JSN Templates at <a href="https://www.joomlashine.com/joomla-templates.html" target="_blank">https://www.joomlashine.com/joomla-templates.html</a>' => 50,
-					'More information at <a href="https://www.joomlashine.com/blog.html" target="_blank">https://www.joomlashine.com/blog.html</a>' => 10
-				);
-
-				// Get a random back-link.
-				$num = rand(1, 10000);
-
-				foreach ($backLinks as $backLink => $ratio)
-				{
-					$cur = isset($cur) ? $cur + $ratio : $ratio;
-
-					if ($num <= $cur)
-					{
-						break;
-					}
-				}
-
-				// Back-link has 80% containing 'rel="nofollow"'.
-				$num = rand(1, 100);
-
-				if ($num <= 80)
-				{
-					$backLink = str_replace('target="_blank"', 'target="_blank"', $backLink);
-				}
-
-				// Store back-link to plugin params.
-				SunFwHelper::updateExtensionParams(array(
-					'branding-link' => $backLink
-				), 'plugin', 'sunfw', 'system');
-			}
-			else
-			{
-				$backLink = $params['branding-link'];
-				$tmpBackLink = strtolower($backLink);
-				if (strpos($tmpBackLink, 'joomlashine'))
-				{
-					$realName = preg_replace('/(\d+)$/', ' \\1', str_replace('_', ' ', str_replace('_pro', '', $renderer->template)));
-					$realName = str_replace('jsn', 'JSN', $realName);
-					$realName = ucwords($realName);
-					$backLink = '<div style="text-align:center;background: #ffffff;max-width: 400px;margin: 0 auto;border-radius: 2px;margin-top: 2px;font-size: 10px;opacity: 0.7;">' . $realName . ' is designed by <a href="https://www.joomlashine.com" style="color: #009aca;" title="JoomlaShine is the best Joomla templates & extension provider" target="_blank">JoomlaShine.com</a> | powered by <a href="https://www.joomlashine.com/joomla-templates/jsn-sunframework.html" title="JSN Sun Framework is the best Joomla template framework" style="color: #009aca;" target="_blank">JSN Sun Framework</a></div>';
-				}
-			}
-		}
-
-		echo '<div style="text-align:center;">' . $backLink . '</div>';
+		echo '<div style="text-align:center;">' . $settings['branding_link_text'] . '</div>';
 	}
 
 	/**

@@ -22,93 +22,6 @@ defined('_JEXEC') or die('Restricted access');
 class SunFwAjaxCommon extends SunFwAjax
 {
 	/**
-	 * Handle purchase action.
-	 *
-	 * @return  void
-	 */
-	public function purchaseAction()
-	{
-		// Check if this is the first time user clicked on purchase link.
-		$params = SunFwHelper::getTemplateParams($this->templateName);
-
-		if (empty($params['clickedPurchase'])) {
-			$params['clickedPurchase'] = time();
-
-			// Store the time the user first clicked on purchase link.
-			SunFwHelper::updateExtensionParams($params, 'template', $this->templateName);
-		}
-
-		// Redirect user to JoomlaShine.
-		JFactory::getApplication()->redirect(
-			sprintf(
-				SUNFW_TEMPLATE_URL,
-				preg_replace('/^tpl_([^\d]+)\d*$/', '\\1', $this->template['id'])
-			)
-		);
-	}
-
-	/**
-	 * Get discount message.
-	 *
-	 * @return  void
-	 */
-	public function getDiscountAction()
-	{
-		// Get template parameters.
-		$params = SunFwHelper::getTemplateParams($this->templateName);
-
-		if (empty($params['token'])) {
-			return;
-		}
-
-		// Get discount message.
-		$discount = SunFwHttp::get(
-			SUNFW_GET_DISCOUNT_URL . "&identified_name={$this->template['id']}&token={$params['token']}"
-			. '&lang=' . $this->app->getLanguage()->getTag()
-		);
-
-		if (empty($discount['error_code'])) {
-			// Save discount.
-			$params['currentDiscount'] = $discount['message'];
-
-			SunFwHelper::updateExtensionParams($params, 'template', $this->templateName);
-		}
-
-		if (empty($discount['error_code']))
-		{
-			$this->setResponse($discount['message']);
-		}
-		else
-		{
-			throw new Exception($discount['message']);
-		}
-	}
-
-	/**
-	 * Get live chat.
-	 *
-	 * @return void
-	 */
-	function getLiveChatAction()
-	{
-		// Get template parameters.
-		$params = SunFwHelper::getTemplateParams($this->templateName);
-
-		if (empty($params['token'])) {
-			return;
-		}
-
-		// Request live chat code from JoomlaShine server.
-		$html = SunFwHttp::get(
-			SUNFW_GET_LIVE_CHAT_URL . (strpos(SUNFW_GET_LIVE_CHAT_URL, '?') === false ? '?' : '&')
-			. "identified_name={$this->template['id']}&token={$params['token']}"
-			. '&lang=' . $this->app->getLanguage()->getTag()
-		);
-
-		$this->setResponse($html);
-	}
-
-	/**
 	 * Get module position from template's manifest file.
 	 *
 	 * @return  void
@@ -281,38 +194,6 @@ class SunFwAjaxCommon extends SunFwAjax
 		array_unshift($categories, JHtml::_('select.option', 'all', JText::_('SUNFW_ALL')));
 
 		$this->setResponse($categories);
-	}
-
-	/**
-	 * Get banner data.
-	 *
-	 * @return  void
-	 */
-	public function getBannerAction()
-	{
-		// Get request variable.
-		$category = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
-
-		if (empty($category))
-		{
-			return;
-		}
-
-		// Get parameters.
-		$params = SunFwHelper::getExtensionParams('template', $this->template['name']);
-
-		if (empty($params['token']))
-		{
-			return;
-		}
-
-		// Get banner data.
-		$banner = SUNFW_GET_BANNER_URL;
-		$banner .= '&category_alias=' . ( $category == 'layout-footer' ? 'jsn-sunfw' : 'jsnsunfw' ) . "-{$category}";
-		$banner .= "&token={$params['token']}";
-		$banner = SunFwHttp::get($banner, 3600);
-
-		$this->setResponse($banner);
 	}
 
 	/**

@@ -10,9 +10,6 @@
 	<license>GNU/GPL v2 or later http://www.gnu.org/licenses/gpl-2.0.html</license>
 	<description>PLG_SYSTEM_SUNFW_XML_DESCRIPTION</description>
 	<scriptfile>installer.php</scriptfile>
-	<updateservers>
-		<server type="extension" priority="1" name="JSN Sun Framework Updates">http://www.joomlashine.com/versioning/extensions/sunfwframework.xml</server>
-	</updateservers>
 	<install>
 		<sql>
 			<file charset="utf8" driver="mysql">database/mysql/install.mysql.sql</file>
@@ -66,19 +63,7 @@
 					filter="integer"
 				/>
 
-				<field
-					name="allow_tracking"
-					type="hidden"
-					default="0"
-					filter="integer"
-				/>
 
-				<field
-					name="branding-link"
-					type="hidden"
-					default="Template by JoomlaShine"
-					filter="string"
-				/>
 			</fieldset>
 		</fields>
 	</config>

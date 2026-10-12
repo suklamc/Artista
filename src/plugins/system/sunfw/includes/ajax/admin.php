@@ -100,68 +100,32 @@ class SunFwAjaxAdmin extends SunFwAjax
 		$ajaxBase = "{$root}administrator/index.php?option=com_ajax&format=json&group=system&plugin=sunfw"
 			. "&template_name={$this->templateName}&style_id={$this->styleID}&" . JSession::getFormToken() . '=1';
 
-		// Get documentation link.
-		$this->documentationLink = '#';
-
-		if (preg_match('/^tpl_([^\d]+)(\d*)$/', $this->template['id'], $match))
-		{
-			$name = $match[1];
-			$gene = empty($match[2]) ? $name : "{$name}-{$match[2]}";
-
-			$this->documentationLink = sprintf(SUNFW_DOCUMENTATION_URL, $name, $gene);
-		}
-
-		// Get Getting Started Series link.
-		$this->gettingStartedSeriesLink = SUNFW_GETTING_STARTED_SERIES_URL;
+		// Documentation now lives with the project on GitHub.
+		$this->documentationLink        = ARTISTA_REPO_URL;
+		$this->gettingStartedSeriesLink = ARTISTA_REPO_URL;
 
 		// Get plugin params.
 		$pluginParams = SunFwHelper::getExtensionParams('plugin', 'sunfw', 'system');
-
-		// Get Google Analytics profile ID.
-		if (isset($params['token']))
-		{
-			$info = SunFwHttp::get(SUNFW_GET_INFO_URL . "&token={$params['token']}&identified_name=" . SUNFW_ID, 3600);
-		}
 
 		// Get license.
 		$license = $this->getLicense();
 
 		$this->setResponse(array(
 			'bootstrapVersion' => SunFwSiteBootstrap::getVersion($this->templateName),
-			'liveChatPopup' => isset($pluginParams['live_chat_popup']) ? $pluginParams['live_chat_popup'] : null,
 			'maxLoading' => isset($pluginParams['max_loading']) ? (int) $pluginParams['max_loading'] : 0,
 			'firstStyle' => $firstStyle,
 			'namespace' => md5($root . '|' . $this->templateName . '|' . $this->styleID),
 			'hasData' => (int) $hasData,
 			'license' => $license,
-			'token' => ( empty($params['token']) || empty($license) ) ? '' : $params['token'],
+			'token' => '',
 			'lang' => $lang,
-			'ga' => array(
-				'debug' => false,
-				'enabled' => isset($pluginParams['allow_tracking']) ? (int) $pluginParams['allow_tracking'] : 0,
-				'profile' => (isset($info) && is_array($info) && isset($info['message']) && is_array($info['message']) && isset($info['message']['ga_property_id'])) ? $info['message']['ga_property_id'] : 0, // [artriva patch] null-safe
-				'set' => array(
-					'dimension1' => $this->template['realName'],
-					'dimension2' => 'edition',
-					'dimension4' => SUNFW_VERSION,
-					'dimension5' => SunFwHelper::getTemplateVersion($this->template['name']),
-					'dimension6' => 'width'
-				)
-			),
 			'urls' => array(
 				'root' => $root,
 				'plugin' => "{$root}plugins/system/sunfw",
 				'ajaxBase' => $ajaxBase,
 				'configManual' => $this->documentationLink,
 				'gettingStartedSeriesLink' => $this->gettingStartedSeriesLink,
-				'getLiveChatHtml' => '&action=getLiveChat',
 				'savePluginParams' => '&action=savePluginParams',
-				'CgZp5GTv' => '&action=purchase',
-				'Mrk1ZsC2' => '&action=getBanner',
-				'GcPAeQCn' => '&action=getDiscount',
-				'yuqT1eqf' => '&context=admin&action=tryPro',
-				'nN8dY5cp' => '&context=sample-data&action=get',
-				'K1m0cfHG' => SUNFW_CUSTOMER_AREA,
 				'chosen' => array(
 					'css' => ( JFile::exists(JPATH_ROOT . '/media/legacy/css/chosen.min.css')
 						? '/media/legacy/css/chosen.min.css'
@@ -515,49 +479,8 @@ class SunFwAjaxAdmin extends SunFwAjax
 					'href' => '#',
 					'icon' => 'database',
 					'type' => 'trigger-other',
-					'title' => JText::_('SUNFW_DATA_TAB'),
-					'target' => '#sample-data',
-					'items' => array(
-						array(
-							'href' => '#',
-							'type' => 'trigger-other',
-							'title' => JText::_('SUNFW_SAMPLE_DATA_TAB'),
-							'target' => '#sample-data'
-						),
-						array(
-							'href' => '#',
-							'type' => 'trigger-other',
-							'title' => JText::_('SUNFW_MAINTENANCE_TAB'),
-							'target' => '#maintenance'
-						)
-					)
-				),
-				array(
-					'href' => '#',
-					'icon' => 'gear',
-					'type' => 'trigger-other',
-					'title' => JText::_('SUNFW_GLOBAL_PARAMETERS'),
-					'target' => '#user-account',
-					'items' => array(
-						array(
-							'href' => '#',
-							'type' => 'trigger-other',
-							'title' => JText::_('SUNFW_USER_ACCOUNT_TAB'),
-							'target' => '#user-account'
-						),
-						array(
-							'href' => '#',
-							'type' => 'trigger-other',
-							'title' => JText::_('SUNFW_PRIVACY_SETTINGS_TAB'),
-							'target' => '#privacy-settings'
-						),
-						array(
-							'href' => '#',
-							'type' => 'trigger-other',
-							'title' => JText::_('SUNFW_LIVE_CHAT_SETTINGS_TAB'),
-							'target' => '#live-chat-settings'
-						)
-					)
+					'title' => JText::_('SUNFW_MAINTENANCE_TAB'),
+					'target' => '#maintenance'
 				),
 				array(
 					'href' => '#',
@@ -567,31 +490,10 @@ class SunFwAjaxAdmin extends SunFwAjax
 					'target' => '#about'
 				),
 				array(
-					'id' => 'sunfw-learn-more',
-					'href' => '#',
-					'icon' => 'life-ring',
-					'title' => JText::_('SUNFW_HELP'),
-					'items' => array(
-						array(
-							'id' => 'sunfw-get-started',
-							'href' => '#',
-							'icon' => 'flag',
-							'title' => JText::_('SUNFW_GET_STARTED')
-						),
-						array(
-							'href' => $this->documentationLink,
-							'icon' => 'book',
-							'title' => JText::_('SUNFW_ABOUT_DOCUMENTATION'),
-							'target' => '_blank'
-						),
-						array(
-							'href' => SUNFW_SUPPORT_URL,
-							'icon' => 'comment-o',
-							'title' => JText::_('SUNFW_ABOUT_SUPPPORT'),
-							'target' => '_blank'
-						)
-					),
-					'dropdownClass' => 'dropdown-menu-right'
+					'href' => ARTISTA_REPO_URL,
+					'icon' => 'github',
+					'title' => 'GitHub',
+					'target' => '_blank'
 				)
 			),
 			'textMapping' => array(
@@ -781,16 +683,6 @@ class SunFwAjaxAdmin extends SunFwAjax
 					'listClass' => 'hidden',
 					'items' => array(
 						array(
-							'href' => '#sample-data',
-							'title' => JText::_('SUNFW_SAMPLE_DATA'),
-							'render' => array(
-								'name' => 'PaneSampleData',
-								'file' => "{$root}/plugins/system/sunfw/assets/joomlashine/admin/js/sample-data"
-									. "/render.js?{$vd}"
-							),
-							'className' => 'toggle-pane'
-						),
-						array(
 							'href' => '#maintenance',
 							'title' => JText::_('SUNFW_MAINTENANCE_TAB'),
 							'render' => array(
@@ -798,44 +690,6 @@ class SunFwAjaxAdmin extends SunFwAjax
 								'data' => ( new SunFwAjaxMaintenance() )->getAction(true),
 								'file' => "{$root}/plugins/system/sunfw/assets/joomlashine/admin/js/maintenance"
 									. "/render.js?{$vd}"
-							),
-							'className' => 'toggle-pane'
-						)
-					)
-				),
-				array(
-					'href' => '#global-parameters',
-					'title' => JText::_('SUNFW_GLOBAL_PARAMETERS_TAB'),
-					'listClass' => 'hidden',
-					'items' => array(
-						array(
-							'href' => '#user-account',
-							'title' => JText::_('SUNFW_USER_ACCOUNT_TAB'),
-							'render' => array(
-								'name' => 'PaneUserAccount',
-								'data' => ( new SunFwAjaxUserAccount() )->getAction(true),
-								'file' => "{$root}/plugins/system/sunfw/assets/joomlashine/admin/js/user-account"
-									. "/render.js?{$vd}"
-							),
-							'className' => 'toggle-pane'
-						),
-						array(
-							'href' => '#privacy-settings',
-							'title' => JText::_('SUNFW_PRIVACY_SETTINGS_TAB'),
-							'render' => array(
-								'name' => 'PanePrivacySettings',
-								'file' => "{$root}/plugins/system/sunfw/assets/joomlashine/admin/js/privacy-settings"
-									. "/render.js?{$vd}"
-							),
-							'className' => 'toggle-pane'
-						),
-						array(
-							'href' => '#live-chat-settings',
-							'title' => JText::_('SUNFW_LIVE_CHAT_SETTINGS_TAB'),
-							'render' => array(
-								'name' => 'PaneLiveChatSettings',
-								'file' => "{$root}/plugins/system/sunfw/assets/joomlashine/admin/js"
-									. "/live-chat-settings/render.js?{$vd}"
 							),
 							'className' => 'toggle-pane'
 						)
@@ -1045,11 +899,8 @@ class SunFwAjaxAdmin extends SunFwAjax
 		else
 		{
 			$otherFooter = array(
-				sprintf(
-					JText::_('SUNFW_OTHER_PRODUCTS_PAGE_BUILDER'),
-					'<a href="http://www.joomlashine.com/joomla-extensions/jsn-pagebuilder.html" target="_blank"'
-					. ' rel="noopener noreferrer" class="link-normal sunfw-prd">JSN PageBuilder</a>'
-				)
+				'Artista is maintained on <a href="' . ARTISTA_REPO_URL . '" target="_blank"'
+				. ' rel="noopener noreferrer" class="link-normal">GitHub</a>'
 			);
 		}
 
@@ -1058,22 +909,20 @@ class SunFwAjaxAdmin extends SunFwAjax
 			'credits' => array(
 				'template' => array(
 					'name' => $this->template['realName'],
-					'link' => sprintf(
-						SUNFW_TEMPLATE_URL,
-						preg_replace('/^tpl_([^\d]+)\d*$/', '\\1', $this->template['id'])
-					),
+					'link' => ARTISTA_REPO_URL,
 					'edition' => $this->template['edition'],
 					'version' => $this->template['version']
 				),
 				'framework' => array(
 					'name' => JText::_('PLG_SYSTEM_SUNFW'),
-					'link' => 'http://www.joomlashine.com/joomla-templates/jsn-sunframework.html',
+					'link' => ARTISTA_REPO_URL,
 					'version' => SUNFW_VERSION
 				)
 			),
 			'others' => (array) $otherFooter,
-			'showChangelogs' => SunFwHelper::getBrandSetting('showTplChangelog', 1),
-			'showUpdate' => SunFwHelper::getBrandSetting('showTplUpgradeButton', 1)
+			// Updates come through Joomla's own updater (System > Update > Extensions).
+			'showChangelogs' => 0,
+			'showUpdate' => 0
 		);
 
 		// Allow 3rd-party plugins to add their own tabs into main workspace.
@@ -1089,12 +938,9 @@ class SunFwAjaxAdmin extends SunFwAjax
 	 */
 	protected function getComponentUpdate()
 	{
-		$ajaxServer = "index.php?option=com_ajax&format=json&group=system&plugin=sunfw&context=update&"
-			. "style_id={$this->styleID}&template_name={$this->templateName}&"
-			. JSession::getFormToken() . '=1&';
-
+		// Updates are handled by Joomla's own updater, so the editor never checks for them itself.
 		$data = array(
-			'url' => $ajaxServer,
+			'url' => '',
 			'modalTitle' => array(
 				'framework' => JText::_('SUNFW_UPDATE_FRAMEWORK_TITLE'),
 				'template' => JText::_('SUNFW_UPDATE_TEMPLATE_TITLE')
@@ -1348,63 +1194,4 @@ class SunFwAjaxAdmin extends SunFwAjax
 		exit();
 	}
 
-	/**
-	 * Method to register a Trial license.
-	 *
-	 * @return  void
-	 */
-	public function tryProAction()
-	{
-		// Get parameters.
-		$params = SunFwHelper::getExtensionParams('template', $this->template['name']);
-
-		if (empty($params['token']))
-		{
-			throw new Exception(JText::_('SUNFW_ERROR_INVALID_TOKEN'));
-		}
-
-		// Send a request to JoomlaShine server to register Trial license.
-		$result = SUNFW_JOIN_TRIAL_URL . "&identified_name={$this->template['id']}";
-		$result .= '&domain=' . JUri::getInstance()->toString(array('host'));
-		$result .= "&ip={$_SERVER['SERVER_ADDR']}&token={$params['token']}";
-		$result = SunFwHttp::get($result);
-
-		if ($result && $result['result'] == 'success')
-		{
-			// Clear cached license data.
-			( new SunFwAjaxUserAccount() )->clearLicenseAction();
-		}
-		elseif (!$result || $result['result'] == 'failure')
-		{
-			if ($result)
-			{
-				if ($result['error_code'] == 'API_ERROR_12')
-				{
-					$title = JText::_('SUNFW_SORRY_TRIAL_EXPIRED_TITLE');
-				}
-				else
-				{
-					$title = JText::_('SUNFW_SORRY_TRIAL_EDITION_TITLE');
-				}
-
-				$key = "SUNFW_LIGHTCART_{$result['error_code']}";
-				$msg = JText::_($key);
-
-				if (strcasecmp($key, $msg) == 0)
-				{
-					$msg = $result['message'];
-				}
-			}
-
-			throw new Exception(
-				$result ? json_encode(
-					array(
-						'title' => $title,
-						'message' => $msg,
-						'button' => JText::_('SUNFW_SORRY_TRIAL_EDITION_BUTTON_TEXT')
-					)
-				) : json_last_error_msg()
-			);
-		}
-	}
 }
