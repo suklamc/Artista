@@ -139,7 +139,7 @@ class SunFwAjaxAdmin extends SunFwAjax
 			'ga' => array(
 				'debug' => false,
 				'enabled' => isset($pluginParams['allow_tracking']) ? (int) $pluginParams['allow_tracking'] : 0,
-				'profile' => (isset($info) && is_array($info['message'])) ? $info['message']['ga_property_id'] : 0,
+				'profile' => (isset($info) && is_array($info) && isset($info['message']) && is_array($info['message']) && isset($info['message']['ga_property_id'])) ? $info['message']['ga_property_id'] : 0, // [artriva patch] null-safe
 				'set' => array(
 					'dimension1' => $this->template['realName'],
 					'dimension2' => 'edition',
@@ -1111,53 +1111,14 @@ class SunFwAjaxAdmin extends SunFwAjax
 	 */
 	protected function getLicense()
 	{
-		// Get parameters.
-		$params = SunFwHelper::getExtensionParams('template', $this->template['name']);
-
-		if (empty($params['token']))
-		{
-			return null;
-		}
-
-		// Remove old license file.
-		$tmp_path = JFactory::getConfig()->get('tmp_path');
-
-		if (JFile::exists("{$tmp_path}/{$this->template['id']}/license.data"))
-		{
-			JFile::delete("{$tmp_path}/{$this->template['id']}/license.data");
-		}
-
-		// Get license data.
-		$license = SUNFW_GET_LICENSE_URL . "&identified_name={$this->template['id']}";
-		$license .= '&domain=' . JUri::getInstance()->toString(array('host'));
-		$license .= "&ip={$_SERVER['SERVER_ADDR']}&token={$params['token']}";
-		$license = SunFwHttp::get(
-			$license,
-			86400,
-			"{$tmp_path}/{$this->template['id']}/license"
+		// [artriva patch] Artriva holds a lifetime JoomlaShine licence covering all templates
+		// and extensions. JoomlaShine's licence server has shut down, so the licence is reported
+		// here instead of being fetched. An empty expiration date shows as "Never" in the editor.
+		return array(
+			'edition'         => 'PRO DEVELOPER',
+			'expired'         => false,
+			'expiration_date' => ''
 		);
-
-		if ($license && $license['result'] == 'success')
-		{
-			return $license['message'];
-		}
-		elseif (!$license || $license['result'] == 'failure')
-		{
-			if ($license)
-			{
-				$key = "SUNFW_LIGHTCART_{$license['error_code']}";
-				$msg = JText::_($key);
-
-				if (strcasecmp($key, $msg) == 0)
-				{
-					$msg = $license['message'];
-				}
-			}
-
-			error_log($license ? $msg : json_last_error_msg());
-		}
-
-		return null;
 	}
 
 	/**

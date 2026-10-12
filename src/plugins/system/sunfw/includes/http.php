@@ -39,6 +39,13 @@ class SunFwHttp
 	{
 		$result = null;
 
+		// [artriva patch] JoomlaShine's servers are gone. Don't call them (or a blanked URL);
+		// return "no data" so the template admin falls back instead of failing.
+		if (self::isDeadEndpoint($link))
+		{
+			return null;
+		}
+
 		// Get results from cache file if not expired.
 		if (empty($cacheFile))
 		{
@@ -57,7 +64,16 @@ class SunFwHttp
 		if (empty($result))
 		{
 			$client = new JHttp();
-			$result = $client->get($link);
+
+			// [artriva patch] 15-second timeout, and fall back to the cached copy if the request fails.
+			try
+			{
+				$result = $client->get($link, null, 15);
+			}
+			catch (Exception $e)
+			{
+				$result = null;
+			}
 
 			if ($result)
 			{
@@ -95,9 +111,15 @@ class SunFwHttp
 	 */
 	public static function post($link, $data = array())
 	{
+		// [artriva patch] Never post anything to JoomlaShine's dead servers.
+		if (self::isDeadEndpoint($link))
+		{
+			return null;
+		}
+
 		// Send request.
 		$client = new JHttp();
-		$result = $client->post($link, $data);
+		$result = $client->post($link, $data, null, 15);
 
 		if (!$result)
 		{
@@ -105,5 +127,27 @@ class SunFwHttp
 		}
 
 		return SunFwText::parseJson($result->body);
+	}
+
+	/**
+	 * [artriva patch] True when a URL has no host (a blanked JoomlaShine constant)
+	 * or points at joomlashine.com, which no longer serves the framework.
+	 *
+	 * @param   string  $link  The URL about to be requested.
+	 *
+	 * @return  boolean
+	 */
+	protected static function isDeadEndpoint($link)
+	{
+		$host = parse_url((string) $link, PHP_URL_HOST);
+
+		if (empty($host))
+		{
+			return true;
+		}
+
+		$host = strtolower($host);
+
+		return $host === 'joomlashine.com' || substr($host, -16) === '.joomlashine.com';
 	}
 }
