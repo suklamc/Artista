@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<updates>
+	<update>
+		<name>Artista</name>
+		<description>Artista: JSN Artista 2 Pro template and Sun Framework for Joomla 4.4, 5 and 6</description>
+		<element>pkg_artista</element>
+		<type>package</type>
+		<version>3.0.0</version>
+		<infourl title="Artista 3.0.0">https://github.com/suklamc/Artista/releases/tag/v3.0.0</infourl>
+		<downloads>
+			<downloadurl type="full" format="zip">https://github.com/suklamc/Artista/releases/download/v3.0.0/pkg_artista_v3.0.0.zip</downloadurl>
+		</downloads>
+		<sha512>d492e8cc824881940cae67178a8b78359a7f52c27fb81cda013b0d03c7c4d8319a7421a9382b4ef98a33c9a898657d2998ee15121e323ae387c8829fceabfd5b</sha512>
+		<tags>
+			<tag>stable</tag>
+		</tags>
+		<maintainer>Artriva Studios</maintainer>
+		<maintainerurl>https://github.com/suklamc/Artista</maintainerurl>
+		<targetplatform name="joomla" version="(4\.4|5\.[0-9]+|6\.[0-9]+)" />
+		<php_minimum>8.1</php_minimum>
+	</update>
+</updates>
