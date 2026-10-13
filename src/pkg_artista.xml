@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" method="upgrade">
+	<name>Artista</name>
+	<packagename>artista</packagename>
+	<version>3.0.0</version>
+	<creationDate>2026-10-13</creationDate>
+	<author>Artriva Studios</author>
+	<authorUrl>https://github.com/suklamc/Artista</authorUrl>
+	<copyright>Copyright (C) 2012-2021 JoomlaShine.com. Copyright (C) 2026 Artriva Studios.</copyright>
+	<license>GNU/GPL v2 or later http://www.gnu.org/licenses/gpl-2.0.html</license>
+	<description>Artista: the JSN Artista 2 Pro template and its Sun Framework, maintained for Joomla 4.4, 5 and 6.</description>
+	<packager>Artriva Studios</packager>
+	<packagerurl>https://github.com/suklamc/Artista</packagerurl>
+	<scriptfile>script.php</scriptfile>
+	<blockChildUninstall>true</blockChildUninstall>
+	<files folder="packages">
+		<file type="plugin" id="sunfw" group="system">plg_system_sunfw.zip</file>
+		<file type="template" id="jsn_artista2_pro" client="site">tpl_jsn_artista2_pro.zip</file>
+	</files>
+	<updateservers>
+		<server type="extension" priority="1" name="Artista">https://raw.githubusercontent.com/suklamc/Artista/main/updates/pkg_artista.xml</server>
+	</updateservers>
+</extension>

@@ -14,6 +14,9 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
 // Get media files.
 $this->get_media();
 
@@ -27,7 +30,7 @@ if (isset($this->media) and count($this->media))
 		
 		$img = '<span class="jsn-file-thumb icon-file" alt="' . basename($file) . '"></span><span class="caption">' . basename($file) . '</span>';
 		
-		if ($dimension = @getimagesize(str_replace(JUri::root(), JPATH_ROOT . '/', $file)))
+		if ($dimension = @getimagesize(str_replace(Uri::root(), JPATH_ROOT . '/', $file)))
 		{
 			// Prepare image dimension
 			if (( $dimension[0] / $dimension[1] ) > ( 128 / 96 ))
@@ -51,13 +54,13 @@ if (isset($this->media) and count($this->media))
 		}
 		?>
 	<li
-		class="<?php if (realpath( str_replace(JUri::root(), JPATH_ROOT, $file) ) == $this->selected) echo 'selected'; ?>">
+		class="<?php if (realpath( str_replace(Uri::root(), JPATH_ROOT, $file) ) == $this->selected) echo 'selected'; ?>">
 		<a class="thumbnail" href="javascript:void(0)"><?php echo $img; ?></a>
 	</li>
 	<?php endforeach; ?>
 </ul>
 <?php else : ?>
-<div class="alert"><?php echo JText::_('SUNFW_NO_MEDIA_ITEM'); ?></div>
+<div class="alert"><?php echo Text::_('SUNFW_NO_MEDIA_ITEM'); ?></div>
 <?php
 endif;
 

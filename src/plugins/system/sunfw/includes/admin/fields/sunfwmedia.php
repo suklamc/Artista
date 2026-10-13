@@ -13,6 +13,13 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
+use Joomla\CMS\Uri\Uri;
+
 /**
  * Custom form field for selecting media file.
  *
@@ -20,7 +27,8 @@ defined('_JEXEC') or die('Restricted access');
  * @subpackage  Form
  * @since       1.0.0
  */
-class JFormFieldSunFwMedia extends JFormField
+#[\AllowDynamicProperties]
+class JFormFieldSunFwMedia extends FormField
 {
 
 	public $type = 'SunFwMedia';
@@ -42,14 +50,14 @@ class JFormFieldSunFwMedia extends JFormField
 			$html .= '<div id="sunFwModalMedia" class="modal hide" tabindex="-1" role="dialog">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-					<h3>' . JText::_('SUNFW_MEDIA_SELECTOR') . '</h3>
+					<h3>' . Text::_('SUNFW_MEDIA_SELECTOR') . '</h3>
 				</div>
 				<div class="modal-body">
 					<iframe src="about:blank"></iframe>
 				</div>
 				<div class="modal-footer">
-					<button class="btn btn-primary" type="button" data-dismiss="modal">' . JText::_('SUNFW_OK') . '</button>
-					<button class="btn" type="button" data-dismiss="modal">' . JText::_('SUNFW_CANCEL') . '</button>
+					<button class="btn btn-primary" type="button" data-dismiss="modal">' . Text::_('SUNFW_OK') . '</button>
+					<button class="btn" type="button" data-dismiss="modal">' . Text::_('SUNFW_CANCEL') . '</button>
 				</div>
 			</div>';
 
@@ -62,10 +70,10 @@ class JFormFieldSunFwMedia extends JFormField
 	protected function addAssets()
 	{
 		// Get Joomla document object.
-		$doc = JFactory::getDocument();
+		$doc = Factory::getDocument();
 
 		// Get path to plugin folder.
-		$plgPath = JUri::root(true) . '/plugins/system/sunfw';
+		$plgPath = Uri::root(true) . '/plugins/system/sunfw';
 
 		// Load modal stylesheet.
 		$doc->addStylesheet("{$plgPath}/includes/admin/fields/modal.css");
@@ -75,10 +83,10 @@ class JFormFieldSunFwMedia extends JFormField
 
 		// Get link to media selector widget.
 		$link = 'index.php?option=com_ajax&format=html&group=system&plugin=sunfw&context=media-selector&type=image&folder=images&handler=SunFwSelectImage&' .
-			 JSession::getFormToken() . '=1';
+			 Session::getFormToken() . '=1';
 
 		// Add script initialization.
-		$script = ';var SunFwMediaSelectorConfig = {url: "' . JRoute::_($link, false) . '"};';
+		$script = ';var SunFwMediaSelectorConfig = {url: "' . Route::_($link, false) . '"};';
 
 		$doc->addScriptDeclaration($script);
 	}

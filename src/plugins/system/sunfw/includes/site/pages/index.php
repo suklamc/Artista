@@ -19,10 +19,10 @@ $showSwitch = isset($this->layout['settings']['show_desktop_switcher']) ? $this-
 // Check if boxed layout is enabled?
 $boxLayout = isset($this->layout['settings']['enable_boxed_layout']) ? $this->layout['settings']['enable_boxed_layout'] : false;
 // Get advanced parameters.
-$systemDataParams = @count((array) $this->system_data) ? $this->system_data : array();
+$systemDataParams = count((array) $this->system_data) ? $this->system_data : array();
 
 // Check if cookie law is enabled?
-$cookieLawEnabled = ( @count((array) $this->cookie_law_data) && (int) $this->cookie_law_data['enabled'] );
+$cookieLawEnabled = ( count((array) $this->cookie_law_data) && (int) $this->cookie_law_data['enabled'] );
 
 // Get template's manifest cache.
 $manifest = SunFwHelper::getManifestCache($this->template);
@@ -42,7 +42,7 @@ $manifest = SunFwHelper::getManifestCache($this->template);
 
 		if ($cookieLawEnabled) :
 
-		if (@count((array) $this->cookie_law_data['cookie-law-accept-script'])) :
+		if (count((array) $this->cookie_law_data['cookie-law-accept-script'])) :
 		?>
 		<script type="text/javascript">
 			function getCookie(cname) {
@@ -128,7 +128,7 @@ $manifest = SunFwHelper::getManifestCache($this->template);
 
 	foreach (array('top', 'right', 'bottom', 'left') as $position)
 	{
-		if (isset($this->layout['views'][$position]) && @count($this->layout['views'][$position]['rows']))
+		if (isset($this->layout['views'][$position]) && count((array) $this->layout['views'][$position]['rows']))
 		{
 			if (isset($this->layout['views'][$position]['settings']) && !empty($this->layout['views'][$position]['settings']['effect']))
 			{
@@ -187,7 +187,7 @@ $manifest = SunFwHelper::getManifestCache($this->template);
 		<div id="sunfw-wrapper" class="sunfw-content <?php if ($boxLayout) echo 'boxLayout'; ?>">
 			<?php
 			// Render sections.
-			if (isset($this->layout['views']['main']) && @count($this->layout['views']['main']['sections']))
+			if (isset($this->layout['views']['main']) && count((array) $this->layout['views']['main']['sections']))
 			{
 				foreach ($this->layout['views']['main']['sections'] as $sectionIndex)
 				{
@@ -201,7 +201,7 @@ $manifest = SunFwHelper::getManifestCache($this->template);
 		// Render offcanvas.
 		foreach (array('top', 'right', 'bottom', 'left') as $position)
 		{
-			if (isset($this->layout['views'][$position]) && @count($this->layout['views'][$position]['rows']))
+			if (isset($this->layout['views'][$position]) && count((array) $this->layout['views'][$position]['rows']))
 			{
 				SunFwSite::renderOffcanvas($this->layout['views'][$position], $position);
 			}

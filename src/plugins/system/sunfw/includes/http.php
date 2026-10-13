@@ -13,9 +13,10 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
-// Import necessary libraries.
-jimport('joomla.filesystem.folder');
-jimport('joomla.filesystem.file');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Http\Http;
+use Joomla\CMS\Language\Text;
+
 
 /**
  * Class for handling HTTP request.
@@ -23,6 +24,7 @@ jimport('joomla.filesystem.file');
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwHttp
 {
 	/**
@@ -49,12 +51,12 @@ class SunFwHttp
 		// Get results from cache file if not expired.
 		if (empty($cacheFile))
 		{
-			$cacheFile = JFactory::getConfig()->get('tmp_path') . '/sunfw/' . md5($link);
+			$cacheFile = Factory::getConfig()->get('tmp_path') . '/sunfw/' . md5($link);
 		}
 
 		if (!$force && is_numeric($cache) && $cache > 0)
 		{
-			if (JFile::exists($cacheFile) && time() - filemtime($cacheFile) < $cache)
+			if (SunFwFile::exists($cacheFile) && time() - filemtime($cacheFile) < $cache)
 			{
 				$result = file_get_contents($cacheFile);
 			}
@@ -63,7 +65,7 @@ class SunFwHttp
 		// Send request if cached results not available.
 		if (empty($result))
 		{
-			$client = new JHttp();
+			$client = new Http();
 
 			// [artriva patch] 15-second timeout, and fall back to the cached copy if the request fails.
 			try
@@ -80,12 +82,12 @@ class SunFwHttp
 				$result = $result->body;
 
 				// Cache results.
-				if (is_numeric($cache) && $cache > 0 && JFolder::create(dirname($cacheFile)))
+				if (is_numeric($cache) && $cache > 0 && SunFwFolder::create(dirname($cacheFile)))
 				{
-					JFile::write($cacheFile, $result);
+					SunFwFile::write($cacheFile, $result);
 				}
 			}
-			elseif (JFile::exists($cacheFile))
+			elseif (SunFwFile::exists($cacheFile))
 			{
 				$result = file_get_contents($cacheFile);
 
@@ -94,7 +96,7 @@ class SunFwHttp
 			}
 			else
 			{
-				throw new Exception(JText::sprintf('SUNFW_HTTP_REQUEST_FAIL', parse_url($link, PHP_URL_HOST)));
+				throw new Exception(Text::sprintf('SUNFW_HTTP_REQUEST_FAIL', parse_url($link, PHP_URL_HOST)));
 			}
 		}
 
@@ -118,12 +120,12 @@ class SunFwHttp
 		}
 
 		// Send request.
-		$client = new JHttp();
+		$client = new Http();
 		$result = $client->post($link, $data, null, 15);
 
 		if (!$result)
 		{
-			throw new Exception(JText::sprintf('SUNFW_HTTP_REQUEST_FAIL', parse_url($link, PHP_URL_HOST)));
+			throw new Exception(Text::sprintf('SUNFW_HTTP_REQUEST_FAIL', parse_url($link, PHP_URL_HOST)));
 		}
 
 		return SunFwText::parseJson($result->body);

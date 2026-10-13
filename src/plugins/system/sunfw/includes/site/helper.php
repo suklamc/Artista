@@ -13,8 +13,11 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Associations;
+use Joomla\Registry\Registry;
+
 // Load necessary library.
-jimport('joomla.filesystem.file');
 
 /**
  * General helper class.
@@ -22,6 +25,7 @@ jimport('joomla.filesystem.file');
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwSiteHelper
 {
 
@@ -71,8 +75,8 @@ class SunFwSiteHelper
 		}
 		else
 		{
-			$this->app = JFactory::getApplication();
-			$this->doc = JFactory::getDocument();
+			$this->app = Factory::getApplication();
+			$this->doc = Factory::getDocument();
 		}
 	}
 
@@ -117,14 +121,14 @@ class SunFwSiteHelper
 	public static function getArticle($id, $lang = '')
 	{
 		// Get database object.
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 
 		// Start building query.
 		$query = $db->getQuery(true)
 			->select(
 			'a.id, a.asset_id, a.title, a.alias, a.introtext, a.fulltext, a.catid, a.created, a.created_by, a.created_by_alias, CASE WHEN a.modified = ' .
 				 $db->quote($db->getNullDate()) .
-				 ' THEN a.created ELSE a.modified END as modified, a.modified_by, a.checked_out, a.checked_out_time, a.publish_up, a.publish_down, a.images, a.urls, a.attribs, a.version, a.ordering, a.metakey, a.metadesc, a.access, a.hits, a.metadata, a.featured, a.language, a.xreference')
+				 ' THEN a.created ELSE a.modified END as modified, a.modified_by, a.checked_out, a.checked_out_time, a.publish_up, a.publish_down, a.images, a.urls, a.attribs, a.version, a.ordering, a.metakey, a.metadesc, a.access, a.hits, a.metadata, a.featured, a.language')
 			->from('#__content AS a');
 
 		// Join on category table.
@@ -155,12 +159,12 @@ class SunFwSiteHelper
 			// Check article language.
 			if (empty($lang))
 			{
-				$lang = JFactory::getLanguage()->getTag();
+				$lang = Factory::getLanguage()->getTag();
 			}
 
 			if ($data->language == $lang)
 			{
-				if (class_exists('Registry'))
+				if (class_exists(Registry::class))
 				{
 					// Convert parameter fields to objects.
 					$data->params = new Registry();
@@ -174,7 +178,7 @@ class SunFwSiteHelper
 			else
 			{
 				// Get associations of the specified article.
-				$associations = JLanguageAssociations::getAssociations('com_content', '#__content', 'com_content.item', (int) $id);
+				$associations = Associations::getAssociations('com_content', '#__content', 'com_content.item', (int) $id);
 
 				foreach ($associations as $tag => $association)
 				{
@@ -209,15 +213,15 @@ class SunFwSiteHelper
 	private function _prepare()
 	{
 		// Preset some variables.
-		$this->doc->templateUrl = $this->renderer->baseurl . '/templates/' . $this->renderer->template;
-		$this->doc->templatePrefix = $this->renderer->template . '_';
-		$this->doc->isMobileSwicher = null;
+		$this->renderer->templateUrl = $this->renderer->baseurl . '/templates/' . $this->renderer->template;
+		$this->renderer->templatePrefix = $this->renderer->template . '_';
+		$this->renderer->isMobileSwicher = null;
 
 		// Set custom direction if specified via query string.
 		$this->doc->direction = $this->app->input->getCmd('sunfw_setdirection', $this->doc->direction);
 
 		// Prepare switcher state.
-		$switcher = $this->app->input->cookie->get($this->doc->templatePrefix . 'switcher_params', null, 'RAW');
+		$switcher = $this->app->input->cookie->get($this->renderer->templatePrefix . 'switcher_params', null, 'RAW');
 
 		if ($switcher != null)
 		{
@@ -225,11 +229,11 @@ class SunFwSiteHelper
 
 			if ($switcher['mobile'] == 'yes')
 			{
-				$this->doc->isMobileSwicher = true;
+				$this->renderer->isMobileSwicher = true;
 			}
 			else
 			{
-				$this->doc->isMobileSwicher = false;
+				$this->renderer->isMobileSwicher = false;
 			}
 		}
 
@@ -280,12 +284,12 @@ class SunFwSiteHelper
 		}
 
 		// Add class for home page.
-		if (is_object($this->doc->activeMenu) && $this->doc->activeMenu->home == 1)
+		if (is_object($this->renderer->activeMenu) && $this->renderer->activeMenu->home == 1)
 		{
 			$bodyClass[] = 'sunfw-homepage';
 		}
 
-		$this->doc->bodyClass = preg_replace('/custom-[^\-]+width-span\d+/', '', implode(' ', $bodyClass));
+		$this->renderer->bodyClass = preg_replace('/custom-[^\-]+width-span\d+/', '', implode(' ', $bodyClass));
 	}
 
 	/**
@@ -298,16 +302,16 @@ class SunFwSiteHelper
 		$pageClass = '';
 
 		$menus = $this->app->getMenu();
-		$this->doc->activeMenu = $menus->getActive();
+		$this->renderer->activeMenu = $menus->getActive();
 
-		if (is_object($this->doc->activeMenu))
+		if (is_object($this->renderer->activeMenu))
 		{
 			// Get page class suffix.
-			$params = JMenu::getInstance('site')->getParams($this->doc->activeMenu->id);
+			$params = $this->renderer->activeMenu->getParams();
 			$pageClass = $params->get('pageclass_sfx');
 		}
 
-		return explode(' ', $pageClass);
+		return explode(' ', (string) $pageClass);
 	}
 
 	/**
@@ -343,7 +347,7 @@ class SunFwSiteHelper
 					}
 					else
 					{
-						$this->doc->addStylesheet($this->doc->templateUrl . '/css/' . trim($cssFile));
+						$this->doc->addStylesheet($this->renderer->templateUrl . '/css/' . trim($cssFile));
 					}
 				}
 			}
@@ -366,7 +370,7 @@ class SunFwSiteHelper
 					}
 					else
 					{
-						$this->doc->addScript($this->doc->templateUrl . '/js/' . trim($jsFile));
+						$this->doc->addScript($this->renderer->templateUrl . '/js/' . trim($jsFile));
 					}
 				}
 			}
@@ -439,7 +443,7 @@ class SunFwSiteHelper
 		// Load right-to-left stylesheet.
 		if ($this->doc->direction == 'rtl')
 		{
-			$this->doc->addStylesheet("{$this->doc->templateUrl}/css/rtl/style-rtl.css");
+			$this->doc->addStylesheet("{$this->renderer->templateUrl}/css/rtl/style-rtl.css");
 
 			// Load RTL override in niche.
 			$template = $this->renderer->template;
@@ -447,7 +451,7 @@ class SunFwSiteHelper
 
 			if (file_exists(JPATH_ROOT . "/templates/{$template}/niches/{$niche}/css/rtl/style-rtl.css"))
 			{
-				$this->doc->addStylesheet("{$this->doc->templateUrl}/niches/{$niche}/css/rtl/style-rtl.css");
+				$this->doc->addStylesheet("{$this->renderer->templateUrl}/niches/{$niche}/css/rtl/style-rtl.css");
 			}
 		}
 
@@ -521,21 +525,20 @@ class SunFwSiteHelper
 	 */
 	private function _autoLoadCustomCssFile()
 	{
-		// Get template parameters from the extensions table.
-		$templateParams = SunFwHelper::getTemplateParams($this->renderer->template);
+		// Load the site's css/custom/custom.css when it holds any CSS beyond comments.
+		// (JoomlaShine compared it with a checksum their installer stored; fresh Artista
+		// installs have no such checksum, so the file would otherwise never load.)
+		$customFile = JPATH_ROOT . "/templates/{$this->renderer->template}/css/custom/custom.css";
 
-		if (isset($templateParams) && !empty($templateParams['customCSSFileChecksum']))
+		if (is_file($customFile))
 		{
-			$customFile = JPATH_ROOT . "/templates/{$this->doc->template}/css/custom/custom.css";
+			$css = preg_replace('#/\*.*?\*/#s', '', (string) file_get_contents($customFile));
 
-			if (JFile::exists($customFile))
+			if (trim($css) !== '')
 			{
-				$md5 = md5_file($customFile);
-
-				if ($md5 != $templateParams['customCSSFileChecksum'])
-				{
-					$this->doc->addStylesheet("{$this->doc->templateUrl}/css/custom/custom.css");
-				}
+				$this->doc->addStylesheet(
+					"{$this->renderer->templateUrl}/css/custom/custom.css?v=" . substr(md5_file($customFile), 0, 8)
+				);
 			}
 		}
 	}

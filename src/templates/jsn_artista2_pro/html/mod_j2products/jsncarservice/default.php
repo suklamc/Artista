@@ -5,6 +5,9 @@
  * @license 		GNU GPL v3 or later
  */
 defined('_JEXEC') or die;
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
 $total_cols = $params->get('number_of_coloums', 3);
 $total_count = count($list); $counter = 0;
 ?>
@@ -22,7 +25,7 @@ $total_count = count($list); $counter = 0;
 					<div itemprop="itemListElement" itemscope="" itemtype="http://schema.org/Product" class="j2store product-<?php echo $product->j2store_product_id; ?> j2store-module-product">
 						<?php if($product->pricing->base_price > $product->pricing->price) : ?>
 							<div class="sale-tag">
-								<?php echo JText::_('J2STORE_SALE_TAG_FOUND'); ?>
+								<?php echo Text::_('J2STORE_SALE_TAG_FOUND'); ?>
 							</div>
 						<?php endif;?>
 						<!-- product image if postion is top -->
@@ -52,7 +55,7 @@ $total_count = count($list); $counter = 0;
 									<h4 itemprop="name" class="product-title">
 										<?php if( $product->link_title ): ?>
 											<a itemprop="url"
-											href="<?php echo JRoute::_( $product->module_display_link ); ?>"
+											href="<?php echo Route::_( $product->module_display_link ); ?>"
 											title="<?php echo $product->product_name; ?>" >
 										<?php endif; ?>
 
@@ -113,7 +116,7 @@ $total_count = count($list); $counter = 0;
 											<?php $discount =(1 - ($product->pricing->price / $product->pricing->base_price) ) * 100; ?>
 											<?php if($discount > 0): ?>
 												<div class="discount-percentage">
-													<?php  echo round($discount).' % '.JText::_('J2STORE_PRODUCT_OFFER');?>
+													<?php  echo round($discount).' % '.Text::_('J2STORE_PRODUCT_OFFER');?>
 												</div>
 											<?php endif; ?>
 										<?php endif; ?>
@@ -123,7 +126,7 @@ $total_count = count($list); $counter = 0;
 										<?php if( $product->show_sku ) : ?>
 											<?php if(!empty($product->variant->sku)) : ?>
 												<div class="product-sku">
-													<span class="sku-text"><?php echo JText::_('J2STORE_SKU')?></span>
+													<span class="sku-text"><?php echo Text::_('J2STORE_SKU')?></span>
 													<span itemprop="sku" class="sku"> <?php echo $product->variant->sku; ?> </span>
 												</div>
 											<?php endif; ?>
@@ -138,14 +141,14 @@ $total_count = count($list); $counter = 0;
 												</span>
 												<?php else: ?>
 													<span class="outofstock">
-														<?php echo JText::_('J2STORE_OUT_OF_STOCK'); ?>
+														<?php echo Text::_('J2STORE_OUT_OF_STOCK'); ?>
 													</span>
 												<?php endif; ?>
 											</div>
 
 											<?php if($product->variant->allow_backorder == 2 && !$product->variant->availability): ?>
 												<span class="backorder-notification">
-													<?php echo JText::_('J2STORE_BACKORDER_NOTIFICATION'); ?>
+													<?php echo Text::_('J2STORE_BACKORDER_NOTIFICATION'); ?>
 												</span>
 											<?php endif; ?>
 										<?php endif; ?>

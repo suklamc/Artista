@@ -18,6 +18,7 @@ use Leafo\ScssPhp\Formatter;
  *
  * @author Leaf Corcoran <leafot@gmail.com>
  */
+#[\AllowDynamicProperties]
 class Compact extends Formatter
 {
     /**

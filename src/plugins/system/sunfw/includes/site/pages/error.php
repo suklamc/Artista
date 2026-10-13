@@ -13,6 +13,15 @@
 // No direct access to this file.
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Helper\ModuleHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Registry\Registry;
+use Joomla\Component\Content\Site\Helper\RouteHelper;
+
 // Continue only if the current template supports custom 404.
 $xml = SunFwHelper::getManifest($this->template);
 
@@ -21,7 +30,7 @@ if (!$xml || !( $xml = current($xml->xpath('//feature[@name="custom_404"]')) ) |
 	return;
 }
 
-$url    = rtrim(JURI::root(), '/');
+$url    = rtrim(Uri::root(), '/');
 	
 // Get request variables.
 $option = $this->app->input->getCmd('option');
@@ -52,40 +61,39 @@ if (!empty($this->custom_404_data) && (int) $this->custom_404_data['enabled'] &&
 		}
 
 		// TODO: Change based on shownoauth.
-		JLoader::register('ContentHelperRoute', JPATH_ROOT . '/components/com_content/helpers/route.php');
-
-		$item->readmore_link = JRoute::_(ContentHelperRoute::getArticleRoute($item->slug, $item->catid, $item->language));
+		$item->readmore_link = Route::_(RouteHelper::getArticleRoute($item->slug, $item->catid, $item->language));
 
 		// Prepare content.
 		$item->text = $item->introtext . $item->fulltext;
-		$item->params = new JRegistry($item->attribs);
+		$item->params = new Registry($item->attribs);
 
 		// Process the content plugins.
-		JPluginHelper::importPlugin('content');
+		PluginHelper::importPlugin('content');
 
-		$dispatcher = JEventDispatcher::getInstance();
-		$dispatcher->trigger('onContentPrepare', array(
+		$dispatcher = Factory::getApplication();
+		$dispatcher->triggerEvent('onContentPrepare', array(
 			'com_content.article',
 			&$item,
-			&$item->params
+			&$item->params,
+			0
 		));
 
 		$item->event = new stdClass();
-		$results = $dispatcher->trigger('onContentAfterTitle', array(
+		$results = $dispatcher->triggerEvent('onContentAfterTitle', array(
 			'com_content.article',
 			&$item,
 			&$item->params
 		));
 		$item->event->afterDisplayTitle = trim(implode("\n", $results));
 
-		$results = $dispatcher->trigger('onContentBeforeDisplay', array(
+		$results = $dispatcher->triggerEvent('onContentBeforeDisplay', array(
 			'com_content.article',
 			&$item,
 			&$item->params
 		));
 		$item->event->beforeDisplayContent = trim(implode("\n", $results));
 
-		$results = $dispatcher->trigger('onContentAfterDisplay', array(
+		$results = $dispatcher->triggerEvent('onContentAfterDisplay', array(
 			'com_content.article',
 			&$item,
 			&$item->params
@@ -94,8 +102,14 @@ if (!empty($this->custom_404_data) && (int) $this->custom_404_data['enabled'] &&
 	}
 }
 
-// Get Joomla document object.
-$document = JFactory::getDocument();
+// Get Joomla document object (the error document being rendered).
+$document = $this->doc ?: Factory::getApplication()->getDocument();
+
+// Joomla 4+ passes the error on the document; Joomla 3 put it on the template object.
+if (!isset($this->error) && isset($document->error) && $document->error instanceof Throwable)
+{
+	$this->error = $document->error;
+}
 
 if (!isset($this->error))
 {
@@ -121,33 +135,24 @@ $manifest = SunFwHelper::getManifestCache($this->template);
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<base href="<?php echo JURI::base(); ?>" />
+	<base href="<?php echo Uri::base(); ?>" />
 
 	<title><?php echo $this->title; ?> <?php echo htmlspecialchars($this->error->getMessage(), ENT_QUOTES, 'UTF-8'); ?></title>
 
-	<?php foreach ($document->_styleSheets as $src => $attrs) : ?>
-	<link href="<?php echo $src; ?>" type="<?php echo $attrs['type']; ?>" rel="stylesheet" />
-	<?php endforeach; ?>
+	<jdoc:include type="metas" />
+	<jdoc:include type="styles" />
 
 	<link href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template; ?>/css/template.css" rel="stylesheet" />
+	<?php if (is_file(JPATH_ROOT . '/templates/' . $this->template . '/css/custom/custom.css')) : ?>
 	<link href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template; ?>/css/custom/custom.css" rel="stylesheet" />
+	<?php endif; ?>
 	<link href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template; ?>/css/bootstrap.css" rel="stylesheet" />
 
-	<style type="text/css">
-		<?php echo implode("\n", $document->_style); ?>
-	</style>
-
 	<?php if ($this->app->get('debug_lang', '0') == '1' || $this->app->get('debug', '0') == '1') : ?>
-	<link href="<?php echo $this->baseurl; ?>/media/cms/css/debug.css" rel="stylesheet" />
+	<link href="<?php echo $this->baseurl; ?>/media/plg_system_debug/css/debug.css" rel="stylesheet" />
 	<?php endif; ?>
 
-	<?php foreach ($document->_scripts as $src => $attrs) : ?>
-	<script src="<?php echo $src; ?>" type="<?php echo $attrs['type']; ?>"></script>
-	<?php endforeach; ?>
-
-	<script type="text/javascript">
-		<?php echo implode("\n", $document->_script); ?>
-	</script>
+	<jdoc:include type="scripts" />
 
 	<link href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template; ?>/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
 </head>
@@ -168,9 +173,8 @@ $manifest = SunFwHelper::getManifestCache($this->template);
 						if (isset($item)) :
 
 						// Render the content that built by JSN PageBuidler4 //
-						$dispatcher = JEventDispatcher::getInstance();
-						JPluginHelper::importPlugin('system', 'pagebuilder4');
-						$dispatcher->trigger('onPageBuilder4RenderDynamicContent', array(&$item->text));
+						PluginHelper::importPlugin('system', 'pagebuilder4');
+						Factory::getApplication()->triggerEvent('onPageBuilder4RenderDynamicContent', array(&$item->text));
 						
 						//  // Fix if article call JSN Uniform //
 						$item->text = str_replace('JSN_UNIFORM_ROOT_URL', $url,  $item->text);
@@ -183,31 +187,31 @@ $manifest = SunFwHelper::getManifestCache($this->template);
 						?>
 						<div class="row page-header">
 							<div class="col-xs-12 col-md-6">
-								<h3><?php echo JText::_('JERROR_LAYOUT_ERROR_HAS_OCCURRED_WHILE_PROCESSING_YOUR_REQUEST'); ?></h3>
-								<p><?php echo JText::_('JERROR_LAYOUT_NOT_ABLE_TO_VISIT'); ?></p>
+								<h3><?php echo Text::_('JERROR_LAYOUT_ERROR_HAS_OCCURRED_WHILE_PROCESSING_YOUR_REQUEST'); ?></h3>
+								<p><?php echo Text::_('JERROR_LAYOUT_NOT_ABLE_TO_VISIT'); ?></p>
 								<ul>
-									<li><?php echo JText::_('JERROR_LAYOUT_AN_OUT_OF_DATE_BOOKMARK_FAVOURITE'); ?></li>
-									<li><?php echo JText::_('JERROR_LAYOUT_MIS_TYPED_ADDRESS'); ?></li>
-									<li><?php echo JText::_('JERROR_LAYOUT_SEARCH_ENGINE_OUT_OF_DATE_LISTING'); ?></li>
-									<li><?php echo JText::_('JERROR_LAYOUT_YOU_HAVE_NO_ACCESS_TO_THIS_PAGE'); ?></li>
+									<li><?php echo Text::_('JERROR_LAYOUT_AN_OUT_OF_DATE_BOOKMARK_FAVOURITE'); ?></li>
+									<li><?php echo Text::_('JERROR_LAYOUT_MIS_TYPED_ADDRESS'); ?></li>
+									<li><?php echo Text::_('JERROR_LAYOUT_SEARCH_ENGINE_OUT_OF_DATE_LISTING'); ?></li>
+									<li><?php echo Text::_('JERROR_LAYOUT_YOU_HAVE_NO_ACCESS_TO_THIS_PAGE'); ?></li>
 								</ul>
 							</div>
 
 							<div class="col-xs-12 col-md-6">
-								<?php if (JModuleHelper::getModule('search')) : ?>
-									<h3><?php echo JText::_('JERROR_LAYOUT_SEARCH'); ?></h3>
-									<p><?php echo JText::_('JERROR_LAYOUT_SEARCH_PAGE'); ?></p>
+								<?php if (ModuleHelper::getModule('search')) : ?>
+									<h3><?php echo Text::_('JERROR_LAYOUT_SEARCH'); ?></h3>
+									<p><?php echo Text::_('JERROR_LAYOUT_SEARCH_PAGE'); ?></p>
 									<?php
 									echo $this->doc->getBuffer('module', 'search');
 
 								endif;
 								?>
-								<p><?php echo JText::_('JERROR_LAYOUT_GO_TO_THE_HOME_PAGE'); ?></p>
-								<p><a href="<?php echo $this->baseurl; ?>/index.php" class="btn btn-default"><?php echo JText::_('JERROR_LAYOUT_HOME_PAGE'); ?></a></p>
+								<p><?php echo Text::_('JERROR_LAYOUT_GO_TO_THE_HOME_PAGE'); ?></p>
+								<p><a href="<?php echo $this->baseurl; ?>/index.php" class="btn btn-default"><?php echo Text::_('JERROR_LAYOUT_HOME_PAGE'); ?></a></p>
 							</div>
 						</div>
 
-						<p><?php echo JText::_('JERROR_LAYOUT_PLEASE_CONTACT_THE_SYSTEM_ADMINISTRATOR'); ?></p>
+						<p><?php echo Text::_('JERROR_LAYOUT_PLEASE_CONTACT_THE_SYSTEM_ADMINISTRATOR'); ?></p>
 						<blockquote>
 							<span class="label label-inverse"><?php echo $this->error->getCode(); ?></span> <?php echo htmlspecialchars($this->error->getMessage(), ENT_QUOTES, 'UTF-8');?>
 							<?php if ($this->debug) : ?>
@@ -231,7 +235,7 @@ $manifest = SunFwHelper::getManifestCache($this->template);
 
 							while ($loop === true) :
 							?>
-							<p><?php echo JText::_('JERROR_LAYOUT_PREVIOUS_ERROR'); ?></p>
+							<p><?php echo Text::_('JERROR_LAYOUT_PREVIOUS_ERROR'); ?></p>
 							<p>
 								<?php echo htmlspecialchars($this->_error->getMessage(), ENT_QUOTES, 'UTF-8'); ?>
 								<br/><?php echo htmlspecialchars($this->_error->getFile(), ENT_QUOTES, 'UTF-8');?>:<?php echo $this->_error->getLine(); ?>

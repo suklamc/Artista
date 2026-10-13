@@ -13,9 +13,9 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
-// Import necessary Joomla libraries
-jimport('joomla.filesystem.folder');
-jimport('joomla.filesystem.file');
+use Joomla\CMS\Uri\Uri;
+use Joomla\Filesystem\Path;
+
 
 /**
  * CSS Compression engine
@@ -24,6 +24,7 @@ jimport('joomla.filesystem.file');
  * @subpackage  Plugin
  * @since       1.0.0
  */
+#[\AllowDynamicProperties]
 abstract class SunFwSiteCompressHelper
 {
 
@@ -40,7 +41,7 @@ abstract class SunFwSiteCompressHelper
 		if (strpos($file, '/') === 0)
 		{
 			$possiblePaths = array(
-				str_replace(JUri::base(true), JPATH_ROOT, $file),
+				str_replace(Uri::base(true), JPATH_ROOT, $file),
 				$_SERVER['DOCUMENT_ROOT'] . '/' . ltrim($file, '/'),
 				JPATH_ROOT . '/' . ltrim($file, '/')
 			);
@@ -68,14 +69,14 @@ abstract class SunFwSiteCompressHelper
 			}
 		}
 		
-		$rootURL = JUri::root();
-		$currentURL = JUri::current();
+		$rootURL = Uri::root();
+		$currentURL = Uri::current();
 		
 		$currentPath = JPATH_ROOT . '/' . substr($currentURL, strlen($rootURL));
 		$currentPath = str_replace(DIRECTORY_SEPARATOR, '/', $currentPath);
 		$currentPath = dirname($currentPath);
 		
-		return JPath::clean($currentPath . '/' . $file);
+		return Path::clean($currentPath . '/' . $file);
 	}
 
 	/**
@@ -134,7 +135,7 @@ abstract class SunFwSiteCompressHelper
 	{
 		$combine = $string . file_get_contents($filename);
 		
-		return JFile::write($filename, $combine);
+		return SunFwFile::write($filename, $combine);
 	}
 
 	/**
@@ -146,7 +147,7 @@ abstract class SunFwSiteCompressHelper
 	 */
 	public static function isInternal($url)
 	{
-		$uri = JUri::getInstance($url);
+		$uri = Uri::getInstance($url);
 		$base = $uri->toString(array(
 			'scheme',
 			'host',
@@ -159,7 +160,7 @@ abstract class SunFwSiteCompressHelper
 			'port'
 		));
 		
-		if (stripos($base, JUri::base()) !== 0 && !empty($host))
+		if (stripos($base, Uri::base()) !== 0 && !empty($host))
 		{
 			return false;
 		}

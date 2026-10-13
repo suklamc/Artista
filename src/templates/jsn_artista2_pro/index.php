@@ -13,8 +13,10 @@
 // No direct access to this file.
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+
 // Add script declaration.
-JFactory::getDocument()->addScriptDeclaration( 'SunBlank.initTemplate();' );
+Factory::getDocument()->addScriptDeclaration( 'SunBlank.initTemplate();' );
 
 // Let SUN Framework handle the rest.
 SunFwSite::getInstance()->render( 'index' );

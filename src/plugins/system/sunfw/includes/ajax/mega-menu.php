@@ -13,12 +13,16 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
 /**
  * Handle Ajax requests from mega menu pane.
  *
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwAjaxMegaMenu extends SunFwAjax
 {
 
@@ -32,7 +36,7 @@ class SunFwAjaxMegaMenu extends SunFwAjax
 	public function getAction($return = false)
 	{
 		// Get site URL.
-		$root = JUri::root(true);
+		$root = Uri::root(true);
 
 		/**
 		 * Get mega menu's items.
@@ -106,82 +110,82 @@ class SunFwAjaxMegaMenu extends SunFwAjax
 			'settings' => SunFwHelper::findTemplateAdminJsonSettings(
 				JPATH_ROOT . '/plugins/system/sunfw/assets/joomlashine/admin/js/mega-menu/settings', 'root.json', true),
 			'textMapping' => array(
-				'mega-menu' => JText::_('SUNFW_MEGAMENU'),
-				'save-mega-menu' => JText::_('SUNFW_SAVE_MEGAMENU'),
-				'megamenu-is-not-activated' => JText::_('SUNFW_MENU_BUILDER_MEGAMENU_IS_NOT_ACTIVATED'),
-				'empty-menu-message' => JText::_('SUNFW_MENU_BUILDER_EMPTY_MESSAGE'),
-				'language-*' => JText::_('SUNFW_LANGUAGE_ALL'),
-				'fixed-width' => JText::_('SUNFW_FIXED_WIDTH'),
-				'submenu-width' => JText::_('SUNFW_SUBMENU_LAYOUT_WIDTH'),
-				'submenu-align' => JText::_('SUNFW_SUBMENU_ALIGN'),
-				'submenu-icon' => JText::_('SUNFW_SUBMENU_ICON'),
-				'submenu-desc' => JText::_('SUNFW_SUBMENU_DESC'),
-				'megamenu-fixed-width-hint' => JText::_('SUNFW_MEGAMENU_FIXED_WIDTH_HINT'),
-				'megamenu-submenu-width-hint' => JText::_('SUNFW_MEGAMENU_SUBMENU_WIDTH_HINT'),
-				'megamenu-submenu-align-hint' => JText::_('SUNFW_MEGAMENU_SUBMENU_ALIGN_HINT'),
-				'megamenu-padding-hint' => JText::_('SUNFW_MEGAMENU_PADDING_HINT'),
-				'megamenu-background-color-hint' => JText::_('SUNFW_MEGAMENU_BACKGROUND_COLOR_HINT'),
-				'megamenu-background-image-hint' => JText::_('SUNFW_MEGAMENU_BACKGROUND_IMAGE_HINT'),
-				'megamenu-background-image-settings-hint' => JText::_('SUNFW_MEGAMENU_BACKGROUND_IMAGE_SETTINGS_HINT'),
-				'megamenu-border-hint' => JText::_('SUNFW_MEGAMENU_BORDER_HINT'),
-				'megamenu-image-name-hint' => JText::_('SUNFW_MEGAMENU_IMAGE_NAME_HINT'),
-				'megamenu-image-image-hint' => JText::_('SUNFW_MEGAMENU_IMAGE_IMAGE_HINT'),
-				'megamenu-image-alt-text-hint' => JText::_('SUNFW_MEGAMENU_IMAGE_ALT_TEXT_HINT'),
-				'megamenu-image-custom-classes-hint' => JText::_('SUNFW_MEGAMENU_IMAGE_CUSTOM_CLASSES_HINT'),
-				'megamenu-submenu-name-hint' => JText::_('SUNFW_MEGAMENU_SUBMENU_NAME_HINT'),
-				'megamenu-module-position-name-hint' => JText::_('SUNFW_MEGAMENU_MODULE_POSITION_NAME_HINT'),
-				'megamenu-module-position-position-hint' => JText::_('SUNFW_MEGAMENU_MODULE_POSITION_POSITION_HINT'),
-				'megamenu-module-position-custom-classes-hint' => JText::_('SUNFW_MEGAMENU_MODULE_POSITION_CUSTOM_CLASSES_HINT'),
-				'megamenu-module-name-hint' => JText::_('SUNFW_MEGAMENU_MODULE_NAME_HINT'),
-				'megamenu-module-module-hint' => JText::_('SUNFW_MEGAMENU_MODULE_MODULE_HINT'),
-				'megamenu-module-custom-classes-hint' => JText::_('SUNFW_MEGAMENU_MODULE_CUSTOM_CLASSES_HINT'),
-				'megamenu-custom-html-name-hint' => JText::_('SUNFW_MEGAMENU_CUSTOM_HTML_NAME_HINT'),
-				'megamenu-custom-html-content-hint' => JText::_('SUNFW_MEGAMENU_CUSTOM_HTML_CONTENT_HINT'),
-				'megamenu-custom-html-custom-classes-hint' => JText::_('SUNFW_MEGAMENU_CUSTOM_HTML_CUSTOM_CLASSES_HINT'),
-				'item-navigation' => JText::_('SUNFW_CONTAINER_SETTINGS'),
-				'container-settings' => JText::_('SUNFW_CONTAINER_SETTINGS'),
-				'block-settings' => JText::_('SUNFW_BLOCK_SETTINGS'),
-				'menu-builder' => JText::_('SUNFW_MENU_BUILDER'),
-				'save-menu' => JText::_('SUNFW_SAVE_MENU'),
+				'mega-menu' => Text::_('SUNFW_MEGAMENU'),
+				'save-mega-menu' => Text::_('SUNFW_SAVE_MEGAMENU'),
+				'megamenu-is-not-activated' => Text::_('SUNFW_MENU_BUILDER_MEGAMENU_IS_NOT_ACTIVATED'),
+				'empty-menu-message' => Text::_('SUNFW_MENU_BUILDER_EMPTY_MESSAGE'),
+				'language-*' => Text::_('SUNFW_LANGUAGE_ALL'),
+				'fixed-width' => Text::_('SUNFW_FIXED_WIDTH'),
+				'submenu-width' => Text::_('SUNFW_SUBMENU_LAYOUT_WIDTH'),
+				'submenu-align' => Text::_('SUNFW_SUBMENU_ALIGN'),
+				'submenu-icon' => Text::_('SUNFW_SUBMENU_ICON'),
+				'submenu-desc' => Text::_('SUNFW_SUBMENU_DESC'),
+				'megamenu-fixed-width-hint' => Text::_('SUNFW_MEGAMENU_FIXED_WIDTH_HINT'),
+				'megamenu-submenu-width-hint' => Text::_('SUNFW_MEGAMENU_SUBMENU_WIDTH_HINT'),
+				'megamenu-submenu-align-hint' => Text::_('SUNFW_MEGAMENU_SUBMENU_ALIGN_HINT'),
+				'megamenu-padding-hint' => Text::_('SUNFW_MEGAMENU_PADDING_HINT'),
+				'megamenu-background-color-hint' => Text::_('SUNFW_MEGAMENU_BACKGROUND_COLOR_HINT'),
+				'megamenu-background-image-hint' => Text::_('SUNFW_MEGAMENU_BACKGROUND_IMAGE_HINT'),
+				'megamenu-background-image-settings-hint' => Text::_('SUNFW_MEGAMENU_BACKGROUND_IMAGE_SETTINGS_HINT'),
+				'megamenu-border-hint' => Text::_('SUNFW_MEGAMENU_BORDER_HINT'),
+				'megamenu-image-name-hint' => Text::_('SUNFW_MEGAMENU_IMAGE_NAME_HINT'),
+				'megamenu-image-image-hint' => Text::_('SUNFW_MEGAMENU_IMAGE_IMAGE_HINT'),
+				'megamenu-image-alt-text-hint' => Text::_('SUNFW_MEGAMENU_IMAGE_ALT_TEXT_HINT'),
+				'megamenu-image-custom-classes-hint' => Text::_('SUNFW_MEGAMENU_IMAGE_CUSTOM_CLASSES_HINT'),
+				'megamenu-submenu-name-hint' => Text::_('SUNFW_MEGAMENU_SUBMENU_NAME_HINT'),
+				'megamenu-module-position-name-hint' => Text::_('SUNFW_MEGAMENU_MODULE_POSITION_NAME_HINT'),
+				'megamenu-module-position-position-hint' => Text::_('SUNFW_MEGAMENU_MODULE_POSITION_POSITION_HINT'),
+				'megamenu-module-position-custom-classes-hint' => Text::_('SUNFW_MEGAMENU_MODULE_POSITION_CUSTOM_CLASSES_HINT'),
+				'megamenu-module-name-hint' => Text::_('SUNFW_MEGAMENU_MODULE_NAME_HINT'),
+				'megamenu-module-module-hint' => Text::_('SUNFW_MEGAMENU_MODULE_MODULE_HINT'),
+				'megamenu-module-custom-classes-hint' => Text::_('SUNFW_MEGAMENU_MODULE_CUSTOM_CLASSES_HINT'),
+				'megamenu-custom-html-name-hint' => Text::_('SUNFW_MEGAMENU_CUSTOM_HTML_NAME_HINT'),
+				'megamenu-custom-html-content-hint' => Text::_('SUNFW_MEGAMENU_CUSTOM_HTML_CONTENT_HINT'),
+				'megamenu-custom-html-custom-classes-hint' => Text::_('SUNFW_MEGAMENU_CUSTOM_HTML_CUSTOM_CLASSES_HINT'),
+				'item-navigation' => Text::_('SUNFW_CONTAINER_SETTINGS'),
+				'container-settings' => Text::_('SUNFW_CONTAINER_SETTINGS'),
+				'block-settings' => Text::_('SUNFW_BLOCK_SETTINGS'),
+				'menu-builder' => Text::_('SUNFW_MENU_BUILDER'),
+				'save-menu' => Text::_('SUNFW_SAVE_MENU'),
                 // image
-			    'megamenu-image-name-popover-content' => JText::_('SUNFW_MEGAMENU_IMAGE_NAME_POPOVER_CONTENT'),
-			    'megamenu-image-image-popover-content' => JText::_('SUNFW_MEGAMENU_IMAGE_IMAGE_POPOVER_CONTENT'),
-			    'megamenu-image-alt-text-popover-content' => JText::_('SUNFW_MEGAMENU_IMAGE_ALT_TEXT_POPOVER_CONTENT'),
-			    'megamenu-image-custom-classes-popover-content' => JText::_('SUNFW_MEGAMENU_IMAGE_CUSTOM_CLASSES_POPOVER_CONTENT'),
+			    'megamenu-image-name-popover-content' => Text::_('SUNFW_MEGAMENU_IMAGE_NAME_POPOVER_CONTENT'),
+			    'megamenu-image-image-popover-content' => Text::_('SUNFW_MEGAMENU_IMAGE_IMAGE_POPOVER_CONTENT'),
+			    'megamenu-image-alt-text-popover-content' => Text::_('SUNFW_MEGAMENU_IMAGE_ALT_TEXT_POPOVER_CONTENT'),
+			    'megamenu-image-custom-classes-popover-content' => Text::_('SUNFW_MEGAMENU_IMAGE_CUSTOM_CLASSES_POPOVER_CONTENT'),
 			    // Menu
-			    'megamenu-submenu-name-popover-content' => JText::_('SUNFW_MEGAMENU_SUBMENU_NAME_POPOVER_CONTENT'),
+			    'megamenu-submenu-name-popover-content' => Text::_('SUNFW_MEGAMENU_SUBMENU_NAME_POPOVER_CONTENT'),
 			    // module position
-			    'megamenu-module-position-name-popover-content' => JText::_('SUNFW_MEGAMENU_MODULE_POSITION_NAME_POPOVER_CONTENT'),
-			    'megamenu-module-position-position-popover-content' => JText::_('SUNFW_MEGAMENU_MODULE_POSITION_POSITION_POPOVER_CONTENT'),
-			    'megamenu-module-position-custom-classes-popover-content' => JText::_('SUNFW_MEGAMENU_MODULE_POSITION_CUSTOM_CLASSES_POPOVER_CONTENT'),
-			    'megamenu-module-name-popover-content' => JText::_('SUNFW_MEGAMENU_MODULE_NAME_POPOVER_CONTENT'),
-			    'megamenu-module-module-popover-content' => JText::_('SUNFW_MEGAMENU_MODULE_MODULE_POPOVER_CONTENT'),
-			    'megamenu-module-custom-classes-popover-content' => JText::_('SUNFW_MEGAMENU_MODULE_CUSTOM_CLASSES_POPOVER_CONTENT'),
+			    'megamenu-module-position-name-popover-content' => Text::_('SUNFW_MEGAMENU_MODULE_POSITION_NAME_POPOVER_CONTENT'),
+			    'megamenu-module-position-position-popover-content' => Text::_('SUNFW_MEGAMENU_MODULE_POSITION_POSITION_POPOVER_CONTENT'),
+			    'megamenu-module-position-custom-classes-popover-content' => Text::_('SUNFW_MEGAMENU_MODULE_POSITION_CUSTOM_CLASSES_POPOVER_CONTENT'),
+			    'megamenu-module-name-popover-content' => Text::_('SUNFW_MEGAMENU_MODULE_NAME_POPOVER_CONTENT'),
+			    'megamenu-module-module-popover-content' => Text::_('SUNFW_MEGAMENU_MODULE_MODULE_POPOVER_CONTENT'),
+			    'megamenu-module-custom-classes-popover-content' => Text::_('SUNFW_MEGAMENU_MODULE_CUSTOM_CLASSES_POPOVER_CONTENT'),
                 // module
-			    'megamenu-module-name-popover-content' => JText::_('SUNFW_MEGAMENU_MODULE_NAME_POPOVER_CONTENT'),
-			    'megamenu-module-module-popover-content' => JText::_('SUNFW_MEGAMENU_MODULE_MODULE_POPOVER_CONTENT'),
-			    'megamenu-module-custom-classes-popover-content' => JText::_('SUNFW_MEGAMENU_MODULE_CUSTOM_CLASSES_POPOVER_CONTENT'),
+			    'megamenu-module-name-popover-content' => Text::_('SUNFW_MEGAMENU_MODULE_NAME_POPOVER_CONTENT'),
+			    'megamenu-module-module-popover-content' => Text::_('SUNFW_MEGAMENU_MODULE_MODULE_POPOVER_CONTENT'),
+			    'megamenu-module-custom-classes-popover-content' => Text::_('SUNFW_MEGAMENU_MODULE_CUSTOM_CLASSES_POPOVER_CONTENT'),
                 // customer html
-			    'megamenu-custom-html-name-popover-content' => JText::_('SUNFW_MEGAMENU_CUSTOM_HTML_NAME_POPOVER_CONTENT'),
-			    'megamenu-custom-html-content-popover-content' => JText::_('SUNFW_MEGAMENU_CUSTOM_HTML_CONTENT_POPOVER_CONTENT'),
-			    'megamenu-custom-html-custom-classes-popover-content' => JText::_('SUNFW_MEGAMENU_CUSTOM_HTML_CUSTOM_CLASSES_POPOVER_CONTENT'),
+			    'megamenu-custom-html-name-popover-content' => Text::_('SUNFW_MEGAMENU_CUSTOM_HTML_NAME_POPOVER_CONTENT'),
+			    'megamenu-custom-html-content-popover-content' => Text::_('SUNFW_MEGAMENU_CUSTOM_HTML_CONTENT_POPOVER_CONTENT'),
+			    'megamenu-custom-html-custom-classes-popover-content' => Text::_('SUNFW_MEGAMENU_CUSTOM_HTML_CUSTOM_CLASSES_POPOVER_CONTENT'),
                 // Column
-			    'megamenu-column-margin-popover-content' => JText::_('SUNFW_MEGAMENU_COLUMN_MARGIN_POPOVER_CONTENT'),
-			    'megamenu-column-padding-popover-content' => JText::_('SUNFW_MEGAMENU_COLUMN_PADDING_POPOVER_CONTENT'),
-			    'megamenu-column-custom-classes-popover-content' => JText::_('SUNFW_MEGAMENU_COLUMN_CUSTOM_CLASSES_POPOVER_CONTENT'),
+			    'megamenu-column-margin-popover-content' => Text::_('SUNFW_MEGAMENU_COLUMN_MARGIN_POPOVER_CONTENT'),
+			    'megamenu-column-padding-popover-content' => Text::_('SUNFW_MEGAMENU_COLUMN_PADDING_POPOVER_CONTENT'),
+			    'megamenu-column-custom-classes-popover-content' => Text::_('SUNFW_MEGAMENU_COLUMN_CUSTOM_CLASSES_POPOVER_CONTENT'),
 			    // Row
-			    'megamenu-row-margin-popover-content' => JText::_('SUNFW_MEGAMENU_ROW_MARGIN_POPOVER_CONTENT'),
-			    'megamenu-row-padding-popover-content' => JText::_('SUNFW_MEGAMENU_ROW_PADDING_POPOVER_CONTENT'),
-			    'megamenu-row-custom-classes-popover-content' => JText::_('SUNFW_MEGAMENU_ROW_CUSTOM_CLASSES_POPOVER_CONTENT'),
+			    'megamenu-row-margin-popover-content' => Text::_('SUNFW_MEGAMENU_ROW_MARGIN_POPOVER_CONTENT'),
+			    'megamenu-row-padding-popover-content' => Text::_('SUNFW_MEGAMENU_ROW_PADDING_POPOVER_CONTENT'),
+			    'megamenu-row-custom-classes-popover-content' => Text::_('SUNFW_MEGAMENU_ROW_CUSTOM_CLASSES_POPOVER_CONTENT'),
 			    // Root
-			    'megamenu-fixed-width-popover-content' => JText::_('SUNFW_MEGAMENU_ROOT_FIXED_WIDTH_POPOVER_CONTENT'),
-			    'megamenu-submenu-width-popover-content' => JText::_('SUNFW_MEGAMENU_ROOT_SUBMENU_WIDTH_POPOVER_CONTENT'),
-			    'megamenu-submenu-align-popover-content' => JText::_('SUNFW_MEGAMENU_ROOT_SUBMENU_ALGIN_POPOVER_CONTENT'),
-			    'megamenu-padding-popover-content' => JText::_('SUNFW_MEGAMENU_ROOT_PADDING_POPOVER_CONTENT'),
-			    'megamenu-background-color-popover-content' => JText::_('SUNFW_MEGAMENU_ROOT_BACKGROUND_COLOR_POPOVER_CONTENT'),
-			    'megamenu-background-image-popover-content'  => JText::_('SUNFW_MEGAMENU_ROOT_BACKGROUND_IMAGE_POPOVER_CONTENT'),
-			    'megamenu-border-popover-content' => JText::_('SUNFW_MEGAMENU_ROOT_BORDER_POPOVER_CONTENT'),
-			    'megamenu-background-image-settings-popover-content' => JText::_('SUNFW_MEGAMENU_ROOT_BACKGROUND_IMAGE_SETTINGS_POPOVER_CONTENT'),
+			    'megamenu-fixed-width-popover-content' => Text::_('SUNFW_MEGAMENU_ROOT_FIXED_WIDTH_POPOVER_CONTENT'),
+			    'megamenu-submenu-width-popover-content' => Text::_('SUNFW_MEGAMENU_ROOT_SUBMENU_WIDTH_POPOVER_CONTENT'),
+			    'megamenu-submenu-align-popover-content' => Text::_('SUNFW_MEGAMENU_ROOT_SUBMENU_ALGIN_POPOVER_CONTENT'),
+			    'megamenu-padding-popover-content' => Text::_('SUNFW_MEGAMENU_ROOT_PADDING_POPOVER_CONTENT'),
+			    'megamenu-background-color-popover-content' => Text::_('SUNFW_MEGAMENU_ROOT_BACKGROUND_COLOR_POPOVER_CONTENT'),
+			    'megamenu-background-image-popover-content'  => Text::_('SUNFW_MEGAMENU_ROOT_BACKGROUND_IMAGE_POPOVER_CONTENT'),
+			    'megamenu-border-popover-content' => Text::_('SUNFW_MEGAMENU_ROOT_BORDER_POPOVER_CONTENT'),
+			    'megamenu-background-image-settings-popover-content' => Text::_('SUNFW_MEGAMENU_ROOT_BACKGROUND_IMAGE_SETTINGS_POPOVER_CONTENT'),
 			)
 		);
 
@@ -257,7 +261,7 @@ class SunFwAjaxMegaMenu extends SunFwAjax
 		}
 
 		$this->setResponse(array(
-			'message' => JText::_('SUNFW_MEGA_MENU_SAVED_SUCCESSFULLY')
+			'message' => Text::_('SUNFW_MEGA_MENU_SAVED_SUCCESSFULLY')
 		));
 	}
 }

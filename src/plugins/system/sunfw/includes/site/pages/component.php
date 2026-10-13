@@ -17,7 +17,7 @@ defined('_JEXEC') or die();
 $boxLayout = isset($this->layout['settings']['enable_boxed_layout']) ? $this->layout['settings']['enable_boxed_layout'] : false;
 
 // Get advanced parameters.
-$systemDataParams = @count($this->system_data) ? $this->system_data : array();
+$systemDataParams = count((array) $this->system_data) ? $this->system_data : array();
 
 // Get template's manifest cache.
 $manifest = SunFwHelper::getManifestCache($this->template);

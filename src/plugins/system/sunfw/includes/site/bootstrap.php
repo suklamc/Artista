@@ -13,12 +13,15 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+
 /**
  * Class for migrating template from Bootstrap v3 to v4.
  *
  * @package  SUN Framework
  * @since    2.2.25
  */
+#[\AllowDynamicProperties]
 class SunFwSiteBootstrap
 {
 	/**
@@ -189,7 +192,7 @@ class SunFwSiteBootstrap
 		// If template not specified, get active template.
 		if (empty($tpl))
 		{
-			$tpl = PlgSystemSunFw::$template ?: JFactory::getApplication()->getTemplate(true);
+			$tpl = PlgSystemSunFw::$template ?: Factory::getApplication()->getTemplate(true);
 			$tpl = $tpl->template;
 		}
 

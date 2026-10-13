@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="3.6" type="plugin" group="system" method="upgrade">
+<extension type="plugin" group="system" method="upgrade">
 	<name>plg_system_sunfw</name>
-	<version>2.2.33</version>
-	<creationDate>07/09/2021</creationDate>
-	<author>JoomlaShine.com</author>
-	<authorEmail>admin@joomlashine.com</authorEmail>
-	<authorUrl>www.joomlashine.com</authorUrl>
-	<copyright>Copyright (C) 2016 JoomlaShine.com. All Rights Reserved.</copyright>
+	<version>3.0.0</version>
+	<creationDate>2026-10-13</creationDate>
+	<author>Artriva Studios (based on work by JoomlaShine.com)</author>
+	<authorUrl>https://github.com/suklamc/Artista</authorUrl>
+	<copyright>Copyright (C) 2012-2021 JoomlaShine.com. Copyright (C) 2026 Artriva Studios.</copyright>
 	<license>GNU/GPL v2 or later http://www.gnu.org/licenses/gpl-2.0.html</license>
 	<description>PLG_SYSTEM_SUNFW_XML_DESCRIPTION</description>
 	<scriptfile>installer.php</scriptfile>

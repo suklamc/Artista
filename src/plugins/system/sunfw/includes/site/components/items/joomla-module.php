@@ -13,6 +13,9 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Table\Table;
+use Joomla\Registry\Registry;
+
 // Get module.
 $module = isset($component['settings']['module']) ? $component['settings']['module'] : false;
 
@@ -44,12 +47,12 @@ if ($module != false)
 
 if ($html != '')
 :
-	$mTable = JTable::getInstance('Module', 'JTable');
+	$mTable = Table::getInstance('Module', 'JTable');
 
 	if ($mTable->load($id))
 	{
 		// Binding parameters to JRegistry object
-		$mParams = new JRegistry($mTable->params);
+		$mParams = new Registry($mTable->params);
 
 		if ($mParams->get('style') != '0')
 		{

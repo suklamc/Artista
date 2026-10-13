@@ -264,7 +264,7 @@ endif;
 	<div class="offcanvas-content">
 		<?php
 		// Render sections in offcanvas.
-		if (@count((array) $component['rows']))
+		if (count((array) $component['rows']))
 		{
 			foreach ($component['rows'] as $rowIndex)
 			{

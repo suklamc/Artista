@@ -13,6 +13,17 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filter\InputFilter;
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\Installer\Installer;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
+use Joomla\Registry\Registry;
+
 // Define neccessary constants.
 require_once dirname(__FILE__) . '/sunfw.defines.php';
 
@@ -22,7 +33,8 @@ require_once dirname(__FILE__) . '/sunfw.defines.php';
  * @package  SUN Framework
  * @since    1.0.0
  */
-class PlgSystemSunFw extends JPlugin
+#[\AllowDynamicProperties]
+class PlgSystemSunFw extends CMSPlugin
 {
 	/**
 	 * The name of the plugin.
@@ -125,13 +137,13 @@ class PlgSystemSunFw extends JPlugin
 		$this->loadLanguage();
 
 		// Get Joomla's application instance.
-		$this->app = JFactory::getApplication();
+		$this->app = Factory::getApplication();
 
 		// Get Joomla's input object.
 		$this->input = $this->app->input;
 
 		// Get Joomla's user instance.
-		$this->user = JFactory::getUser();
+		$this->user = Factory::getUser();
 
 		// Get necessary request variables.
 		$this->option = $this->input->getCmd('option');
@@ -141,7 +153,7 @@ class PlgSystemSunFw extends JPlugin
 		// Check if user want to preview the coming soon page.
 		if ($this->input->getInt('preview-coming-soon'))
 		{
-			JFactory::$config->set('offline', '1');
+			Factory::$config->set('offline', '1');
 		}
 	}
 
@@ -160,7 +172,7 @@ class PlgSystemSunFw extends JPlugin
 				if (!$this->hasSunFwBasedTemplate())
 				{
 					// Get the extension ID of the Sun Framework plugin.
-					$db = JFactory::getDbo();
+					$db = Factory::getDbo();
 					$qr = $db->getQuery(true)
 						->select('extension_id')
 						->from('#__extensions')
@@ -179,7 +191,7 @@ class PlgSystemSunFw extends JPlugin
 						if ($db->setQuery($qr)->execute())
 						{
 							// Get an installer object to uninstall the Sun Framework plugin.
-							$installer = JInstaller::getInstance();
+							$installer = Installer::getInstance();
 
 							return $installer->uninstall('plugin', $eid);
 						}
@@ -193,12 +205,11 @@ class PlgSystemSunFw extends JPlugin
 		elseif (SunFwCompat::isClient('site'))
 		{
 			// Reorder the execution of onAfterRoute event handler if necessary.
-			if (JPluginHelper::isEnabled('system', 'jsntplframework'))
+			if (PluginHelper::isEnabled('system', 'jsntplframework'))
 			{
-				$this->app->registerEvent('onAfterRoute', array(
-					&$this,
-					'onAfterRoute'
-				));
+				$this->app->registerEvent('onAfterRoute', function () {
+					$this->onAfterRoute();
+				});
 			}
 		}
 	}
@@ -211,7 +222,7 @@ class PlgSystemSunFw extends JPlugin
 	public function onAfterRoute()
 	{
 		// Make sure this event handler is executed at last order if necessary.
-		if (JPluginHelper::isEnabled('system', 'jsntplframework') && !isset($this->onAfterRouteReordered))
+		if (PluginHelper::isEnabled('system', 'jsntplframework') && !isset($this->onAfterRouteReordered))
 		{
 			$this->onAfterRouteReordered = true;
 
@@ -222,7 +233,7 @@ class PlgSystemSunFw extends JPlugin
 		if (SunFwCompat::isClient('site') && !isset(self::$template))
 		{
 			// Check if the Metaman system plugin is installed and enabled?
-			if (JPluginHelper::isEnabled('system', 'metaman'))
+			if (PluginHelper::isEnabled('system', 'metaman'))
 			{
 				/**
 				 * Because the Metaman system plugin calls the JHtml::_ method to load the Bootstrap
@@ -258,7 +269,7 @@ class PlgSystemSunFw extends JPlugin
 					$id = (int) $tid;
 				}
 
-				$cache = JFactory::getCache('com_templates', '');
+				$cache = Factory::getCache('com_templates', '');
 
 				if ($this->app->getLanguageFilter())
 				{
@@ -278,7 +289,7 @@ class PlgSystemSunFw extends JPlugin
 				else
 				{
 					// Load styles.
-					$db    = JFactory::getDbo();
+					$db    = Factory::getDbo();
 					$query = $db->getQuery(true)
 						->select('id, home, template, s.params')
 						->from('#__template_styles as s')
@@ -297,7 +308,7 @@ class PlgSystemSunFw extends JPlugin
 							$template_home = clone $template;
 						}
 
-						$template->params = new JRegistry($template->params);
+						$template->params = new Registry($template->params);
 					}
 
 					// Unset the $template reference to the last $templates[n] item cycled in the foreach above to avoid editing it later.
@@ -306,7 +317,7 @@ class PlgSystemSunFw extends JPlugin
 					// Add home element, after loop to avoid double execution.
 					if (isset($template_home))
 					{
-						$template_home->params = new JRegistry($template_home->params);
+						$template_home->params = new Registry($template_home->params);
 						$templates[0]          = $template_home;
 					}
 
@@ -342,12 +353,12 @@ class PlgSystemSunFw extends JPlugin
 				}
 
 				// Need to filter the default value as well.
-				$template->template = JFilterInput::getInstance()->clean($template->template, 'cmd');
+				$template->template = InputFilter::getInstance()->clean($template->template, 'cmd');
 
 				// Fallback template.
 				if (!file_exists(JPATH_THEMES . '/' . $template->template . '/index.php'))
 				{
-					$this->app->enqueueMessage(JText::_('JERROR_ALERTNOTEMPLATE'), 'error');
+					$this->app->enqueueMessage(Text::_('JERROR_ALERTNOTEMPLATE'), 'error');
 
 					// Try to find data for 'beez3' template.
 					$original_tmpl = $template->template;
@@ -364,7 +375,7 @@ class PlgSystemSunFw extends JPlugin
 					// Check, the data were found and if template really exists.
 					if (!file_exists(JPATH_THEMES . '/' . $template->template . '/index.php'))
 					{
-						throw new InvalidArgumentException(JText::sprintf('JERROR_COULD_NOT_FIND_TEMPLATE', $original_tmpl));
+						throw new InvalidArgumentException(Text::sprintf('JERROR_COULD_NOT_FIND_TEMPLATE', $original_tmpl));
 					}
 				}
 
@@ -382,6 +393,64 @@ class PlgSystemSunFw extends JPlugin
 		{
 			SunFwSite::getInstance();
 		}
+	}
+
+	/**
+	 * Add social share buttons and commenting above an article (when configured).
+	 *
+	 * @param   string   $context  The context of the content being displayed.
+	 * @param   object   &$row     The article.
+	 * @param   object   &$params  The article params.
+	 * @param   integer  $page     The page number.
+	 *
+	 * @return  string
+	 */
+	public function onContentBeforeDisplay($context, &$row, &$params, $page = 0)
+	{
+		return $this->renderArticleExtras('onContentBeforeDisplay', $context, $row, $params, $page);
+	}
+
+	/**
+	 * Add social share buttons and commenting below an article (when configured).
+	 *
+	 * @param   string   $context  The context of the content being displayed.
+	 * @param   object   &$row     The article.
+	 * @param   object   &$params  The article params.
+	 * @param   integer  $page     The page number.
+	 *
+	 * @return  string
+	 */
+	public function onContentAfterDisplay($context, &$row, &$params, $page = 0)
+	{
+		return $this->renderArticleExtras('onContentAfterDisplay', $context, $row, $params, $page);
+	}
+
+	/**
+	 * Render social share and commenting through the active Sun Framework site renderer.
+	 *
+	 * @return  string
+	 */
+	protected function renderArticleExtras($eventName, $context, &$row, &$params, $page)
+	{
+		if (!SunFwCompat::isClient('site') || !SunFwSite::hasInstance())
+		{
+			return '';
+		}
+
+		$site = SunFwSite::getInstance();
+		$html = '';
+
+		foreach (array('renderSocialShare', 'renderCommenting') as $method)
+		{
+			$result = $site->{$method}($context, $row, $params, $page, $eventName);
+
+			if (is_string($result))
+			{
+				$html .= $result;
+			}
+		}
+
+		return $html;
 	}
 
 	/**
@@ -415,7 +484,7 @@ class PlgSystemSunFw extends JPlugin
 				// Get the default site template.
 				if (SunFwCompat::isClient('administrator'))
 				{
-					$dbo = JFactory::getDbo()->setQuery('SELECT * FROM #__template_styles WHERE client_id = 0 AND home = 1;');
+					$dbo = Factory::getDbo()->setQuery('SELECT * FROM #__template_styles WHERE client_id = 0 AND home = 1;');
 					$tpl = $dbo->loadObject();
 				}
 				else
@@ -435,7 +504,7 @@ class PlgSystemSunFw extends JPlugin
 						}
 					}
 					// Register additional form path.
-					JForm::addFormPath(JPATH_PLUGINS . '/system/sunfw/includes/admin/forms');
+					Form::addFormPath(JPATH_PLUGINS . '/system/sunfw/includes/admin/forms');
 
 					// Load additional form fields.
 					$context->loadFile($context->getName() == 'com_menus.item' ? 'menu' : 'article', false);
@@ -464,8 +533,8 @@ class PlgSystemSunFw extends JPlugin
 			// Define base Ajax URL.
 			$ajaxBase = 'index.php?option=com_ajax&format=json&group=system&plugin=sunfw';
 			$ajaxBase .= "&template_name={$this->renderExtraOptions->template}&style_id={$this->renderExtraOptions->id}";
-			$ajaxBase .= '&' . JSession::getFormToken() . '=1&context=admin&action=get';
-			$ajaxBase = JRoute::_($ajaxBase, false);
+			$ajaxBase .= '&' . Session::getFormToken() . '=1&context=admin&action=get';
+			$ajaxBase = Route::_($ajaxBase, false);
 
 			$buffer = str_replace(
 				'</body>',
@@ -507,11 +576,11 @@ class PlgSystemSunFw extends JPlugin
 		if ('plg_system_sunfw' == (string) $manifest->name)
 		{
 			// Rename all update files.
-			foreach (JFolder::files(JPATH_ROOT . '/plugins/system/sunfw/database/mysql/updates', '\.sql$') as $file)
+			foreach (SunFwFolder::files(JPATH_ROOT . '/plugins/system/sunfw/database/mysql/updates', '\.sql$') as $file)
 			{
 				$file = JPATH_ROOT . "/plugins/system/sunfw/database/mysql/updates/{$file}";
 
-				JFile::move($file, "{$file}.bak");
+				SunFwFile::move($file, "{$file}.bak");
 			}
 		}
 	}
@@ -529,11 +598,11 @@ class PlgSystemSunFw extends JPlugin
 		if ('plg_system_sunfw' == (string) $installer->manifest->name)
 		{
 			// Restore all update files.
-			foreach (JFolder::files(JPATH_ROOT . '/plugins/system/sunfw/database/mysql/updates', '\.bak$') as $file)
+			foreach (SunFwFolder::files(JPATH_ROOT . '/plugins/system/sunfw/database/mysql/updates', '\.bak$') as $file)
 			{
 				$file = JPATH_ROOT . "/plugins/system/sunfw/database/mysql/updates/{$file}";
 
-				JFile::move($file, substr($file, 0, -4));
+				SunFwFile::move($file, substr($file, 0, -4));
 			}
 		}
 	}
@@ -553,8 +622,8 @@ class PlgSystemSunFw extends JPlugin
 			return;
 		}
 
-		$session = JFactory::getSession();
-		$dbo = JFactory::getDBO();
+		$session = Factory::getSession();
+		$dbo = Factory::getDBO();
 
 		// If session SUNFW_CLONE_STYLE_ID is not existed then created and assign value to it
 		if ($session->has('SUNFW_CLONE_STYLE_ID') == false)
@@ -710,7 +779,7 @@ class PlgSystemSunFw extends JPlugin
 	protected function hasSunFwBasedTemplate()
 	{
 		// Get all installed templates.
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$qr = $db->getQuery(true)
 			->select('element')
 			->from('#__extensions')

@@ -13,10 +13,9 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-// Import necessary libraries.
-jimport('joomla.filesystem.folder');
-jimport('joomla.filesystem.file');
-jimport('joomla.filesystem.path');
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
 
 /**
  * Handle Ajax requests from layout pane.
@@ -24,6 +23,7 @@ jimport('joomla.filesystem.path');
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwAjaxLayout extends SunFwAjax
 {
 
@@ -37,7 +37,7 @@ class SunFwAjaxLayout extends SunFwAjax
 	public function getAction($return = false)
 	{
 		// Get site URL.
-		$root = JUri::root(true);
+		$root = Uri::root(true);
 
 		/**
 		 * Get layout builder's items.
@@ -70,10 +70,10 @@ class SunFwAjaxLayout extends SunFwAjax
 		 */
 		$screens = array_merge(
 			array(
-				'lg' => JText::_('SUNFW_DESKTOP'),
-				'md' => JText::_('SUNFW_LATOP'),
-				'sm' => JText::_('SUNFW_TABLET'),
-				'xs' => JText::_('SUNFW_SMARTPHONE')
+				'lg' => Text::_('SUNFW_DESKTOP'),
+				'md' => Text::_('SUNFW_LATOP'),
+				'sm' => Text::_('SUNFW_TABLET'),
+				'xs' => Text::_('SUNFW_SMARTPHONE')
 			),
 			// Allow 3rd-party to add additional screens into layout builder.
 			$this->app->triggerEvent('SunFwGetLayoutScreens')
@@ -81,7 +81,7 @@ class SunFwAjaxLayout extends SunFwAjax
 
 		if (SunFwSiteBootstrap::getVersion($this->templateName) === '4')
 		{
-			$screens['small-smartphone'] = JText::_('SUNFW_SMALL_SMARTPHONE');
+			$screens['small-smartphone'] = Text::_('SUNFW_SMALL_SMARTPHONE');
 		}
 
 		/**
@@ -90,24 +90,24 @@ class SunFwAjaxLayout extends SunFwAjax
 		$offcanvas = array_merge(
 			array(
 				'top' => array(
-					'label' => JText::_('SUNFW_OFFCANVAS_TOP'),
+					'label' => Text::_('SUNFW_OFFCANVAS_TOP'),
 					'settings' => SunFwHelper::findTemplateAdminJsonSettings(
 						JPATH_ROOT . '/plugins/system/sunfw/assets/joomlashine/admin/js/layout/settings/items', 'offcanvas-top.json', true)
 				),
 				'right' => array(
-					'label' => JText::_('SUNFW_OFFCANVAS_RIGHT'),
+					'label' => Text::_('SUNFW_OFFCANVAS_RIGHT'),
 					'settings' => SunFwHelper::findTemplateAdminJsonSettings(
 						JPATH_ROOT . '/plugins/system/sunfw/assets/joomlashine/admin/js/layout/settings/items', 'offcanvas-right.json',
 						true)
 				),
 				'bottom' => array(
-					'label' => JText::_('SUNFW_OFFCANVAS_BOTTOM'),
+					'label' => Text::_('SUNFW_OFFCANVAS_BOTTOM'),
 					'settings' => SunFwHelper::findTemplateAdminJsonSettings(
 						JPATH_ROOT . '/plugins/system/sunfw/assets/joomlashine/admin/js/layout/settings/items', 'offcanvas-bottom.json',
 						true)
 				),
 				'left' => array(
-					'label' => JText::_('SUNFW_OFFCANVAS_LEFT'),
+					'label' => Text::_('SUNFW_OFFCANVAS_LEFT'),
 					'settings' => SunFwHelper::findTemplateAdminJsonSettings(
 						JPATH_ROOT . '/plugins/system/sunfw/assets/joomlashine/admin/js/layout/settings/items', 'offcanvas-left.json', true)
 				)
@@ -161,240 +161,240 @@ class SunFwAjaxLayout extends SunFwAjax
 			'settings' => SunFwHelper::findTemplateAdminJsonSettings(
 				JPATH_ROOT . '/plugins/system/sunfw/assets/joomlashine/admin/js/layout/settings', 'page.json', true),
 			'textMapping' => array(
-				'layout' => JText::_('SUNFW_LAYOUT'),
-				'layout-builder' => JText::_('SUNFW_LAYOUT_BUILDER'),
-				'empty-layout-message' => JText::_('SUNFW_LAYOUT_BUILDER_EMPTY_MESSAGE'),
-				'or' => JText::_('SUNFW_OR'),
-				'select-predefined-layout' => JText::_('SUNFW_SELECT_PREDEFINED_LAYOUT'),
-				'layout-page' => JText::_('SUNFW_LAYOUT_PAGE'),
-				'layout-section' => JText::_('SUNFW_LAYOUT_SECTION'),
-				'item-row' => JText::_('SUNFW_LAYOUT_ROW'),
-				'item-column' => JText::_('SUNFW_LAYOUT_COLUMN'),
-				'page-settings' => JText::_('SUNFW_PAGE_SETTINGS'),
-				'section-settings' => JText::_('SUNFW_SECTION_SETTINGS'),
-				'offcanvas-settings' => JText::_('SUNFW_OFFCANVAS_SETTINGS'),
-				'row-settings' => JText::_('SUNFW_ROW_SETTINGS'),
-				'column-settings' => JText::_('SUNFW_COLUMN_SETTINGS'),
-				'item-settings' => JText::_('SUNFW_ITEM_SETTINGS'),
-				'enable-responsive' => JText::_('SUNFW_ENABLE_RESPONSIVE'),
-				'desktop-switcher' => JText::_('SUNFW_SHOW_DESKTOP_SWITCHER'),
-				'boxed-layout' => JText::_('SUNFW_ENABLE_BOXED_LAYOUT'),
-				'boxed-layout-width' => JText::_('SUNFW_BOXED_LAYOUT_WIDTH'),
-				'boxed-layout-min-width' => JText::_('SUNFW_MINIMUM_WIDTH_FOR_BOX_LAYOUT_IS_767'),
-				'show-go-to-top' => JText::_('SUNFW_SHOW_GO_TO_TOP'),
-				'load-prebuilt-layout' => JText::_('SUNFW_LOAD_PREBUILT_LAYOUT'),
-				'save-prebuilt-layout' => JText::_('SUNFW_SAVE_PREBUILT_LAYOUT'),
-				'prebuilt-layout-name' => JText::_('SUNFW_PREBUILT_LAYOUT_NAME'),
-				'new-layout' => JText::_('SUNFW_NEW_LAYOUT'),
-				'save-layout' => JText::_('SUNFW_SAVE_LAYOUT'),
-				'no-pre-layout' => JText::_('SUNFW_NO_PRE_LAYOUT'),
-				'mobile-screen-can-have-only-2-columns-per-row' => JText::_('SUNFW_MOBILE_SCREEN_LIMITATION_REACHED'),
-				'clone-label' => JText::_('SUNFW_CLONE_LABEL'),
-				'duplicate-id' => JText::_('SUNFW_DUPLICATE_ID'),
-				'one-time-item' => JText::_('SUNFW_ONE_TIME_ITEM_NOTICE'),
-				'clone-item-error' => JText::_('SUNFW_CLONE_ITEM_ERROR_MESSAGE'),
-				'used-one-time-item' => JText::_('SUNFW_USED_ONE_TIME_ITEM'),
-				'enable-responsive-hint' => JText::_('SUNFW_ENABLE_RESPONSIVE_HIT'),
-				'show-desktop-switcher-hint' => JText::_('SUNFW_SHOW_DESKTOP_SWITCHER_HINT'),
-				'enable-boxed-layout-hint' => JText::_('SUNFW_ENABLE_BOXED_LAYOUT_HINT'),
-				'margin-hint' => JText::_('SUNFW_MARGIN_HINT'),
-				'show-go-to-top-hint' => JText::_('SUNFW_SHOW_GO_TO_TOP_HINT'),
-				'go-to-top-icon-hint' => JText::_('SUNFW_GO_TO_TOP_ICON_HINT'),
-				'go-to-top-text-hint' => JText::_('SUNFW_GO_TO_TOP_TEXT_HINT'),
-				'go-to-top-text-color-hint' => JText::_('SUNFW_GO_TO_TOP_TEXT_COLOR_HINT'),
-				'go-to-top-background-color-hint' => JText::_('SUNFW_GO_TO_TOP_TEXT_BACKGROUND_HINT'),
-				'go-to-top-position-hint' => JText::_('SUNFW_GO_TO_TOP_POSITION_HINT'),
-				'layout-section-name-hint' => JText::_('SUNFW_LAYOUT_SECTION_NAME_HINT'),
-				'layout-section-enable-full-width-hint' => JText::_('SUNFW_LAYOUT_SECTION_ENABLE_FULL_WIDTH_HINT'),
-				'layout-section-enable-sticky-hint' => JText::_('SUNFW_LAYOUT_SECTION_ENABLE_STICKY_HINT'),
-				'layout-section-margin-hint' => JText::_('SUNFW_LAYOUT_SECTION_MARGIN_HINT'),
-				'layout-section-padding-hint' => JText::_('SUNFW_LAYOUT_SECTION_PADDING_HINT'),
-				'layout-section-custom-classes-hint' => JText::_('SUNFW_LAYOUT_SECTION_CUSTOM_CLASSES_HINT'),
-				'layout-row-margin-hint' => JText::_('SUNFW_LAYOUT_ROW_MARGIN_HINT'),
-				'layout-row-padding-hint' => JText::_('SUNFW_LAYOUT_ROW_PADDING_HINT'),
-				'layout-row-custom-classes-hint' => JText::_('SUNFW_LAYOUT_ROW_CUSTOM_CLASSES_HINT'),
-				'layout-column-margin-hint' => JText::_('SUNFW_LAYOUT_COLUMN_MARGIN_HINT'),
-				'layout-column-padding-hint' => JText::_('SUNFW_LAYOUT_COLUMN_PADDING_HINT'),
-				'layout-column-display-in-layouts-hint' => JText::_('SUNFW_LAYOUT_COLUMN_DISPLAY_IN_LAYOUTS_HINT'),
-				'layout-column-custom-classes-hint' => JText::_('SUNFW_LAYOUT_COLUMN_CUSTOM_CLASSES_HINT'),
-				'layout-logo-name-hint' => JText::_('SUNFW_LAYOUT_LOGO_NAME_HINT'),
-				'layout-logo-hint' => JText::_('SUNFW_LAYOUT_LOGO_HINT'),
-				'layout-mobile-logo-hint' => JText::_('SUNFW_LAYOUT_MOBILE_LOGO_HINT'),
-				'layout-logo-alt-text-hint' => JText::_('SUNFW_LAYOUT_LOGO_ALT_TEXT_HINT'),
-				'layout-logo-link-hint' => JText::_('SUNFW_LAYOUT_LOGO_LINK_HINT'),
-				'layout-logo-display-in-layout-hint' => JText::_('SUNFW_LAYOUT_LOGO_DISPLAY_IN_LAYOUT_HINT'),
-				'layout-logo-custom-classes-hint' => JText::_('SUNFW_LAYOUT_LOGO_CUSTOM_CLASSES_HINT'),
-				'layout-menu-name-hint' => JText::_('SUNFW_LAYOUT_MENU_NAME_HINT'),
-				'layout-menu-hint' => JText::_('SUNFW_LAYOUT_MENU_HINT'),
-				'layout-menu-base-item-hint' => JText::_('SUNFW_LAYOUT_MENU_BASE_ITEM_HINT'),
-				'layout-menu-start-level-item-hint' => JText::_('SUNFW_LAYOUT_MENU_START_LEVEL_ITEM_HINT'),
-				'layout-menu-end-level-hint' => JText::_('SUNFW_LAYOUT_MENU_END_LEVEL_HINT'),
-				'layout-menu-show-icon-hint' => JText::_('SUNFW_LAYOUT_MENU_SHOW_ICON_HINT'),
-				'layout-menu-show-description-hint' => JText::_('SUNFW_LAYOUT_MENU_SHOW_DESCRIPTION_HINT'),
-				'layout-menu-show-submenu-hint' => JText::_('SUNFW_LAYOUT_MENU_SHOW_SUBMENU_HINT'),
-				'layout-menu-sub-effect-hint' => JText::_('SUNFW_LAYOUT_MENU_SUB_EFFECT_HINT'),
-				'layout-menu-mobile-target-hint' => JText::_('SUNFW_LAYOUT_MENU_MOBILE_TARGET_HINT'),
-				'layout-menu-display-in-layout-hint' => JText::_('SUNFW_LAYOUT_MENU_DISPLAY_IN_LAYOUT_HINT'),
-				'layout-menu-custom-classes-hint' => JText::_('SUNFW_LAYOUT_MENU_CUSTOM_CLASSES_HINT'),
-				'layout-module-position-name-hint' => JText::_('SUNFW_LAYOUT_MODULE_POSITION_NAME_HINT'),
-				'layout-module-position-position-hint' => JText::_('SUNFW_LAYOUT_MODULE_POSITION_POSITION_HINT'),
-				'layout-module-position-display-in-layout-hint' => JText::_('SUNFW_LAYOUT_MODULE_POSITION_DISPLAY_IN_LAYOUT_HINT'),
-				'layout-module-position-custom-classes-hint' => JText::_('SUNFW_LAYOUT_MODULE_POSITION_CUSTOM_CLASSES_HINT'),
-				'layout-joomla-module-name-hint' => JText::_('SUNFW_LAYOUT_JOOMLA_MODULE_NAME_HINT'),
-				'layout-joomla-module-selector-hint' => JText::_('SUNFW_LAYOUT_JOOMLA_MODULE_PICKER_HINT'),
-				'layout-joomla-module-display-in-layout-hint' => JText::_('SUNFW_LAYOUT_JOOMLA_MODULE_DISPLAY_IN_LAYOUT_HINT'),
-				'layout-joomla-module-custom-classes-hint' => JText::_('SUNFW_LAYOUT_JOOMLA_MODULE_CUSTOM_CLASSES_HINT'),
-				'layout-page-content-show-on-front-page' => JText::_('SUNFW_LAYOUT_PAGE_CONTENT_SHOW_ON_FRONT_PAGE'),
-				'layout-social-icon-name-hint' => JText::_('SUNFW_LAYOUT_SOCIAL_ICON_NAME_HINT'),
-				'layout-social-icon-icons-hint' => JText::_('SUNFW_LAYOUT_SOCIAL_ICON_ICONS_HINT'),
-				'layout-social-icon-color-hint' => JText::_('SUNFW_LAYOUT_SOCIAL_ICON_COLOR_HINT'),
-				'layout-social-icon-size-hint' => JText::_('SUNFW_LAYOUT_SOCIAL_ICON_SIZE_HINT'),
-				'layout-social-icon-link-target-hint' => JText::_('SUNFW_LAYOUT_SOCIAL_ICON_LINK_TARGET_HINT'),
-				'layout-social-icon-display-in-layout-hint' => JText::_('SUNFW_LAYOUT_SOCIAL_ICON_DISPLAY_IN_LAYOUT_HINT'),
-				'layout-social-icon-custom-classes-hint' => JText::_('SUNFW_LAYOUT_SOCIAL_ICON_CUSTOM_CLASSES_HINT'),
-				'layout-custom-html-name-hint' => JText::_('SUNFW_LAYOUT_CUSTOM_HTML_NAME_HINT'),
-				'layout-custom-html-content-hint' => JText::_('SUNFW_LAYOUT_CUSTOM_HTML_CONTENT_HINT'),
-				'layout-custom-html-display-in-layout-hint' => JText::_('SUNFW_LAYOUT_CUSTOM_HTML_DISPLAY_IN_LAYOUT_HINT'),
-				'layout-custom-html-custom-classes-hint' => JText::_('SUNFW_LAYOUT_CUSTOM_HTML_CUSTOM_CLASSES_HINT'),
-				'layout-flexible-space-name-hint' => JText::_('SUNFW_LAYOUT_FLEXIBLE_SPACE_NAME_HINT'),
-				'layout-flexible-space-display-in-layout-hint' => JText::_('SUNFW_LAYOUT_FLEXIBLE_SPACE_DISPLAY_IN_LAYOUT_HINT'),
-				'layout-flexible-space-custom-classes-hint' => JText::_('SUNFW_LAYOUT_FLEXIBLE_SPACE_CUSTOM_CLASSES_HINT'),
-				'base-item' => JText::_('SUNFW_TEXT_BASE_ITEM'),
-				'start-level' => JText::_('SUNFW_TEXT_START_LEVEL'),
-				'end-level' => JText::_('SUNFW_TEXT_END_LEVEL'),
-				'show-sub-menu-items' => JText::_('SUNFW_TEXT_SHOW_SUB_MENU_ITEMS'),
-				'menu-sub-effect' => JText::_('SUNFW_TEXT_MENU_SUB_EFFECT'),
-				'enable-sticky' => JText::_('SUNFW_TEXT_ENABLE_STICKY'),
-				'mobile-target' => JText::_('SUNFW_TEXT_MOBILE_TARGET'),
-				'show-icon' => JText::_('SUNFW_SHOW_ICON'),
-				'show-description' => JText::_('SUNFW_SHOW_DESCRIPTION'),
-				'show-submenu' => JText::_('SUNFW_SHOW_SUBMENU'),
-				'preview-layout' => JText::_('SUNFW_PREVIEW_LAYOUT'),
-				'view-modules' => JText::_('SUNFW_VIEW_MODULES'),
-				'show-offcanvas-toggle' => JText::_('SUNFW_OFFCANVAS_SHOW_TOGGLE'),
-				'show-offcanvas-toggle-hint' => JText::_('SUNFW_OFFCANVAS_SHOW_TOGGLE_HINT'),
-				'toggle-position' => JText::_('SUNFW_TOGGLE_POSITION'),
-				'open-on-hover' => JText::_('SUNFW_OPEN_ON_HOVER'),
-				'enable-full-width' => JText::_('SUNFW_ENABLE_FULL_WIDTH'),
-				'display-in-layout' => JText::_('SUNFW_DISPLAY_IN_LAYOUT'),
-				'show-on-front-page' => JText::_('SUNFW_SHOW_ON_FRONT_PAGE'),
-				'mobile-logo' => JText::_('SUNFW_MOBILE_LOGO'),
-				'logo-alt-text' => JText::_('SUNFW_LOGO_ALT_TEXT'),
-				'logo-link' => JText::_('SUNFW_LOGO_LINK'),
-				'full_width' => JText::_('SUNFW_FULL_WIDTH'),
-				'desktop_and_mobile' => JText::_('SUNFW_DESKTOP_AND_MOBILE'),
-				'show-branding-link' => JText::_('SUNFW_SHOW_BRANDING_LINK'),
-				'show-branding-link-hint' => JText::_('SUNFW_SHOW_BRANDING_LINK_DESC'),
-				'branding-link-text' => JText::_('SUNFW_BRANDING_LINK_TEXT'),
-				'branding-link-text-hint' => JText::_('SUNFW_BRANDING_LINK_TEXT_DESC'),
-				'enable-responsive-to-switch-device' => JText::_('SUNFW_ENABLE_RESPONSIVE_TO_SWITCH_DEVICE'),
-				'missing-custom-layout-name' => JText::_('SUNFW_MISSING_CUSTOM_LAYOUT_NAME'),
-				'name-already-in-use' => JText::_('SUNFW_NAME_ALREADY_IN_USE'),
+				'layout' => Text::_('SUNFW_LAYOUT'),
+				'layout-builder' => Text::_('SUNFW_LAYOUT_BUILDER'),
+				'empty-layout-message' => Text::_('SUNFW_LAYOUT_BUILDER_EMPTY_MESSAGE'),
+				'or' => Text::_('SUNFW_OR'),
+				'select-predefined-layout' => Text::_('SUNFW_SELECT_PREDEFINED_LAYOUT'),
+				'layout-page' => Text::_('SUNFW_LAYOUT_PAGE'),
+				'layout-section' => Text::_('SUNFW_LAYOUT_SECTION'),
+				'item-row' => Text::_('SUNFW_LAYOUT_ROW'),
+				'item-column' => Text::_('SUNFW_LAYOUT_COLUMN'),
+				'page-settings' => Text::_('SUNFW_PAGE_SETTINGS'),
+				'section-settings' => Text::_('SUNFW_SECTION_SETTINGS'),
+				'offcanvas-settings' => Text::_('SUNFW_OFFCANVAS_SETTINGS'),
+				'row-settings' => Text::_('SUNFW_ROW_SETTINGS'),
+				'column-settings' => Text::_('SUNFW_COLUMN_SETTINGS'),
+				'item-settings' => Text::_('SUNFW_ITEM_SETTINGS'),
+				'enable-responsive' => Text::_('SUNFW_ENABLE_RESPONSIVE'),
+				'desktop-switcher' => Text::_('SUNFW_SHOW_DESKTOP_SWITCHER'),
+				'boxed-layout' => Text::_('SUNFW_ENABLE_BOXED_LAYOUT'),
+				'boxed-layout-width' => Text::_('SUNFW_BOXED_LAYOUT_WIDTH'),
+				'boxed-layout-min-width' => Text::_('SUNFW_MINIMUM_WIDTH_FOR_BOX_LAYOUT_IS_767'),
+				'show-go-to-top' => Text::_('SUNFW_SHOW_GO_TO_TOP'),
+				'load-prebuilt-layout' => Text::_('SUNFW_LOAD_PREBUILT_LAYOUT'),
+				'save-prebuilt-layout' => Text::_('SUNFW_SAVE_PREBUILT_LAYOUT'),
+				'prebuilt-layout-name' => Text::_('SUNFW_PREBUILT_LAYOUT_NAME'),
+				'new-layout' => Text::_('SUNFW_NEW_LAYOUT'),
+				'save-layout' => Text::_('SUNFW_SAVE_LAYOUT'),
+				'no-pre-layout' => Text::_('SUNFW_NO_PRE_LAYOUT'),
+				'mobile-screen-can-have-only-2-columns-per-row' => Text::_('SUNFW_MOBILE_SCREEN_LIMITATION_REACHED'),
+				'clone-label' => Text::_('SUNFW_CLONE_LABEL'),
+				'duplicate-id' => Text::_('SUNFW_DUPLICATE_ID'),
+				'one-time-item' => Text::_('SUNFW_ONE_TIME_ITEM_NOTICE'),
+				'clone-item-error' => Text::_('SUNFW_CLONE_ITEM_ERROR_MESSAGE'),
+				'used-one-time-item' => Text::_('SUNFW_USED_ONE_TIME_ITEM'),
+				'enable-responsive-hint' => Text::_('SUNFW_ENABLE_RESPONSIVE_HIT'),
+				'show-desktop-switcher-hint' => Text::_('SUNFW_SHOW_DESKTOP_SWITCHER_HINT'),
+				'enable-boxed-layout-hint' => Text::_('SUNFW_ENABLE_BOXED_LAYOUT_HINT'),
+				'margin-hint' => Text::_('SUNFW_MARGIN_HINT'),
+				'show-go-to-top-hint' => Text::_('SUNFW_SHOW_GO_TO_TOP_HINT'),
+				'go-to-top-icon-hint' => Text::_('SUNFW_GO_TO_TOP_ICON_HINT'),
+				'go-to-top-text-hint' => Text::_('SUNFW_GO_TO_TOP_TEXT_HINT'),
+				'go-to-top-text-color-hint' => Text::_('SUNFW_GO_TO_TOP_TEXT_COLOR_HINT'),
+				'go-to-top-background-color-hint' => Text::_('SUNFW_GO_TO_TOP_TEXT_BACKGROUND_HINT'),
+				'go-to-top-position-hint' => Text::_('SUNFW_GO_TO_TOP_POSITION_HINT'),
+				'layout-section-name-hint' => Text::_('SUNFW_LAYOUT_SECTION_NAME_HINT'),
+				'layout-section-enable-full-width-hint' => Text::_('SUNFW_LAYOUT_SECTION_ENABLE_FULL_WIDTH_HINT'),
+				'layout-section-enable-sticky-hint' => Text::_('SUNFW_LAYOUT_SECTION_ENABLE_STICKY_HINT'),
+				'layout-section-margin-hint' => Text::_('SUNFW_LAYOUT_SECTION_MARGIN_HINT'),
+				'layout-section-padding-hint' => Text::_('SUNFW_LAYOUT_SECTION_PADDING_HINT'),
+				'layout-section-custom-classes-hint' => Text::_('SUNFW_LAYOUT_SECTION_CUSTOM_CLASSES_HINT'),
+				'layout-row-margin-hint' => Text::_('SUNFW_LAYOUT_ROW_MARGIN_HINT'),
+				'layout-row-padding-hint' => Text::_('SUNFW_LAYOUT_ROW_PADDING_HINT'),
+				'layout-row-custom-classes-hint' => Text::_('SUNFW_LAYOUT_ROW_CUSTOM_CLASSES_HINT'),
+				'layout-column-margin-hint' => Text::_('SUNFW_LAYOUT_COLUMN_MARGIN_HINT'),
+				'layout-column-padding-hint' => Text::_('SUNFW_LAYOUT_COLUMN_PADDING_HINT'),
+				'layout-column-display-in-layouts-hint' => Text::_('SUNFW_LAYOUT_COLUMN_DISPLAY_IN_LAYOUTS_HINT'),
+				'layout-column-custom-classes-hint' => Text::_('SUNFW_LAYOUT_COLUMN_CUSTOM_CLASSES_HINT'),
+				'layout-logo-name-hint' => Text::_('SUNFW_LAYOUT_LOGO_NAME_HINT'),
+				'layout-logo-hint' => Text::_('SUNFW_LAYOUT_LOGO_HINT'),
+				'layout-mobile-logo-hint' => Text::_('SUNFW_LAYOUT_MOBILE_LOGO_HINT'),
+				'layout-logo-alt-text-hint' => Text::_('SUNFW_LAYOUT_LOGO_ALT_TEXT_HINT'),
+				'layout-logo-link-hint' => Text::_('SUNFW_LAYOUT_LOGO_LINK_HINT'),
+				'layout-logo-display-in-layout-hint' => Text::_('SUNFW_LAYOUT_LOGO_DISPLAY_IN_LAYOUT_HINT'),
+				'layout-logo-custom-classes-hint' => Text::_('SUNFW_LAYOUT_LOGO_CUSTOM_CLASSES_HINT'),
+				'layout-menu-name-hint' => Text::_('SUNFW_LAYOUT_MENU_NAME_HINT'),
+				'layout-menu-hint' => Text::_('SUNFW_LAYOUT_MENU_HINT'),
+				'layout-menu-base-item-hint' => Text::_('SUNFW_LAYOUT_MENU_BASE_ITEM_HINT'),
+				'layout-menu-start-level-item-hint' => Text::_('SUNFW_LAYOUT_MENU_START_LEVEL_ITEM_HINT'),
+				'layout-menu-end-level-hint' => Text::_('SUNFW_LAYOUT_MENU_END_LEVEL_HINT'),
+				'layout-menu-show-icon-hint' => Text::_('SUNFW_LAYOUT_MENU_SHOW_ICON_HINT'),
+				'layout-menu-show-description-hint' => Text::_('SUNFW_LAYOUT_MENU_SHOW_DESCRIPTION_HINT'),
+				'layout-menu-show-submenu-hint' => Text::_('SUNFW_LAYOUT_MENU_SHOW_SUBMENU_HINT'),
+				'layout-menu-sub-effect-hint' => Text::_('SUNFW_LAYOUT_MENU_SUB_EFFECT_HINT'),
+				'layout-menu-mobile-target-hint' => Text::_('SUNFW_LAYOUT_MENU_MOBILE_TARGET_HINT'),
+				'layout-menu-display-in-layout-hint' => Text::_('SUNFW_LAYOUT_MENU_DISPLAY_IN_LAYOUT_HINT'),
+				'layout-menu-custom-classes-hint' => Text::_('SUNFW_LAYOUT_MENU_CUSTOM_CLASSES_HINT'),
+				'layout-module-position-name-hint' => Text::_('SUNFW_LAYOUT_MODULE_POSITION_NAME_HINT'),
+				'layout-module-position-position-hint' => Text::_('SUNFW_LAYOUT_MODULE_POSITION_POSITION_HINT'),
+				'layout-module-position-display-in-layout-hint' => Text::_('SUNFW_LAYOUT_MODULE_POSITION_DISPLAY_IN_LAYOUT_HINT'),
+				'layout-module-position-custom-classes-hint' => Text::_('SUNFW_LAYOUT_MODULE_POSITION_CUSTOM_CLASSES_HINT'),
+				'layout-joomla-module-name-hint' => Text::_('SUNFW_LAYOUT_JOOMLA_MODULE_NAME_HINT'),
+				'layout-joomla-module-selector-hint' => Text::_('SUNFW_LAYOUT_JOOMLA_MODULE_PICKER_HINT'),
+				'layout-joomla-module-display-in-layout-hint' => Text::_('SUNFW_LAYOUT_JOOMLA_MODULE_DISPLAY_IN_LAYOUT_HINT'),
+				'layout-joomla-module-custom-classes-hint' => Text::_('SUNFW_LAYOUT_JOOMLA_MODULE_CUSTOM_CLASSES_HINT'),
+				'layout-page-content-show-on-front-page' => Text::_('SUNFW_LAYOUT_PAGE_CONTENT_SHOW_ON_FRONT_PAGE'),
+				'layout-social-icon-name-hint' => Text::_('SUNFW_LAYOUT_SOCIAL_ICON_NAME_HINT'),
+				'layout-social-icon-icons-hint' => Text::_('SUNFW_LAYOUT_SOCIAL_ICON_ICONS_HINT'),
+				'layout-social-icon-color-hint' => Text::_('SUNFW_LAYOUT_SOCIAL_ICON_COLOR_HINT'),
+				'layout-social-icon-size-hint' => Text::_('SUNFW_LAYOUT_SOCIAL_ICON_SIZE_HINT'),
+				'layout-social-icon-link-target-hint' => Text::_('SUNFW_LAYOUT_SOCIAL_ICON_LINK_TARGET_HINT'),
+				'layout-social-icon-display-in-layout-hint' => Text::_('SUNFW_LAYOUT_SOCIAL_ICON_DISPLAY_IN_LAYOUT_HINT'),
+				'layout-social-icon-custom-classes-hint' => Text::_('SUNFW_LAYOUT_SOCIAL_ICON_CUSTOM_CLASSES_HINT'),
+				'layout-custom-html-name-hint' => Text::_('SUNFW_LAYOUT_CUSTOM_HTML_NAME_HINT'),
+				'layout-custom-html-content-hint' => Text::_('SUNFW_LAYOUT_CUSTOM_HTML_CONTENT_HINT'),
+				'layout-custom-html-display-in-layout-hint' => Text::_('SUNFW_LAYOUT_CUSTOM_HTML_DISPLAY_IN_LAYOUT_HINT'),
+				'layout-custom-html-custom-classes-hint' => Text::_('SUNFW_LAYOUT_CUSTOM_HTML_CUSTOM_CLASSES_HINT'),
+				'layout-flexible-space-name-hint' => Text::_('SUNFW_LAYOUT_FLEXIBLE_SPACE_NAME_HINT'),
+				'layout-flexible-space-display-in-layout-hint' => Text::_('SUNFW_LAYOUT_FLEXIBLE_SPACE_DISPLAY_IN_LAYOUT_HINT'),
+				'layout-flexible-space-custom-classes-hint' => Text::_('SUNFW_LAYOUT_FLEXIBLE_SPACE_CUSTOM_CLASSES_HINT'),
+				'base-item' => Text::_('SUNFW_TEXT_BASE_ITEM'),
+				'start-level' => Text::_('SUNFW_TEXT_START_LEVEL'),
+				'end-level' => Text::_('SUNFW_TEXT_END_LEVEL'),
+				'show-sub-menu-items' => Text::_('SUNFW_TEXT_SHOW_SUB_MENU_ITEMS'),
+				'menu-sub-effect' => Text::_('SUNFW_TEXT_MENU_SUB_EFFECT'),
+				'enable-sticky' => Text::_('SUNFW_TEXT_ENABLE_STICKY'),
+				'mobile-target' => Text::_('SUNFW_TEXT_MOBILE_TARGET'),
+				'show-icon' => Text::_('SUNFW_SHOW_ICON'),
+				'show-description' => Text::_('SUNFW_SHOW_DESCRIPTION'),
+				'show-submenu' => Text::_('SUNFW_SHOW_SUBMENU'),
+				'preview-layout' => Text::_('SUNFW_PREVIEW_LAYOUT'),
+				'view-modules' => Text::_('SUNFW_VIEW_MODULES'),
+				'show-offcanvas-toggle' => Text::_('SUNFW_OFFCANVAS_SHOW_TOGGLE'),
+				'show-offcanvas-toggle-hint' => Text::_('SUNFW_OFFCANVAS_SHOW_TOGGLE_HINT'),
+				'toggle-position' => Text::_('SUNFW_TOGGLE_POSITION'),
+				'open-on-hover' => Text::_('SUNFW_OPEN_ON_HOVER'),
+				'enable-full-width' => Text::_('SUNFW_ENABLE_FULL_WIDTH'),
+				'display-in-layout' => Text::_('SUNFW_DISPLAY_IN_LAYOUT'),
+				'show-on-front-page' => Text::_('SUNFW_SHOW_ON_FRONT_PAGE'),
+				'mobile-logo' => Text::_('SUNFW_MOBILE_LOGO'),
+				'logo-alt-text' => Text::_('SUNFW_LOGO_ALT_TEXT'),
+				'logo-link' => Text::_('SUNFW_LOGO_LINK'),
+				'full_width' => Text::_('SUNFW_FULL_WIDTH'),
+				'desktop_and_mobile' => Text::_('SUNFW_DESKTOP_AND_MOBILE'),
+				'show-branding-link' => Text::_('SUNFW_SHOW_BRANDING_LINK'),
+				'show-branding-link-hint' => Text::_('SUNFW_SHOW_BRANDING_LINK_DESC'),
+				'branding-link-text' => Text::_('SUNFW_BRANDING_LINK_TEXT'),
+				'branding-link-text-hint' => Text::_('SUNFW_BRANDING_LINK_TEXT_DESC'),
+				'enable-responsive-to-switch-device' => Text::_('SUNFW_ENABLE_RESPONSIVE_TO_SWITCH_DEVICE'),
+				'missing-custom-layout-name' => Text::_('SUNFW_MISSING_CUSTOM_LAYOUT_NAME'),
+				'name-already-in-use' => Text::_('SUNFW_NAME_ALREADY_IN_USE'),
                  // Logo element
-			    'layout-logo-name-popover-content' => JText::_('SUNFW_LAYOUT_LOGO_NAME_POPOVER_CONTENT'),
-			    'layout-logo-popover-content' => JText::_('SUNFW_LAYOUT_LOGO_POPOVER_CONTENT'),
-			    'layout-mobile-logo-popover-content' => JText::_('SUNFW_LAYOUT_MOBILE_LOGO_POPOVER_CONTENT'),
-			    'layout-logo-alt-text-popover-content' => JText::_('SUNFW_LAYOUT_LOGO_ALT_TEXT_POPOVER_CONTENT'),
-			    'layout-logo-link-popover-content' => JText::_('SUNFW_LAYOUT_LOGO_LINK_POPOVER_CONTENT'),
-			    'layout-logo-display-in-layout-popover-content' => JText::_('SUNFW_LAYOUT_LOGO_DISPLAY_IN_LAYOUT_POPOVER_CONTENT'),
-			    'layout-logo-custom-classes-popover-content' => JText::_('SUNFW_LAYOUT_LOGO_CUSTOM_CLASSES_POPOVER_CONTENT'),
+			    'layout-logo-name-popover-content' => Text::_('SUNFW_LAYOUT_LOGO_NAME_POPOVER_CONTENT'),
+			    'layout-logo-popover-content' => Text::_('SUNFW_LAYOUT_LOGO_POPOVER_CONTENT'),
+			    'layout-mobile-logo-popover-content' => Text::_('SUNFW_LAYOUT_MOBILE_LOGO_POPOVER_CONTENT'),
+			    'layout-logo-alt-text-popover-content' => Text::_('SUNFW_LAYOUT_LOGO_ALT_TEXT_POPOVER_CONTENT'),
+			    'layout-logo-link-popover-content' => Text::_('SUNFW_LAYOUT_LOGO_LINK_POPOVER_CONTENT'),
+			    'layout-logo-display-in-layout-popover-content' => Text::_('SUNFW_LAYOUT_LOGO_DISPLAY_IN_LAYOUT_POPOVER_CONTENT'),
+			    'layout-logo-custom-classes-popover-content' => Text::_('SUNFW_LAYOUT_LOGO_CUSTOM_CLASSES_POPOVER_CONTENT'),
 			    // Custom HTML element
-			    'layout-custom-html-name-popover-content' => JText::_('SUNFW_LAYOUT_CUSTOM_HTML_NAME_POPOVER_CONTENT'),
-			    'layout-custom-html-content-popover-content' => JText::_('SUNFW_LAYOUT_CUSTOM_HTML_CONTENT_POPOVER_CONTENT'),
-			    'layout-custom-html-display-in-layout-popover-content' => JText::_('SUNFW_LAYOUT_CUSTOM_HTML_DISPLAY_IN_LAYOUT_POPOVER_CONTENT'),
-			    'layout-custom-html-custom-classes-popover-content' => JText::_('SUNFW_LAYOUT_CUSTOM_HTML_CUSTOM_CLASSES_POPOVER_CONTENT'),
+			    'layout-custom-html-name-popover-content' => Text::_('SUNFW_LAYOUT_CUSTOM_HTML_NAME_POPOVER_CONTENT'),
+			    'layout-custom-html-content-popover-content' => Text::_('SUNFW_LAYOUT_CUSTOM_HTML_CONTENT_POPOVER_CONTENT'),
+			    'layout-custom-html-display-in-layout-popover-content' => Text::_('SUNFW_LAYOUT_CUSTOM_HTML_DISPLAY_IN_LAYOUT_POPOVER_CONTENT'),
+			    'layout-custom-html-custom-classes-popover-content' => Text::_('SUNFW_LAYOUT_CUSTOM_HTML_CUSTOM_CLASSES_POPOVER_CONTENT'),
 			    // Flexible element
-			    'layout-flexible-space-name-popover-content' => JText::_('SUNFW_LAYOUT_FLEXIBLE_SPACE_NAME_POPOVER_CONTENT'),
-			    'layout-flexible-space-display-in-layout-popover-content' => JText::_('SUNFW_LAYOUT_FLEXIBLE_SPACE_DISPLAY_IN_LAYOUT_POPOVER_CONTENT'),
-			    'layout-flexible-space-custom-classes-popover-content' => JText::_('SUNFW_LAYOUT_FLEXIBLE_SPACE_CUSTOM_CLASSES_POPOVER_CONTENT'),
+			    'layout-flexible-space-name-popover-content' => Text::_('SUNFW_LAYOUT_FLEXIBLE_SPACE_NAME_POPOVER_CONTENT'),
+			    'layout-flexible-space-display-in-layout-popover-content' => Text::_('SUNFW_LAYOUT_FLEXIBLE_SPACE_DISPLAY_IN_LAYOUT_POPOVER_CONTENT'),
+			    'layout-flexible-space-custom-classes-popover-content' => Text::_('SUNFW_LAYOUT_FLEXIBLE_SPACE_CUSTOM_CLASSES_POPOVER_CONTENT'),
 			    // Joomla Module element
-			    'layout-joomla-module-name-popover-content' => JText::_('SUNFW_LAYOUT_JOOMLA_MODULE_NAME_POPOVER_CONTENT'),
-			    'layout-joomla-module-selector-popover-content' => JText::_('SUNFW_LAYOUT_JOOMLA_MODULE_PICKER_POPOVER_CONTENT'),
-			    'layout-joomla-module-display-in-layout-popover-content' => JText::_('SUNFW_LAYOUT_JOOMLA_MODULE_DISPLAY_IN_LAYOUT_POPOVER_CONTENT'),
-			    'layout-joomla-module-custom-classes-popover-content' => JText::_('SUNFW_LAYOUT_JOOMLA_MODULE_CUSTOM_CLASSES_POPOVER_CONTENT'),
+			    'layout-joomla-module-name-popover-content' => Text::_('SUNFW_LAYOUT_JOOMLA_MODULE_NAME_POPOVER_CONTENT'),
+			    'layout-joomla-module-selector-popover-content' => Text::_('SUNFW_LAYOUT_JOOMLA_MODULE_PICKER_POPOVER_CONTENT'),
+			    'layout-joomla-module-display-in-layout-popover-content' => Text::_('SUNFW_LAYOUT_JOOMLA_MODULE_DISPLAY_IN_LAYOUT_POPOVER_CONTENT'),
+			    'layout-joomla-module-custom-classes-popover-content' => Text::_('SUNFW_LAYOUT_JOOMLA_MODULE_CUSTOM_CLASSES_POPOVER_CONTENT'),
                 // Menu element
-			    'layout-menu-name-popover-content' => JText::_('SUNFW_LAYOUT_MENU_NAME_POPOVER_CONTENT'),
-			    'layout-menu-popover-content' => JText::_('SUNFW_LAYOUT_MENU_POPOVER_CONTENT'),
-			    'layout-menu-base-item-popover-content' => JText::_('SUNFW_LAYOUT_MENU_BASE_ITEM_POPOVER_CONTENT'),
-			    'layout-menu-start-level-item-popover-content' => JText::_('SUNFW_LAYOUT_MENU_START_LEVEL_ITEM_POPOVER_CONTENT'),
-			    'layout-menu-end-level-popover-content' => JText::_('SUNFW_LAYOUT_MENU_END_LEVEL_POPOVER_CONTENT'),
-			    'layout-menu-show-icon-popover-content' => JText::_('SUNFW_LAYOUT_MENU_SHOW_ICON_POPOVER_CONTENT'),
-			    'layout-menu-show-description-popover-content' => JText::_('SUNFW_LAYOUT_MENU_SHOW_DESCRIPTION_POPOVER_CONTENT'),
-			    'layout-menu-show-submenu-popover-content' => JText::_('SUNFW_LAYOUT_MENU_SHOW_SUBMENU_POPOVER_CONTENT'),
-			    'layout-menu-sub-effect-popover-content' => JText::_('SUNFW_LAYOUT_MENU_SUB_EFFECT_POPOVER_CONTENT'),
-			    'layout-menu-mobile-target-popover-content' => JText::_('SUNFW_LAYOUT_MENU_MOBILE_TARGET_POPOVER_CONTENT'),
-			    'layout-menu-display-in-layout-popover-content' => JText::_('SUNFW_LAYOUT_MENU_DISPLAY_IN_LAYOUT_POPOVER_CONTENT'),
-			    'layout-menu-custom-classes-popover-content' => JText::_('SUNFW_LAYOUT_MENU_CUSTOM_CLASSES_POPOVER_CONTENT'),
-			    'layout-menu-mobile-icon' => JText::_('SUNFW_LAYOUT_MENU_MOBILE_ICON'),
-			    'layout-mobile-icon-color-popover-content' => JText::_('SUNFW_LAYOUT_MENU_MOBILE_ICON_COLOR_POPOVER_CONTENT'),
-			    'layout-mobile-icon-size-popover-content' => JText::_('SUNFW_LAYOUT_MENU_MOBILE_ICON_SIZE_POPOVER_CONTENT'),
-                'layout-menu-mobile-icon-color' => JText::_('SUNFW_LAYOUT_MENU_MOBILE_ICON_COLOR'),
-			    'layout-menu-mobile-icon-size' => JText::_('SUNFW_LAYOUT_MENU_MOBILE_ICON_SIZE'),
-			    'layout-menu-mobile-icon-popover-content' => JText::_('SUNFW_LAYOUT_MENU_MOBILE_POPOVER_CONTENT'),
-			    'layout-menu-mobile-icon-background-color' => JText::_('SUNFW_LAYOUT_MENU_MOBILE_ICON_BACKGROUND_COLOR'),
-			    'layout-menu-mobile-icon-background-color-popover-content' => JText::_('SUNFW_LAYOUT_MENU_MOBILE_ICON_BACKGROUND_COLOR_POPOVER_CONTENT'),
+			    'layout-menu-name-popover-content' => Text::_('SUNFW_LAYOUT_MENU_NAME_POPOVER_CONTENT'),
+			    'layout-menu-popover-content' => Text::_('SUNFW_LAYOUT_MENU_POPOVER_CONTENT'),
+			    'layout-menu-base-item-popover-content' => Text::_('SUNFW_LAYOUT_MENU_BASE_ITEM_POPOVER_CONTENT'),
+			    'layout-menu-start-level-item-popover-content' => Text::_('SUNFW_LAYOUT_MENU_START_LEVEL_ITEM_POPOVER_CONTENT'),
+			    'layout-menu-end-level-popover-content' => Text::_('SUNFW_LAYOUT_MENU_END_LEVEL_POPOVER_CONTENT'),
+			    'layout-menu-show-icon-popover-content' => Text::_('SUNFW_LAYOUT_MENU_SHOW_ICON_POPOVER_CONTENT'),
+			    'layout-menu-show-description-popover-content' => Text::_('SUNFW_LAYOUT_MENU_SHOW_DESCRIPTION_POPOVER_CONTENT'),
+			    'layout-menu-show-submenu-popover-content' => Text::_('SUNFW_LAYOUT_MENU_SHOW_SUBMENU_POPOVER_CONTENT'),
+			    'layout-menu-sub-effect-popover-content' => Text::_('SUNFW_LAYOUT_MENU_SUB_EFFECT_POPOVER_CONTENT'),
+			    'layout-menu-mobile-target-popover-content' => Text::_('SUNFW_LAYOUT_MENU_MOBILE_TARGET_POPOVER_CONTENT'),
+			    'layout-menu-display-in-layout-popover-content' => Text::_('SUNFW_LAYOUT_MENU_DISPLAY_IN_LAYOUT_POPOVER_CONTENT'),
+			    'layout-menu-custom-classes-popover-content' => Text::_('SUNFW_LAYOUT_MENU_CUSTOM_CLASSES_POPOVER_CONTENT'),
+			    'layout-menu-mobile-icon' => Text::_('SUNFW_LAYOUT_MENU_MOBILE_ICON'),
+			    'layout-mobile-icon-color-popover-content' => Text::_('SUNFW_LAYOUT_MENU_MOBILE_ICON_COLOR_POPOVER_CONTENT'),
+			    'layout-mobile-icon-size-popover-content' => Text::_('SUNFW_LAYOUT_MENU_MOBILE_ICON_SIZE_POPOVER_CONTENT'),
+                'layout-menu-mobile-icon-color' => Text::_('SUNFW_LAYOUT_MENU_MOBILE_ICON_COLOR'),
+			    'layout-menu-mobile-icon-size' => Text::_('SUNFW_LAYOUT_MENU_MOBILE_ICON_SIZE'),
+			    'layout-menu-mobile-icon-popover-content' => Text::_('SUNFW_LAYOUT_MENU_MOBILE_POPOVER_CONTENT'),
+			    'layout-menu-mobile-icon-background-color' => Text::_('SUNFW_LAYOUT_MENU_MOBILE_ICON_BACKGROUND_COLOR'),
+			    'layout-menu-mobile-icon-background-color-popover-content' => Text::_('SUNFW_LAYOUT_MENU_MOBILE_ICON_BACKGROUND_COLOR_POPOVER_CONTENT'),
 
 			    // Module Position element
-			    'layout-module-position-name-popover-content' => JText::_('SUNFW_LAYOUT_MODULE_POSITION_NAME_POPOVER_CONTENT'),
-			    'layout-module-position-position-popover-content' => JText::_('SUNFW_LAYOUT_MODULE_POSITION_POSITION_POPOVER_CONTENT'),
-			    'layout-module-position-display-in-layout-popover-content' => JText::_('SUNFW_LAYOUT_MODULE_POSITION_DISPLAY_IN_LAYOUT_POPOVER_CONTENT'),
-			    'layout-module-position-custom-classes-popover-content' => JText::_('SUNFW_LAYOUT_MODULE_POSITION_CUSTOM_CLASSES_POPOVER_CONTENT'),
+			    'layout-module-position-name-popover-content' => Text::_('SUNFW_LAYOUT_MODULE_POSITION_NAME_POPOVER_CONTENT'),
+			    'layout-module-position-position-popover-content' => Text::_('SUNFW_LAYOUT_MODULE_POSITION_POSITION_POPOVER_CONTENT'),
+			    'layout-module-position-display-in-layout-popover-content' => Text::_('SUNFW_LAYOUT_MODULE_POSITION_DISPLAY_IN_LAYOUT_POPOVER_CONTENT'),
+			    'layout-module-position-custom-classes-popover-content' => Text::_('SUNFW_LAYOUT_MODULE_POSITION_CUSTOM_CLASSES_POPOVER_CONTENT'),
 			    // Off Canvas
-			    'show-offcanvas-toggle-popover-content' => JText::_('SUNFW_OFFCANVAS_SHOW_TOGGLE_POPOVER_CONTENT'),
-			    'show-offcanvas-height-popover-content' => JText::_('SUNFW_OFFCANVAS_HEIGHT_POPOVER_CONTENT'),
-			    'show-offcanvas-icon' => JText::_('SUNFW_OFFCANVAS_ICON'),
-			    'show-offcanvas-icon-popover-content' => JText::_('SUNFW_OFFCANVAS_ICONT_POPOVER_CONTENT'),
-			    'show-offcanvas-padding-popover-content' => JText::_('SUNFW_OFFCANVAS_PADDING_POPOVER_CONTENT'),
-			    'show-offcanvas-display-in-layout-popover-content' => JText::_('SUNFW_OFFCANVAS_DISPLAY_IN_LAYOUT_POPOVER_CONTENT'),
-			    'show-offcanvas-custom-class-popover-content' => JText::_('SUNFW_OFFCANVAS_CUSTOM_CLASS_POPOVER_CONTENT'),
-			    'show-offcanvas-width-popover-content' => JText::_('SUNFW_OFFCANVAS_WIDTH_POPOVER_CONTENT'),
-			    'show-offcanvas-icon-background-color-popover-content' => JText::_('SUNFW_OFFCANVAS_ICON_BACKGROUND_COLOR_POPOVER_CONTENT'),
-			    'show-offcanvas-icon-background-color' => JText::_('SUNFW_OFFCANVAS_ICON_BACKGROUND_COLOR'),
+			    'show-offcanvas-toggle-popover-content' => Text::_('SUNFW_OFFCANVAS_SHOW_TOGGLE_POPOVER_CONTENT'),
+			    'show-offcanvas-height-popover-content' => Text::_('SUNFW_OFFCANVAS_HEIGHT_POPOVER_CONTENT'),
+			    'show-offcanvas-icon' => Text::_('SUNFW_OFFCANVAS_ICON'),
+			    'show-offcanvas-icon-popover-content' => Text::_('SUNFW_OFFCANVAS_ICONT_POPOVER_CONTENT'),
+			    'show-offcanvas-padding-popover-content' => Text::_('SUNFW_OFFCANVAS_PADDING_POPOVER_CONTENT'),
+			    'show-offcanvas-display-in-layout-popover-content' => Text::_('SUNFW_OFFCANVAS_DISPLAY_IN_LAYOUT_POPOVER_CONTENT'),
+			    'show-offcanvas-custom-class-popover-content' => Text::_('SUNFW_OFFCANVAS_CUSTOM_CLASS_POPOVER_CONTENT'),
+			    'show-offcanvas-width-popover-content' => Text::_('SUNFW_OFFCANVAS_WIDTH_POPOVER_CONTENT'),
+			    'show-offcanvas-icon-background-color-popover-content' => Text::_('SUNFW_OFFCANVAS_ICON_BACKGROUND_COLOR_POPOVER_CONTENT'),
+			    'show-offcanvas-icon-background-color' => Text::_('SUNFW_OFFCANVAS_ICON_BACKGROUND_COLOR'),
 
 			    // Layout element
-			    'layout-page-content-show-on-front-page-popover-content' => JText::_('SUNFW_LAYOUT_PAGE_CONTENT_SHOW_ON_FRONT_PAGE_POPOVER_CONTENT'),
+			    'layout-page-content-show-on-front-page-popover-content' => Text::_('SUNFW_LAYOUT_PAGE_CONTENT_SHOW_ON_FRONT_PAGE_POPOVER_CONTENT'),
 			    // Section
-			    'layout-section-name-popover-content' => JText::_('SUNFW_LAYOUT_SECTION_NAME_POPOVER_CONTENT'),
-			    'layout-section-enable-full-width-popover-content' => JText::_('SUNFW_LAYOUT_SECTION_ENABLE_FULL_WIDTH_POPOVER_CONTENT'),
-			    'layout-section-enable-sticky-popover-content' => JText::_('SUNFW_LAYOUT_SECTION_ENABLE_STICKY_POPOVER_CONTENT'),
-			    'layout-section-margin-popover-content' => JText::_('SUNFW_LAYOUT_SECTION_MARGIN_POPOVER_CONTENT'),
-			    'layout-section-padding-popover-content' => JText::_('SUNFW_LAYOUT_SECTION_PADDING_POPOVER_CONTENT'),
-			    'layout-section-display-in-layouts-popover-content' => JText::_('SUNFW_LAYOUT_SECTION_DISPLAY_IN_LAYOUTS_POPOVER_CONTENT'),
-			    'layout-section-custom-classes-popover-content' => JText::_('SUNFW_LAYOUT_SECTION_CUSTOM_CLASSES_POPOVER_CONTENT'),
+			    'layout-section-name-popover-content' => Text::_('SUNFW_LAYOUT_SECTION_NAME_POPOVER_CONTENT'),
+			    'layout-section-enable-full-width-popover-content' => Text::_('SUNFW_LAYOUT_SECTION_ENABLE_FULL_WIDTH_POPOVER_CONTENT'),
+			    'layout-section-enable-sticky-popover-content' => Text::_('SUNFW_LAYOUT_SECTION_ENABLE_STICKY_POPOVER_CONTENT'),
+			    'layout-section-margin-popover-content' => Text::_('SUNFW_LAYOUT_SECTION_MARGIN_POPOVER_CONTENT'),
+			    'layout-section-padding-popover-content' => Text::_('SUNFW_LAYOUT_SECTION_PADDING_POPOVER_CONTENT'),
+			    'layout-section-display-in-layouts-popover-content' => Text::_('SUNFW_LAYOUT_SECTION_DISPLAY_IN_LAYOUTS_POPOVER_CONTENT'),
+			    'layout-section-custom-classes-popover-content' => Text::_('SUNFW_LAYOUT_SECTION_CUSTOM_CLASSES_POPOVER_CONTENT'),
 			    // Column
-			    'layout-column-margin-popover-content' => JText::_('SUNFW_LAYOUT_COLUMN_MARGIN_POPOVER_CONTENT'),
-			    'layout-column-padding-popover-content' => JText::_('SUNFW_LAYOUT_COLUMN_PADDING_POPOVER_CONTENT'),
-			    'layout-column-display-in-layouts-popover-content' => JText::_('SUNFW_LAYOUT_COLUMN_DISPLAY_IN_LAYOUTS_POPOVER_CONTENT'),
-			    'layout-column-custom-classes-popover-content' => JText::_('SUNFW_LAYOUT_COLUMN_CUSTOM_CLASSES_POPOVER_CONTENT'),
+			    'layout-column-margin-popover-content' => Text::_('SUNFW_LAYOUT_COLUMN_MARGIN_POPOVER_CONTENT'),
+			    'layout-column-padding-popover-content' => Text::_('SUNFW_LAYOUT_COLUMN_PADDING_POPOVER_CONTENT'),
+			    'layout-column-display-in-layouts-popover-content' => Text::_('SUNFW_LAYOUT_COLUMN_DISPLAY_IN_LAYOUTS_POPOVER_CONTENT'),
+			    'layout-column-custom-classes-popover-content' => Text::_('SUNFW_LAYOUT_COLUMN_CUSTOM_CLASSES_POPOVER_CONTENT'),
 			    // Row
-			    'layout-row-margin-popover-content' => JText::_('SUNFW_LAYOUT_ROW_MARGIN_POPOVER_CONTENT'),
-			    'layout-row-padding-popover-content' => JText::_('SUNFW_LAYOUT_ROW_PADDING_POPOVER_CONTENT'),
-			    'layout-row-custom-classes-popover-content' => JText::_('SUNFW_LAYOUT_ROW_CUSTOM_CLASSES_POPOVER_CONTENT'),
-			    'layout-row-display-in-layouts-popover-content' => JText::_('SUNFW_LAYOUT_ROW_DISPLAY_IN_LAYOUTS_POPOVER_CONTENT'),
+			    'layout-row-margin-popover-content' => Text::_('SUNFW_LAYOUT_ROW_MARGIN_POPOVER_CONTENT'),
+			    'layout-row-padding-popover-content' => Text::_('SUNFW_LAYOUT_ROW_PADDING_POPOVER_CONTENT'),
+			    'layout-row-custom-classes-popover-content' => Text::_('SUNFW_LAYOUT_ROW_CUSTOM_CLASSES_POPOVER_CONTENT'),
+			    'layout-row-display-in-layouts-popover-content' => Text::_('SUNFW_LAYOUT_ROW_DISPLAY_IN_LAYOUTS_POPOVER_CONTENT'),
                 // Social Icon
-			    'layout-social-icon-name-popover-content' => JText::_('SUNFW_LAYOUT_SOCIAL_ICON_NAME_POPOVER_CONTENT'),
-			    'layout-social-icon-icons-popover-content' => JText::_('SUNFW_LAYOUT_SOCIAL_ICON_ICONS_POPOVER_CONTENT'),
-			    'layout-social-icon-color-popover-content' => JText::_('SUNFW_LAYOUT_SOCIAL_ICON_COLOR_POPOVER_CONTENT'),
-			    'layout-social-icon-color-hover-popover-content' => JText::_('SUNFW_LAYOUT_SOCIAL_ICON_COLOR_HOVER_POPOVER_CONTENT'),
-			    'layout-social-icon-size-popover-content' => JText::_('SUNFW_LAYOUT_SOCIAL_ICON_SIZE_POPOVER_CONTENT'),
-			    'layout-social-icon-link-target-popover-content' => JText::_('SUNFW_LAYOUT_SOCIAL_ICON_LINK_TARGET_POPOVER_CONTENT'),
-			    'layout-social-icon-display-in-layout-popover-content' => JText::_('SUNFW_LAYOUT_SOCIAL_ICON_DISPLAY_IN_LAYOUT_POPOVER_CONTENT'),
-			    'layout-social-icon-custom-classes-popover-content' => JText::_('SUNFW_LAYOUT_SOCIAL_ICON_CUSTOM_CLASSES_POPOVER_CONTENT'),
+			    'layout-social-icon-name-popover-content' => Text::_('SUNFW_LAYOUT_SOCIAL_ICON_NAME_POPOVER_CONTENT'),
+			    'layout-social-icon-icons-popover-content' => Text::_('SUNFW_LAYOUT_SOCIAL_ICON_ICONS_POPOVER_CONTENT'),
+			    'layout-social-icon-color-popover-content' => Text::_('SUNFW_LAYOUT_SOCIAL_ICON_COLOR_POPOVER_CONTENT'),
+			    'layout-social-icon-color-hover-popover-content' => Text::_('SUNFW_LAYOUT_SOCIAL_ICON_COLOR_HOVER_POPOVER_CONTENT'),
+			    'layout-social-icon-size-popover-content' => Text::_('SUNFW_LAYOUT_SOCIAL_ICON_SIZE_POPOVER_CONTENT'),
+			    'layout-social-icon-link-target-popover-content' => Text::_('SUNFW_LAYOUT_SOCIAL_ICON_LINK_TARGET_POPOVER_CONTENT'),
+			    'layout-social-icon-display-in-layout-popover-content' => Text::_('SUNFW_LAYOUT_SOCIAL_ICON_DISPLAY_IN_LAYOUT_POPOVER_CONTENT'),
+			    'layout-social-icon-custom-classes-popover-content' => Text::_('SUNFW_LAYOUT_SOCIAL_ICON_CUSTOM_CLASSES_POPOVER_CONTENT'),
 			    // Page
-			    'layout-page-enable-responsive-popover-content' => JText::_('SUNFW_LAYOUT_PAGE_ENABLE_RESPONSIVE_POPOVER_CONTENT'),
-			    'layout-page-show-desktop-switcher-popover-content' => JText::_('SUNFW_LAYOUT_PAGE_SHOW_DESKTOP_SWITCHER_POPOVER_CONTENT'),
-			    'layout-page-enable-boxed-layout-popover-content' => JText::_('SUNFW_LAYOUT_PAGE_ENABLE_BOXED_LAYOUT_POPOVER_CONTENT'),
-			    'layout-page-margin-popover-content' => JText::_('SUNFW_LAYOUT_PAGE_MARGIN_POPOVER_CONTENT'),
-			    'layout-page-show-go-to-top-popover-content' => JText::_('SUNFW_LAYOUT_PAGE_SHOW_GO_TO_TOP_POPOVER_CONTENT'),
-			    'layout-page-go-to-top-icon-popover-content' => JText::_('SUNFW_LAYOUT_PAGE_GO_TO_TOP_ICON_POPOVER_CONTENT'),
-			    'layout-page-go-to-top-text-popover-content' => JText::_('SUNFW_LAYOUT_PAGE_GO_TO_TOP_TEXT_POPOVER_CONTENT'),
-			    'layout-page-go-to-top-text-color-popover-content' => JText::_('SUNFW_LAYOUT_PAGE_GO_TO_TOP_TEXT_COLOR_POPOVER_CONTENT'),
-			    'layout-page-go-to-top-background-color-popover-content' => JText::_('SUNFW_LAYOUT_PAGE_GO_TO_TOP_TEXT_BACKGROUND_POPOVER_CONTENT'),
-			    'layout-page-go-to-top-position-popover-content' => JText::_('SUNFW_LAYOUT_PAGE_GO_TO_TOP_POSITION_POPOVER_CONTENT'),
-			    'layout-page-show-branding-link-popover-content' => JText::_('SUNFW_LAYOUT_PAGE_SHOW_BRANDING_LINK_POPOVER_CONTENT'),
-			    'layout-page-branding-link-text-popover-content' => JText::_('SUNFW_LAYOUT_PAGE_BRANDING_LINK_TEXT_POPOVER_CONTENT'),
-			    'layout-page-go-to-top-background-hover-color-popover-content' => JText::_('SUNFW_LAYOUT_PAGE_GO_TO_TOP_TEXT_BACKGROUND_HOVER_POPOVER_CONTENT'),
-			    'layout-page-go-to-top-text-hover-color-popover-content' => JText::_('SUNFW_LAYOUT_PAGE_GO_TO_TOP_TEXT_COLOR_POPOVER_CONTENT'),
+			    'layout-page-enable-responsive-popover-content' => Text::_('SUNFW_LAYOUT_PAGE_ENABLE_RESPONSIVE_POPOVER_CONTENT'),
+			    'layout-page-show-desktop-switcher-popover-content' => Text::_('SUNFW_LAYOUT_PAGE_SHOW_DESKTOP_SWITCHER_POPOVER_CONTENT'),
+			    'layout-page-enable-boxed-layout-popover-content' => Text::_('SUNFW_LAYOUT_PAGE_ENABLE_BOXED_LAYOUT_POPOVER_CONTENT'),
+			    'layout-page-margin-popover-content' => Text::_('SUNFW_LAYOUT_PAGE_MARGIN_POPOVER_CONTENT'),
+			    'layout-page-show-go-to-top-popover-content' => Text::_('SUNFW_LAYOUT_PAGE_SHOW_GO_TO_TOP_POPOVER_CONTENT'),
+			    'layout-page-go-to-top-icon-popover-content' => Text::_('SUNFW_LAYOUT_PAGE_GO_TO_TOP_ICON_POPOVER_CONTENT'),
+			    'layout-page-go-to-top-text-popover-content' => Text::_('SUNFW_LAYOUT_PAGE_GO_TO_TOP_TEXT_POPOVER_CONTENT'),
+			    'layout-page-go-to-top-text-color-popover-content' => Text::_('SUNFW_LAYOUT_PAGE_GO_TO_TOP_TEXT_COLOR_POPOVER_CONTENT'),
+			    'layout-page-go-to-top-background-color-popover-content' => Text::_('SUNFW_LAYOUT_PAGE_GO_TO_TOP_TEXT_BACKGROUND_POPOVER_CONTENT'),
+			    'layout-page-go-to-top-position-popover-content' => Text::_('SUNFW_LAYOUT_PAGE_GO_TO_TOP_POSITION_POPOVER_CONTENT'),
+			    'layout-page-show-branding-link-popover-content' => Text::_('SUNFW_LAYOUT_PAGE_SHOW_BRANDING_LINK_POPOVER_CONTENT'),
+			    'layout-page-branding-link-text-popover-content' => Text::_('SUNFW_LAYOUT_PAGE_BRANDING_LINK_TEXT_POPOVER_CONTENT'),
+			    'layout-page-go-to-top-background-hover-color-popover-content' => Text::_('SUNFW_LAYOUT_PAGE_GO_TO_TOP_TEXT_BACKGROUND_HOVER_POPOVER_CONTENT'),
+			    'layout-page-go-to-top-text-hover-color-popover-content' => Text::_('SUNFW_LAYOUT_PAGE_GO_TO_TOP_TEXT_COLOR_POPOVER_CONTENT'),
 
 			)
 		);
@@ -525,7 +525,7 @@ class SunFwAjaxLayout extends SunFwAjax
 		}
 
 		$this->setResponse(array(
-			'message' => JText::_('SUNFW_LAYOUT_SAVED_SUCCESSFULLY')
+			'message' => Text::_('SUNFW_LAYOUT_SAVED_SUCCESSFULLY')
 		));
 	}
 
@@ -552,15 +552,15 @@ class SunFwAjaxLayout extends SunFwAjax
 
 		if (!$directory)
 		{
-			throw new Exception(JText::sprintf('SUNFW_NOT_FOUND_WRITABLE_DIRECTORY', implode("\n\n", $directories)));
+			throw new Exception(Text::sprintf('SUNFW_NOT_FOUND_WRITABLE_DIRECTORY', implode("\n\n", $directories)));
 		}
 
 		// Write layout builder data to prebuilt layout file.
 		$file = "{$directory}/" . preg_replace('/[^a-zA-Z0-9\-_]+/', '_', $name) . '.json';
 
-		if (!JFile::write($file, $data))
+		if (!SunFwFile::write($file, $data))
 		{
-			throw new Exception(JText::sprintf('SUNFW_ERROR_FAILED_TO_SAVE_FILENAME', $file));
+			throw new Exception(Text::sprintf('SUNFW_ERROR_FAILED_TO_SAVE_FILENAME', $file));
 		}
 
 		// Set default layout if requested.
@@ -573,7 +573,7 @@ class SunFwAjaxLayout extends SunFwAjax
 
 		$this->setResponse(array(
 			'name' => $name,
-			'message' => JText::_('SUNFW_PREBUILD_LAYOUT_SAVED_SUCCESSFULLY')
+			'message' => Text::_('SUNFW_PREBUILD_LAYOUT_SAVED_SUCCESSFULLY')
 		));
 	}
 
@@ -599,9 +599,9 @@ class SunFwAjaxLayout extends SunFwAjax
 		{
 			if (is_file($file = "{$dir}/{$layout}.json"))
 			{
-				if (!JFile::delete($file))
+				if (!SunFwFile::delete($file))
 				{
-					throw new Exception(JText::sprintf('SUNFW_FAILED_TO_REMOVE_FILE', $file));
+					throw new Exception(Text::sprintf('SUNFW_FAILED_TO_REMOVE_FILE', $file));
 				}
 			}
 		}

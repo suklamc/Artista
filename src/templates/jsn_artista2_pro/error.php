@@ -16,6 +16,11 @@
 // No direct access to this file.
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
 
 $sunfwParams = SunFwSite::getInstance();
 $sunfwParams1 = json_encode($sunfwParams);
@@ -25,9 +30,9 @@ if (!empty($custom_404_data) && (int) $custom_404_data->enabled && !empty($custo
 {
     SunFwSite::getInstance()->render('error', $this);
 }else {
-    $app             = JFactory::getApplication();
-    $doc             = JFactory::getDocument();
-    $user            = JFactory::getUser();
+    $app             = Factory::getApplication();
+    $doc             = Factory::getDocument();
+    $user            = Factory::getUser();
 
     $this->language  = $doc->language;
     $this->direction = $doc->direction;
@@ -62,7 +67,7 @@ if (!empty($custom_404_data) && (int) $custom_404_data->enabled && !empty($custo
     $image_404_path = $this->baseurl . '/templates/' . $this->template . "/images/404.png";
 
 // Add JavaScript Frameworks
-    JHtml::_('bootstrap.framework');
+    HTMLHelper::_('bootstrap.framework');
 
     ?>
     <!DOCTYPE html>
@@ -77,7 +82,7 @@ if (!empty($custom_404_data) && (int) $custom_404_data->enabled && !empty($custo
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
 
         <?php if ($app->get('debug_lang', '0') == '1' || $app->get('debug', '0') == '1') : ?>
-            <link href="<?php echo JUri::root(true); ?>/media/cms/css/debug.css" rel="stylesheet" />
+            <link href="<?php echo Uri::root(true); ?>/media/plg_system_debug/css/debug.css" rel="stylesheet" />
         <?php endif; ?>
 
         <link href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template; ?>/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
@@ -105,7 +110,7 @@ if (!empty($custom_404_data) && (int) $custom_404_data->enabled && !empty($custo
                                 <div class="content-inner">
                                     <h3>404 ERROR :(</h3>
                                     <h4 class="jsn-error-text">Sorry, <?php echo htmlspecialchars($this->error->getMessage(), ENT_QUOTES, 'UTF-8');?></h4>
-                                    <div class="goto-home"><a href="<?php echo JUri::base();?>"><?php echo JText::_('TPL_GO_TO_HOME');?></a></div>
+                                    <div class="goto-home"><a href="<?php echo Uri::base();?>"><?php echo Text::_('TPL_GO_TO_HOME');?></a></div>
                                 </div>
                             </div>
                         </div>

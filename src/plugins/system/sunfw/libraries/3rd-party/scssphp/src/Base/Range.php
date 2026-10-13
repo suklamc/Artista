@@ -16,6 +16,7 @@ namespace Leafo\ScssPhp\Base;
  *
  * @author Anthon Pang <anthon.pang@gmail.com>
  */
+#[\AllowDynamicProperties]
 class Range
 {
     public $first;

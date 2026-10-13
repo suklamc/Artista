@@ -13,12 +13,17 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\Registry\Registry;
+
 /**
  * General Module class.
  *
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwModule
 {
 
@@ -29,10 +34,10 @@ class SunFwModule
 	 */
 	public static function render($mID)
 	{
-		$app = JFactory::getApplication();
-		$now = JFactory::getDate()->toSql();
+		$app = Factory::getApplication();
+		$now = Factory::getDate()->toSql();
 
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$nullDate = $db->getNullDate();
 
 		$query = $db->getQuery(true);
@@ -46,13 +51,13 @@ class SunFwModule
 			->where('(m.publish_up = ' . $db->quote($nullDate) . ' OR m.publish_up <= ' . $db->quote($now) . ')')
 			->where('(m.publish_down = ' . $db->quote($nullDate) . ' OR m.publish_down >= ' . $db->quote($now) . ')')
 			->where('m.id=' . (int) $mID . ' AND m.client_id= ' . (int) $app->getClientId())
-			->where('m.access IN (' . implode(', ', JFactory::getUser()->getAuthorisedViewLevels()) . ')')
+			->where('m.access IN (' . implode(', ', Factory::getUser()->getAuthorisedViewLevels()) . ')')
 			->where('(mm.menuid = ' . (int) $app->input->getInt('Itemid') . ' OR mm.menuid <= 0)');
 
 		// Filter by language
 		if (SunFwCompat::isClient('site') && $app->getLanguageFilter())
 		{
-			$query->where('m.language IN (' . $db->quote(JFactory::getLanguage()->getTag()) . ', ' . $db->quote('*') . ')');
+			$query->where('m.language IN (' . $db->quote(Factory::getLanguage()->getTag()) . ', ' . $db->quote('*') . ')');
 		}
 
 		$db->setQuery($query);
@@ -70,7 +75,7 @@ class SunFwModule
 		}
 
 		// Prepare module parameters.
-		$params = new JRegistry();
+		$params = new Registry();
 
 		$params->loadString($module->params);
 
@@ -89,11 +94,11 @@ class SunFwModule
 
 		$html = '<div class="modulecontainer ' . trim($moduleclassSfx) . '">';
 
-		$moduleHTML = JFactory::getDocument()->loadRenderer('module')->render($module, $params, $module->content);
+		$moduleHTML = Factory::getDocument()->loadRenderer('module')->render($module, $params, $module->content);
 
 		if (trim($moduleHTML) == '')
 		{
-			$html .= '<div class="alert alert-block">' . JText::sprintf('SUNFW_MODULE_HAS_NO_CONTENT', $module->title) . '</div>';
+			$html .= '<div class="alert alert-block">' . Text::sprintf('SUNFW_MODULE_HAS_NO_CONTENT', $module->title) . '</div>';
 		}
 		else
 		{

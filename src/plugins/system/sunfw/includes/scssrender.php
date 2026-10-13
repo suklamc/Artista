@@ -13,12 +13,15 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Uri\Uri;
+
 /**
  * General ScssRender class.
  *
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwScssrender
 {
 
@@ -464,7 +467,7 @@ class SunFwScssrender
 
 	public function compile($styleID, $templateName, $s = "appearance")
 	{
-		$genaralPathRoot = $sectionPathRoot = $modulePathRoot = JURI::root() . '/';
+		$genaralPathRoot = $sectionPathRoot = $modulePathRoot = Uri::root() . '/';
 
 		$urlPattern = '/^(http|https)/';
 
@@ -674,7 +677,7 @@ class SunFwScssrender
 
 						$scss_genaral_content .= '@font-face {
 													font-family: ' . $headCFName . ';
-													src: url(' . JURI::root() . $genaral["heading"]["headings-custom-font-file"] . ');
+													src: url(' . Uri::root() . $genaral["heading"]["headings-custom-font-file"] . ');
 													font-weight: normal;
 												}';
 					}
@@ -719,7 +722,7 @@ class SunFwScssrender
 
 						$scss_genaral_content .= '@font-face {
 													font-family: ' . $contentCFName . ';
-													src: url(' . JURI::root() . $genaral["content"]["content-custom-font-file"] . ');
+													src: url(' . Uri::root() . $genaral["content"]["content-custom-font-file"] . ');
 													font-weight: normal;
 												}';
 					}
@@ -1401,7 +1404,7 @@ class SunFwScssrender
 
 								$scss_content .= '@font-face {
 									font-family: ' . $menuCFName . ';
-									src: url(' . JUri::root() . $root['custom-font-file'] . ');
+									src: url(' . Uri::root() . $root['custom-font-file'] . ');
 									font-weight: normal;
 								}';
 							}

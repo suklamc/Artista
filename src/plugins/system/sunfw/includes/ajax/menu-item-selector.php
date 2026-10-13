@@ -13,29 +13,32 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\Component\Menus\Administrator\Helper\MenusHelper;
+
 /**
  * Menu item selector widget.
  *
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwAjaxMenuItemSelector extends SunFwAjaxSelector
 {
 
 	public function indexAction()
 	{
 		// Get Joomla language object.
-		$lang = JFactory::getLanguage();
+		$lang = Factory::getLanguage();
 
 		// Load menus component language.
 		$lang->load('com_menus', JPATH_ADMINISTRATOR);
 
 		// Get the menu items model.
-		JLoader::register('MenusModelItems', JPATH_ADMINISTRATOR . '/components/com_menus/models/items.php');
-
-		$this->model = new MenusModelItems(array(
-			'ignore_request' => true
-		));
+		$this->model = Factory::getApplication()->bootComponent('com_menus')->getMVCFactory()
+			->createModel('Items', 'Administrator', array('ignore_request' => true));
 
 		// Prepare states.
 		$this->model->setState('filter.menutype', $this->input->getString('menutype'));
@@ -68,23 +71,23 @@ class SunFwAjaxMenuItemSelector extends SunFwAjaxSelector
 			switch ($item->type)
 			{
 				case 'url':
-					$value = JText::_('COM_MENUS_TYPE_EXTERNAL_URL');
+					$value = Text::_('COM_MENUS_TYPE_EXTERNAL_URL');
 				break;
 
 				case 'alias':
-					$value = JText::_('COM_MENUS_TYPE_ALIAS');
+					$value = Text::_('COM_MENUS_TYPE_ALIAS');
 				break;
 
 				case 'separator':
-					$value = JText::_('COM_MENUS_TYPE_SEPARATOR');
+					$value = Text::_('COM_MENUS_TYPE_SEPARATOR');
 				break;
 
 				case 'heading':
-					$value = JText::_('COM_MENUS_TYPE_HEADING');
+					$value = Text::_('COM_MENUS_TYPE_HEADING');
 				break;
 
 				case 'container':
-					$value = JText::_('COM_MENUS_TYPE_CONTAINER');
+					$value = Text::_('COM_MENUS_TYPE_CONTAINER');
 				break;
 
 				case 'component':
@@ -96,7 +99,7 @@ class SunFwAjaxMenuItemSelector extends SunFwAjaxSelector
 					if (!empty($item->componentname))
 					{
 						$titleParts = array();
-						$titleParts[] = JText::_($item->componentname);
+						$titleParts[] = Text::_($item->componentname);
 						$vars = null;
 
 						parse_str($item->link, $vars);
@@ -124,7 +127,7 @@ class SunFwAjaxMenuItemSelector extends SunFwAjaxSelector
 										// Check if the key is valid. Needed due to B/C so we don't show untranslated keys. This check should be removed with Joomla 4.
 										if ($lang->hasKey($viewTitle))
 										{
-											$titleParts[] = JText::_($viewTitle);
+											$titleParts[] = Text::_($viewTitle);
 										}
 									}
 								}
@@ -165,13 +168,13 @@ class SunFwAjaxMenuItemSelector extends SunFwAjaxSelector
 								{
 									if (!empty($layout[0]['title']))
 									{
-										$titleParts[] = JText::_(trim((string) $layout[0]['title']));
+										$titleParts[] = Text::_(trim((string) $layout[0]['title']));
 									}
 								}
 
 								if (!empty($layout[0]->message[0]))
 								{
-									$item->item_type_desc = JText::_(trim((string) $layout[0]->message[0]));
+									$item->item_type_desc = Text::_(trim((string) $layout[0]->message[0]));
 								}
 							}
 
@@ -189,11 +192,11 @@ class SunFwAjaxMenuItemSelector extends SunFwAjaxSelector
 					{
 						if (preg_match("/^index.php\?option=([a-zA-Z\-0-9_]*)/", $item->link, $result))
 						{
-							$value = JText::sprintf('COM_MENUS_TYPE_UNEXISTING', $result[1]);
+							$value = Text::sprintf('COM_MENUS_TYPE_UNEXISTING', $result[1]);
 						}
 						else
 						{
-							$value = JText::_('COM_MENUS_TYPE_UNKNOWN');
+							$value = Text::_('COM_MENUS_TYPE_UNKNOWN');
 						}
 					}
 				break;
@@ -229,10 +232,10 @@ class SunFwAjaxMenuItemSelector extends SunFwAjaxSelector
 
 		// Render menu types select box.
 		$types = array_merge(array(
-			JHtml::_('select.option', '', JText::_('JOPTION_SELECT_MENU'))
+			HTMLHelper::_('select.option', '', Text::_('JOPTION_SELECT_MENU'))
 		), $menus);
 
-		echo JHTML::_('select.genericlist', $types, $name, $parameters, 'value', 'text', $selected);
+		echo HTMLHelper::_('select.genericlist', $types, $name, $parameters, 'value', 'text', $selected);
 	}
 
 	/**
@@ -247,19 +250,19 @@ class SunFwAjaxMenuItemSelector extends SunFwAjaxSelector
 	public function renderMaxLevelOptions($name, $selected, $parameters = '')
 	{
 		// Render max. levels select box.
-		echo JHTML::_('select.genericlist',
+		echo HTMLHelper::_('select.genericlist',
 			array(
-				JHtml::_('select.option', '', JText::_('JOPTION_SELECT_MAX_LEVELS')),
-				JHtml::_('select.option', '1', JText::_('J1')),
-				JHtml::_('select.option', '2', JText::_('J2')),
-				JHtml::_('select.option', '3', JText::_('J3')),
-				JHtml::_('select.option', '4', JText::_('J4')),
-				JHtml::_('select.option', '5', JText::_('J5')),
-				JHtml::_('select.option', '6', JText::_('J6')),
-				JHtml::_('select.option', '7', JText::_('J7')),
-				JHtml::_('select.option', '8', JText::_('J8')),
-				JHtml::_('select.option', '9', JText::_('J9')),
-				JHtml::_('select.option', '10', JText::_('J10'))
+				HTMLHelper::_('select.option', '', Text::_('JOPTION_SELECT_MAX_LEVELS')),
+				HTMLHelper::_('select.option', '1', Text::_('J1')),
+				HTMLHelper::_('select.option', '2', Text::_('J2')),
+				HTMLHelper::_('select.option', '3', Text::_('J3')),
+				HTMLHelper::_('select.option', '4', Text::_('J4')),
+				HTMLHelper::_('select.option', '5', Text::_('J5')),
+				HTMLHelper::_('select.option', '6', Text::_('J6')),
+				HTMLHelper::_('select.option', '7', Text::_('J7')),
+				HTMLHelper::_('select.option', '8', Text::_('J8')),
+				HTMLHelper::_('select.option', '9', Text::_('J9')),
+				HTMLHelper::_('select.option', '10', Text::_('J10'))
 			), $name, $parameters, 'value', 'text', $selected);
 	}
 
@@ -278,14 +281,12 @@ class SunFwAjaxMenuItemSelector extends SunFwAjaxSelector
 		$menuType = $this->input->getString('menutype', $this->app->getUserState('com_menus.items.menutype', ''));
 
 		// Get the menu items.
-		JLoader::register('MenusHelper', JPATH_ADMINISTRATOR . '/components/com_menus/helpers/menus.php');
-
 		$items = MenusHelper::getMenuLinks($menuType);
 
 		// Build group for a specific menu type.
 		$groups = array(
 			0 => array(
-				JHtml::_('select.option', '', JText::_('COM_MENUS_FILTER_SELECT_PARENT_MENU_ITEM'))
+				HTMLHelper::_('select.option', '', Text::_('COM_MENUS_FILTER_SELECT_PARENT_MENU_ITEM'))
 			)
 		);
 
@@ -333,7 +334,7 @@ class SunFwAjaxMenuItemSelector extends SunFwAjaxSelector
 					$lang = '';
 				}
 
-				$groups[$menuTitle][] = JHtml::_('select.option', $link->value, $levelPrefix . $link->text . $lang, 'value', 'text');
+				$groups[$menuTitle][] = HTMLHelper::_('select.option', $link->value, $levelPrefix . $link->text . $lang, 'value', 'text');
 			}
 		}
 		// Build groups for all menu types.
@@ -360,13 +361,13 @@ class SunFwAjaxMenuItemSelector extends SunFwAjaxSelector
 						$lang = '';
 					}
 
-					$groups[$menu->title][] = JHtml::_('select.option', $link->value, $levelPrefix . $link->text . $lang, 'value', 'text');
+					$groups[$menu->title][] = HTMLHelper::_('select.option', $link->value, $levelPrefix . $link->text . $lang, 'value', 'text');
 				}
 			}
 		}
 
 		// Render module types select box.
-		echo JHTML::_('select.groupedlist', $groups, $name,
+		echo HTMLHelper::_('select.groupedlist', $groups, $name,
 			array(
 				'list.attr' => $parameters,
 				'list.select' => $selected,

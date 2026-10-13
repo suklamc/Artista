@@ -13,9 +13,12 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-// Import necessary libraries.
-jimport('joomla.filesystem.folder');
-jimport('joomla.filesystem.file');
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Session\Session;
+use Joomla\CMS\Uri\Uri;
+
 
 /**
  * Widget for selecting media file.
@@ -23,6 +26,7 @@ jimport('joomla.filesystem.file');
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwAjaxMedia extends SunFwAjax
 {
 
@@ -52,7 +56,7 @@ class SunFwAjaxMedia extends SunFwAjax
 		parent::__construct();
 
 		// Verify token.
-		JSession::checkToken('get') or die('Invalid Token');
+		Session::checkToken('get') or die('Invalid Token');
 
 		// Make sure root is not outside of Joomla directory.
 		$this->abs_root = realpath(JPATH_ROOT . '/' . $this->root);
@@ -104,7 +108,7 @@ class SunFwAjaxMedia extends SunFwAjax
 		}
 
 		// Get form token for the current session.
-		$this->token = JSession::getFormToken();
+		$this->token = Session::getFormToken();
 
 		// Prepare widget links.
 		$this->list_url = $this->baseUrl . '&action=list';
@@ -114,13 +118,13 @@ class SunFwAjaxMedia extends SunFwAjax
 	public function indexAction()
 	{
 		// Get Joomla document object.
-		$doc = JFactory::getDocument();
+		$doc = Factory::getDocument();
 
 		// Get base URLs.
-		$root = JURI::root(true);
+		$root = Uri::root(true);
 
 		// Load required stylesheets.
-		$doc->addStylesheet("{$root}/media/jui/css/bootstrap.min.css");
+		$doc->addStylesheet("{$root}/plugins/system/sunfw/assets/3rd-party/bootstrap/bootstrap.min.css");
 		$doc->addStylesheet("{$root}/plugins/system/sunfw/assets/3rd-party/jquery-ui-1.12.0/jquery-ui.min.css");
 		$doc->addStylesheet("{$root}/plugins/system/sunfw/assets/3rd-party/jquery-layout/css/layout-default-latest.css");
 		$doc->addStylesheet("{$root}/plugins/system/sunfw/assets/3rd-party/vakata-jstree/themes/default/style.css");
@@ -129,7 +133,7 @@ class SunFwAjaxMedia extends SunFwAjax
 		$doc->addStylesheet("{$root}/plugins/system/sunfw/assets/joomlashine/admin/css/general.css?v=" . SUNFW_VERSION . '&d=' . SUNFW_RELEASED_DATE);
 
 		// Load required scripts.
-		JHtml::_('jquery.framework');
+		HTMLHelper::_('jquery.framework');
 
 		$doc->addScript("{$root}/plugins/system/sunfw/assets/3rd-party/jquery-ui-1.12.0/jquery-ui.min.js");
 		$doc->addScript("{$root}/plugins/system/sunfw/assets/3rd-party/jquery-layout/js/jquery.layout-latest.js");
@@ -162,7 +166,7 @@ class SunFwAjaxMedia extends SunFwAjax
 		// Get directory list.
 		else
 		{
-			$list = JFolder::folders($this->work_dir);
+			$list = SunFwFolder::folders($this->work_dir);
 
 			// Initialize return value.
 			foreach ($list as $k => $v)
@@ -197,13 +201,13 @@ class SunFwAjaxMedia extends SunFwAjax
 		if (!preg_match("#{$this->filter}#", $_FILES['file']['name']) || !SunFwUtils::check_upload($_FILES['file']) ||
 			 !SunFwUtils::check_xss($_FILES['file']['tmp_name']))
 		{
-			jexit(JText::_('SUNFW_UPLOADED_FILE_TYPE_NOT_SUPPORTED'));
+			jexit(Text::_('SUNFW_UPLOADED_FILE_TYPE_NOT_SUPPORTED'));
 		}
 
 		// Move uploaded file to target directory.
-		if (!JFile::upload($_FILES['file']['tmp_name'], $this->work_dir . '/' . $_FILES['file']['name']))
+		if (!SunFwFile::upload($_FILES['file']['tmp_name'], $this->work_dir . '/' . $_FILES['file']['name']))
 		{
-			jexit(JText::_('SUNFW_MOVE_UPLOAD_FILE_FAIL'));
+			jexit(Text::_('SUNFW_MOVE_UPLOAD_FILE_FAIL'));
 		}
 
 		exit();
@@ -243,12 +247,12 @@ class SunFwAjaxMedia extends SunFwAjax
 	protected function get_media()
 	{
 		// Get media list
-		$this->media = JFolder::files($this->work_dir, $this->filter);
+		$this->media = SunFwFolder::files($this->work_dir, $this->filter);
 
 		// Prepare URL for media files.
 		foreach ($this->media as $k => $v)
 		{
-			$v = str_replace(realpath(JPATH_ROOT), JUri::root(), $this->work_dir) . '/' . $v;
+			$v = str_replace(realpath(JPATH_ROOT), Uri::root(), $this->work_dir) . '/' . $v;
 
 			$this->media[$k] = str_replace('\\', '/', $v);
 		}

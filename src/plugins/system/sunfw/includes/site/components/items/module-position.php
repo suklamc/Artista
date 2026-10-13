@@ -13,6 +13,8 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Helper\ModuleHelper;
+
 // Verify module position.
 if (!@isset($component['settings']['module-position']))
 {
@@ -23,7 +25,7 @@ $class = isset($component['settings']['class']) ? ' ' . $component['settings']['
 $visible_in = isset($component['settings']['visible_in']) ? $component['settings']['visible_in'] : array();
 
 // Make sure module position not empty.
-if (!count((array) JModuleHelper::getModules($component['settings']['module-position'])))
+if (!count((array) ModuleHelper::getModules($component['settings']['module-position'])))
 {
 	return;
 }

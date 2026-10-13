@@ -9,6 +9,8 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Helper\ModuleHelper;
+
 $id = '';
 
 if ($tagId = $params->get('tag_id', ''))
@@ -28,7 +30,7 @@ if ($tagId = $params->get('tag_id', ''))
 		$class .= ' default';
 	}
 
-	if ($item->id == $active_id || ($item->type === 'alias' && $item->params->get('aliasoptions') == $active_id))
+	if ($item->id == $active_id || ($item->type === 'alias' && $item->getParams()->get('aliasoptions') == $active_id))
 	{
 		$class .= ' current';
 	}
@@ -39,7 +41,7 @@ if ($tagId = $params->get('tag_id', ''))
 	}
 	elseif ($item->type === 'alias')
 	{
-		$aliasToId = $item->params->get('aliasoptions');
+		$aliasToId = $item->getParams()->get('aliasoptions');
 
 		if (count($path) > 0 && $aliasToId == $path[count($path) - 1])
 		{
@@ -73,11 +75,11 @@ if ($tagId = $params->get('tag_id', ''))
 		case 'component':
 		case 'heading':
 		case 'url':
-			require JModuleHelper::getLayoutPath('mod_menu', 'default_' . $item->type);
+			require ModuleHelper::getLayoutPath('mod_menu', 'default_' . $item->type);
 			break;
 
 		default:
-			require JModuleHelper::getLayoutPath('mod_menu', 'default_url');
+			require ModuleHelper::getLayoutPath('mod_menu', 'default_url');
 			break;
 	endswitch;
 

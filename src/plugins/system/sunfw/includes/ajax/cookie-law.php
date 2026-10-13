@@ -13,12 +13,16 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
 /**
  * Handle Ajax requests from cookie consent pane.
  *
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwAjaxCookieLaw extends SunFwAjax
 {
 
@@ -32,7 +36,7 @@ class SunFwAjaxCookieLaw extends SunFwAjax
 	public function getAction($return = false)
 	{
 		// Get root URL.
-		$root = JUri::root(true);
+		$root = Uri::root(true);
 
 		/**
 		 * Get cookie consent data.
@@ -61,45 +65,45 @@ class SunFwAjaxCookieLaw extends SunFwAjax
 			'settings' => SunFwHelper::findTemplateAdminJsonSettings(
 				JPATH_ROOT . '/plugins/system/sunfw/assets/joomlashine/admin/js/cookie-law', 'settings.json', true),
 			'textMapping' => array(
-				'cookie-law' => JText::_('SUNFW_COOKIE_LAW'),
-				'save-cookie-law' => JText::_('SUNFW_SAVE_COOKIE_LAW'),
-				'cookie-law-settings' => JText::_('SUNFW_COOKIE_LAW_SETTINGS'),
-				'cookie-law-not-enabled' => JText::_('SUNFW_COOKIE_LAW_NOT_ENABLED'),
-				'enable-cookie-consent' => JText::_('SUNFW_ENABLE_COOKIE_CONSENT'),
-				'enable-cookie-consent-hint' => JText::_('SUNFW_COOKIE_LAW_ENABLE_COOKIE_CONSENT_HINT'),
-				'style' => JText::_('SUNFW_STYLE'),
-				'dark' => JText::_('SUNFW_DARK_STYLE'),
-				'light' => JText::_('SUNFW_LIGHT_STYLE'),
-				'cookie-law-style-hint' => JText::_('SUNFW_COOKIE_LAW_STYLE_HINT'),
-				'banner-placement' => JText::_('SUNFW_BANNER_PLACEMENT'),
-				'floating' => JText::_('SUNFW_FLOATING'),
-				'floating-right' => JText::_('SUNFW_FLOATING_RIGHT'),
-				'floating-left' => JText::_('SUNFW_FLOATING_LEFT'),
-				'static' => JText::_('SUNFW_STATIC'),
-				'cookie-law-banner-placement-hint' => JText::_('SUNFW_COOKIE_LAW_BANNER_PLACEMENT_HINT'),
-				'message' => JText::_('SUNFW_MESSAGE'),
-				'article' => JText::_('SUNFW_ARTICLE'),
-				'cookie-law-message-hint' => JText::_('SUNFW_COOKIE_LAW_MESSAGE_HINT'),
-				'cookie-law-default-message' => JText::_('SUNFW_COOKIE_LAW_DEFAULT_MESSAGE'),
-				'cookie-law-article-message' => JText::_('SUNFW_COOKIE_LAW_ARTICLE_MESSAGE'),
-				'cookie-law-select-article' => JText::_('SUNFW_COOKIE_LAW_SELECT_ARTICLE'),
-				'read-more-button-text' => JText::_('SUNFW_READ_MORE_BUTTON_TEXT'),
-				'cookie-policy-link' => JText::_('SUNFW_COOKIE_POLICY_LINK'),
-				'accept-button-text' => JText::_('SUNFW_ACCEPT_BUTTON_TEXT'),
-				'accept-script' => JText::_('SUNFW_ACCEPT_SCRIPT'),
-				'set-script' => JText::_('SUNFW_SET_SCRIPT'),
-				'cookie-law-read-more-button-text-hint' => JText::_('SUNFW_COOKIE_LAW_READ_MORE_BUTTON_TEXT_HINT'),
-				'cookie-law-cookie-policy-link-hint' => JText::_('SUNFW_COOKIE_LAW_COOKIE_POLICY_LINK_HINT'),
-				'cookie-law-accept-button-text-hint' => JText::_('SUNFW_COOKIE_LAW_ACCEPT_BUTTON_TEXT_HINT'),
-				'cookie-law-accept-script-hint' => JText::_('SUNFW_ACCEPT_SCRIPT_HINT'),
-			    'enable-cookie-consent-popover-content' => JText::_('SUNFW_COOKIE_LAW_ENABLE_COOKIE_CONSENT_POPOVER_CONTENT'),
-			    'cookie-law-style-popover-content' => JText::_('SUNFW_COOKIE_LAW_STYLE_POPOVER_CONTENT'),
-			    'cookie-law-banner-placement-popover-content' => JText::_('SUNFW_COOKIE_LAW_BANNER_PLACEMENT_POPOVER_CONTENT'),
-			    'cookie-law-message-popover-content' => JText::_('SUNFW_COOKIE_LAW_MESSAGE_POPOVER_CONTENT'),
-			    'cookie-law-read-more-button-text-popover-content' => JText::_('SUNFW_COOKIE_LAW_READ_MORE_BUTTON_TEXT_POPOVER_CONTENT'),
-			    'cookie-law-cookie-policy-link-popover-content' => JText::_('SUNFW_COOKIE_LAW_COOKIE_POLICY_LINK_POPOVER_CONTENT'),
-			    'cookie-law-accept-button-text-popover-content' => JText::_('SUNFW_COOKIE_LAW_ACCEPT_BUTTON_TEXT_POPOVER_CONTENT'),
-			    'cookie-law-accept-script-popover-content' => JText::_('SUNFW_ACCEPT_SCRIPT_POPOVER_CONTENT')
+				'cookie-law' => Text::_('SUNFW_COOKIE_LAW'),
+				'save-cookie-law' => Text::_('SUNFW_SAVE_COOKIE_LAW'),
+				'cookie-law-settings' => Text::_('SUNFW_COOKIE_LAW_SETTINGS'),
+				'cookie-law-not-enabled' => Text::_('SUNFW_COOKIE_LAW_NOT_ENABLED'),
+				'enable-cookie-consent' => Text::_('SUNFW_ENABLE_COOKIE_CONSENT'),
+				'enable-cookie-consent-hint' => Text::_('SUNFW_COOKIE_LAW_ENABLE_COOKIE_CONSENT_HINT'),
+				'style' => Text::_('SUNFW_STYLE'),
+				'dark' => Text::_('SUNFW_DARK_STYLE'),
+				'light' => Text::_('SUNFW_LIGHT_STYLE'),
+				'cookie-law-style-hint' => Text::_('SUNFW_COOKIE_LAW_STYLE_HINT'),
+				'banner-placement' => Text::_('SUNFW_BANNER_PLACEMENT'),
+				'floating' => Text::_('SUNFW_FLOATING'),
+				'floating-right' => Text::_('SUNFW_FLOATING_RIGHT'),
+				'floating-left' => Text::_('SUNFW_FLOATING_LEFT'),
+				'static' => Text::_('SUNFW_STATIC'),
+				'cookie-law-banner-placement-hint' => Text::_('SUNFW_COOKIE_LAW_BANNER_PLACEMENT_HINT'),
+				'message' => Text::_('SUNFW_MESSAGE'),
+				'article' => Text::_('SUNFW_ARTICLE'),
+				'cookie-law-message-hint' => Text::_('SUNFW_COOKIE_LAW_MESSAGE_HINT'),
+				'cookie-law-default-message' => Text::_('SUNFW_COOKIE_LAW_DEFAULT_MESSAGE'),
+				'cookie-law-article-message' => Text::_('SUNFW_COOKIE_LAW_ARTICLE_MESSAGE'),
+				'cookie-law-select-article' => Text::_('SUNFW_COOKIE_LAW_SELECT_ARTICLE'),
+				'read-more-button-text' => Text::_('SUNFW_READ_MORE_BUTTON_TEXT'),
+				'cookie-policy-link' => Text::_('SUNFW_COOKIE_POLICY_LINK'),
+				'accept-button-text' => Text::_('SUNFW_ACCEPT_BUTTON_TEXT'),
+				'accept-script' => Text::_('SUNFW_ACCEPT_SCRIPT'),
+				'set-script' => Text::_('SUNFW_SET_SCRIPT'),
+				'cookie-law-read-more-button-text-hint' => Text::_('SUNFW_COOKIE_LAW_READ_MORE_BUTTON_TEXT_HINT'),
+				'cookie-law-cookie-policy-link-hint' => Text::_('SUNFW_COOKIE_LAW_COOKIE_POLICY_LINK_HINT'),
+				'cookie-law-accept-button-text-hint' => Text::_('SUNFW_COOKIE_LAW_ACCEPT_BUTTON_TEXT_HINT'),
+				'cookie-law-accept-script-hint' => Text::_('SUNFW_ACCEPT_SCRIPT_HINT'),
+			    'enable-cookie-consent-popover-content' => Text::_('SUNFW_COOKIE_LAW_ENABLE_COOKIE_CONSENT_POPOVER_CONTENT'),
+			    'cookie-law-style-popover-content' => Text::_('SUNFW_COOKIE_LAW_STYLE_POPOVER_CONTENT'),
+			    'cookie-law-banner-placement-popover-content' => Text::_('SUNFW_COOKIE_LAW_BANNER_PLACEMENT_POPOVER_CONTENT'),
+			    'cookie-law-message-popover-content' => Text::_('SUNFW_COOKIE_LAW_MESSAGE_POPOVER_CONTENT'),
+			    'cookie-law-read-more-button-text-popover-content' => Text::_('SUNFW_COOKIE_LAW_READ_MORE_BUTTON_TEXT_POPOVER_CONTENT'),
+			    'cookie-law-cookie-policy-link-popover-content' => Text::_('SUNFW_COOKIE_LAW_COOKIE_POLICY_LINK_POPOVER_CONTENT'),
+			    'cookie-law-accept-button-text-popover-content' => Text::_('SUNFW_COOKIE_LAW_ACCEPT_BUTTON_TEXT_POPOVER_CONTENT'),
+			    'cookie-law-accept-script-popover-content' => Text::_('SUNFW_ACCEPT_SCRIPT_POPOVER_CONTENT')
 			)
 		);
 
@@ -171,7 +175,7 @@ class SunFwAjaxCookieLaw extends SunFwAjax
 		}
 
 		$this->setResponse(array(
-			'message' => JText::_('SUNFW_COOKIE_LAW_SAVED_SUCCESSFULLY')
+			'message' => Text::_('SUNFW_COOKIE_LAW_SAVED_SUCCESSFULLY')
 		));
 	}
 }

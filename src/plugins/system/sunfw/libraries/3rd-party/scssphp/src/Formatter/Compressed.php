@@ -19,6 +19,7 @@ use Leafo\ScssPhp\Formatter\OutputBlock;
  *
  * @author Leaf Corcoran <leafot@gmail.com>
  */
+#[\AllowDynamicProperties]
 class Compressed extends Formatter
 {
     /**

@@ -13,12 +13,19 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Component\Content\Site\Helper\RouteHelper;
+
 /**
  * Cookie consent class.
  *
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwCookielaw
 {
 	/**
@@ -49,8 +56,8 @@ class SunFwCookielaw
 	 */
 	public static function loadCookie()
 	{
-		$app = JFactory::getApplication();
-		$document = JFactory::getDocument();
+		$app = Factory::getApplication();
+		$document = Factory::getDocument();
 
 		if ($app->input->getCmd('tmpl') == 'component' || $document->getType() !== 'html')
 		{
@@ -59,7 +66,7 @@ class SunFwCookielaw
 
 		$cookieLawData = SunFwSite::getInstance()->cookie_law_data;
 
-		if (@count((array) $cookieLawData) && isset($cookieLawData['enabled']) && (int) $cookieLawData['enabled'])
+		if (count((array) $cookieLawData) && isset($cookieLawData['enabled']) && (int) $cookieLawData['enabled'])
 		{
 			self::loadCookieLibrary();
 
@@ -115,23 +122,19 @@ class SunFwCookielaw
 				}
 
 				// Get read more link.
-				if (!class_exists('ContentHelperRoute'))
-				{
-					require_once JPATH_ROOT . '/components/com_content/helpers/route.php';
-				}
-
-				$item->readmore_link = JRoute::_(ContentHelperRoute::getArticleRoute($item->slug, $item->catid, $item->language));
+				$item->readmore_link = Route::_(RouteHelper::getArticleRoute($item->slug, $item->catid, $item->language));
 
 				// Process the content plugins.
-				JPluginHelper::importPlugin('content');
+				PluginHelper::importPlugin('content');
 
 				$item->text = $item->introtext;
 
-				JEventDispatcher::getInstance()->trigger('onContentPrepare',
+				Factory::getApplication()->triggerEvent('onContentPrepare',
 					array(
 						'com_content.article',
 						&$item,
-						&$item->params
+						&$item->params,
+						0
 					));
 
 				// Set message.
@@ -178,7 +181,7 @@ class SunFwCookielaw
 			}
 
 			$document->addStylesheet(
-				JUri::root(true) . "/plugins/system/sunfw/assets/3rd-party/cookieconsent/styles/{$cookieLawData['style']}.css");
+				Uri::root(true) . "/plugins/system/sunfw/assets/3rd-party/cookieconsent/styles/{$cookieLawData['style']}.css");
 
 			// Print inline script to initialize Cookie Consent.
 			$document->addScriptDeclaration(
@@ -212,6 +215,6 @@ class SunFwCookielaw
 	 */
 	public static function loadCookieLibrary()
 	{
-		JFactory::getDocument()->addScript(JUri::root(true) . '/plugins/system/sunfw/assets/3rd-party/cookieconsent/cookieconsent.min.js');
+		Factory::getDocument()->addScript(Uri::root(true) . '/plugins/system/sunfw/assets/3rd-party/cookieconsent/cookieconsent.min.js');
 	}
 }

@@ -1,163 +1,173 @@
 <?php
 /**
- * @version    $Id$
- * @package    SUN Framework
- * @author     JoomlaShine Team <support@joomlashine.com>
- * @copyright  Copyright (C) 2012 JoomlaShine.com. All Rights Reserved.
+ * @package    Artista (Sun Framework)
+ * @copyright  Copyright (C) 2012 JoomlaShine.com. Copyright (C) 2026 Artriva Studios.
  * @license    GNU/GPL v2 or later http://www.gnu.org/licenses/gpl-2.0.html
- *
- * Websites: http://www.joomlashine.com
- * Technical Support:  Feedback - http://www.joomlashine.com/contact-us/get-support.html
  */
 
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
-// Import necessary libraries.
-jimport('joomla.filesystem.file');
-jimport('joomla.filesystem.folder');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Log\Log;
 
 /**
- * Installer class.
+ * Install script for the Sun Framework plugin.
  *
- * @package  SUN Framework
- * @since    1.0.0
+ * Runs before the framework itself is loaded, so it uses plain PHP and core Joomla only.
  */
+#[\AllowDynamicProperties]
 class PlgSystemSunFwInstallerScript
 {
+	/**
+	 * Lowest supported PHP version.
+	 */
+	const MIN_PHP = '8.1.0';
 
 	/**
-	 * Implement preflight hook.
+	 * Lowest supported Joomla version.
+	 */
+	const MIN_JOOMLA = '4.4.0';
+
+	/**
+	 * Check requirements, then stop Joomla from re-running database updates that are
+	 * already applied (sites upgrading from the JoomlaShine releases).
 	 *
-	 * This step will be verify permission for install/update process.
-	 *
-	 * @param   string  $route      Route type: install, update or uninstall.
-	 * @param   object  $installer  The installer object.
+	 * @param   string  $route      install, update, discover_install or uninstall.
+	 * @param   object  $installer  The installer adapter.
 	 *
 	 * @return  boolean
 	 */
 	public function preflight($route, $installer)
 	{
-		// Clean up obsolete files.
-		if (JFolder::exists(JPATH_ROOT . '/plugins/system/sunfw'))
+		if ($route === 'uninstall')
 		{
-			foreach (array(
-				'1.3.1',
-				'2.0.3'
-			) as $update)
+			return true;
+		}
+
+		if (version_compare(PHP_VERSION, self::MIN_PHP, '<'))
+		{
+			Log::add('Artista needs PHP ' . self::MIN_PHP . ' or later. This server runs PHP ' . PHP_VERSION . '.', Log::WARNING, 'jerror');
+
+			return false;
+		}
+
+		if (version_compare(JVERSION, self::MIN_JOOMLA, '<'))
+		{
+			Log::add('Artista needs Joomla ' . self::MIN_JOOMLA . ' or later. This site runs Joomla ' . JVERSION . '.', Log::WARNING, 'jerror');
+
+			return false;
+		}
+
+		$target = JPATH_ROOT . '/plugins/system/sunfw/database/mysql/updates';
+
+		// Clean up obsolete update files left by old JoomlaShine releases.
+		foreach (array('1.3.1', '2.0.3') as $old)
+		{
+			if (is_file("{$target}/{$old}.sql"))
 			{
-				if (JFile::exists(JPATH_ROOT . "/plugins/system/sunfw/database/mysql/updates/{$update}.sql"))
+				@unlink("{$target}/{$old}.sql");
+			}
+		}
+
+		$dbo    = Factory::getDbo();
+		$tables = $dbo->setQuery('SHOW TABLES')->loadColumn();
+
+		if (!in_array($dbo->getPrefix() . 'sunfw_styles', $tables, true))
+		{
+			return true;
+		}
+
+		// The styles table exists: hide update files whose columns are already there.
+		$columns = $dbo->setQuery('SHOW COLUMNS FROM ' . $dbo->quoteName('#__sunfw_styles'))->loadColumn();
+		$source  = $installer->getParent()->getPath('source') . '/database/mysql/updates';
+
+		foreach (glob("{$source}/*.sql") ?: array() as $update)
+		{
+			$sql = (string) file_get_contents($update);
+
+			if (!preg_match_all('/ALTER TABLE `?[^\s]+_sunfw_styles`? ADD ([^\s]+)/i', $sql, $matches, PREG_SET_ORDER))
+			{
+				continue;
+			}
+
+			foreach ($matches as $match)
+			{
+				if (in_array(trim($match[1], '`'), $columns, true))
 				{
-					JFile::delete(JPATH_ROOT . "/plugins/system/sunfw/database/mysql/updates/{$update}.sql");
+					// Don't let Joomla import it from the package...
+					@unlink($update);
+
+					// ...nor from the installed copy; it's restored in postflight().
+					$installed = "{$target}/" . basename($update);
+
+					if (is_file($installed))
+					{
+						@rename($installed, "{$installed}.bak");
+					}
+
+					break;
 				}
 			}
 		}
 
-		// Get a database connector object.
-		$dbo = JFactory::getDbo();
+		// Record the installed version as the schema version.
+		$info = $dbo->setQuery(
+			$dbo->getQuery(true)
+				->select($dbo->quoteName(array('extension_id', 'manifest_cache')))
+				->from($dbo->quoteName('#__extensions'))
+				->where($dbo->quoteName('element') . ' = ' . $dbo->quote('sunfw'))
+				->where($dbo->quoteName('type') . ' = ' . $dbo->quote('plugin'))
+				->where($dbo->quoteName('folder') . ' = ' . $dbo->quote('system'))
+		)->loadObject();
 
-		// Check if the table `sunfw_styles` already exists?
-		$tables = $dbo->setQuery('SHOW TABLES;')->loadColumn();
-
-		if (in_array($dbo->getPrefix() . 'sunfw_styles', $tables))
+		if ($info && ($manifest = json_decode((string) $info->manifest_cache)) && !empty($manifest->version))
 		{
-			// Prepare database updates.
-			$source = $installer->getParent()->getPath('source');
-			$updates = JFolder::files("{$source}/database/mysql/updates", '\.sql$');
-
-			foreach ($updates as $update)
-			{
-				$update = "{$source}/database/mysql/updates/{$update}";
-
-				if ($sql = file_get_contents($update))
-				{
-					if (preg_match_all('/ALTER TABLE `?[^\s]+_sunfw_styles`? ADD ([^\s]+)/i', $sql, $matches, PREG_SET_ORDER))
-					{
-						foreach ($matches as $match)
-						{
-							$column = trim($match[1], '`');
-
-							if (!isset($columns))
-							{
-								$columns = $dbo->setQuery('SHOW COLUMNS FROM #__sunfw_styles;')->loadColumn();
-							}
-
-							if (in_array($column, $columns))
-							{
-								// Delete the database update file to prevent it from being imported by Joomla.
-								JFile::delete($update);
-
-								// Rename existing file in the target directory also.
-								$update = str_replace($source, JPATH_ROOT . '/plugins/system/sunfw', $update);
-
-								if (JFile::exists($update))
-								{
-									JFile::move($update, "{$update}.bak");
-								}
-							}
-						}
-					}
-				}
-			}
-
-			// Get extension info of the plugin from #__extensions table.
-			$info = $dbo->setQuery(
-				$dbo->getQuery(true)
-					->select('extension_id, manifest_cache')
-					->from('#__extensions')
-					->where("element = 'sunfw'")
-					->where("type = 'plugin'")
-					->where("folder = 'system'"))
-				->loadObject();
-
-			$manifest = json_decode($info->manifest_cache);
-
-			// Update the plugin version in the #__schemas table.
 			$dbo->setQuery(
 				$dbo->getQuery(true)
-					->update('#__schemas')
-					->set('version_id = ' . $dbo->quote($manifest->version))
-					->where('extension_id = ' . (int) $info->extension_id))
-				->execute();
+					->update($dbo->quoteName('#__schemas'))
+					->set($dbo->quoteName('version_id') . ' = ' . $dbo->quote($manifest->version))
+					->where($dbo->quoteName('extension_id') . ' = ' . (int) $info->extension_id)
+			)->execute();
 		}
+
+		return true;
 	}
 
 	/**
-	 * Implement postflight hook.
+	 * Restore the hidden update files and make sure the plugin is enabled.
 	 *
-	 * @param   string  $route      Route type: install, update or uninstall.
-	 * @param   object  $installer  The installer object.
+	 * @param   string  $route      install, update or discover_install.
+	 * @param   object  $installer  The installer adapter.
 	 *
-	 * @return  boolean
+	 * @return  void
 	 */
 	public function postflight($route, $installer)
 	{
-		// Restore database update files at the target directory.
-		if (JFolder::exists(JPATH_ROOT . '/plugins/system/sunfw'))
+		if ($route === 'uninstall')
 		{
-			foreach (JFolder::files(JPATH_ROOT . '/plugins/system/sunfw/database/mysql/updates', '\.bak$') as $file)
-			{
-				$file = JPATH_ROOT . "/plugins/system/sunfw/database/mysql/updates/{$file}";
-
-				JFile::move($file, substr($file, 0, -4));
-			}
+			return;
 		}
 
-		// Get a database connector object.
-		$dbo = JFactory::getDbo();
+		foreach (glob(JPATH_ROOT . '/plugins/system/sunfw/database/mysql/updates/*.bak') ?: array() as $file)
+		{
+			@rename($file, substr($file, 0, -4));
+		}
 
-		// Enable plugin by default.
+		$dbo = Factory::getDbo();
+
 		$dbo->setQuery(
 			$dbo->getQuery(true)
-				->update('#__extensions')
+				->update($dbo->quoteName('#__extensions'))
 				->set(array(
-				'enabled = 1',
-				'protected = 1',
-				'ordering = -9'
-			))
-				->where("element = 'sunfw'")
-				->where("type = 'plugin'")
-				->where("folder = 'system'"))
-			->execute();
+					$dbo->quoteName('enabled') . ' = 1',
+					// Not protected, so uninstalling the Artista package can remove it cleanly.
+					$dbo->quoteName('protected') . ' = 0',
+					$dbo->quoteName('ordering') . ' = -9',
+				))
+				->where($dbo->quoteName('element') . ' = ' . $dbo->quote('sunfw'))
+				->where($dbo->quoteName('type') . ' = ' . $dbo->quote('plugin'))
+				->where($dbo->quoteName('folder') . ' = ' . $dbo->quote('system'))
+		)->execute();
 	}
 }

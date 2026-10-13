@@ -13,12 +13,16 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 /**
  * Handle Ajax requests from data maintenance pane.
  *
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwAjaxMaintenance extends SunFwAjax
 {
 
@@ -36,9 +40,9 @@ class SunFwAjaxMaintenance extends SunFwAjax
 		 */
 		$data = array(
 			'url' => $this->baseUrl,
-			'description' => JText::_('SUNFW_EXPORT_IMPORT_DESC'),
-			'importLabel' => JText::_('SUNFW_ADVANCED_IMPORT'),
-			'exportLabel' => JText::_('SUNFW_ADVANCED_EXPORT')
+			'description' => Text::_('SUNFW_EXPORT_IMPORT_DESC'),
+			'importLabel' => Text::_('SUNFW_ADVANCED_IMPORT'),
+			'exportLabel' => Text::_('SUNFW_ADVANCED_EXPORT')
 		);
 		
 		if ($return)
@@ -57,7 +61,7 @@ class SunFwAjaxMaintenance extends SunFwAjax
 	public function exportAction()
 	{
 		// Get database and query object
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$q = $db->getQuery(true);
 		
 		// Build query to get template style parameters
@@ -86,7 +90,7 @@ class SunFwAjaxMaintenance extends SunFwAjax
 		header('Content-Length: ' . strlen($params));
 		header(
 			'Content-Disposition: attachment; filename=' .
-				 str_replace(' ', '_', JText::sprintf('SUNFW_ADVANCED_EXPORTED_FILE_NAME', JText::_($this->templateName))) . '.json');
+				 str_replace(' ', '_', Text::sprintf('SUNFW_ADVANCED_EXPORTED_FILE_NAME', Text::_($this->templateName))) . '.json');
 		header('Cache-Control: no-cache, must-revalidate, max-age=60');
 		header('Expires: Sat, 01 Jan 2000 12:00:00 GMT');
 		
@@ -108,25 +112,25 @@ class SunFwAjaxMaintenance extends SunFwAjax
 		
 		if ($backupFile == null)
 		{
-			throw new Exception(JText::sprintf('SUNFW_UPLOAD_FAIL', ''));
+			throw new Exception(Text::sprintf('SUNFW_UPLOAD_FAIL', ''));
 		}
 		
 		// Check if file is uploaded successful
 		if ($backupFile['error'] != 0)
 		{
-			throw new Exception(JText::sprintf('SUNFW_UPLOAD_FAIL', $backupFile['error']));
+			throw new Exception(Text::sprintf('SUNFW_UPLOAD_FAIL', $backupFile['error']));
 		}
 		
 		if (!is_file($backupFile['tmp_name']))
 		{
-			throw new Exception(JText::_('SUNFW_ADVANCED_RESTORE_PARAMS_PACKAGE_FILE_NOT_FOUND'));
+			throw new Exception(Text::_('SUNFW_ADVANCED_RESTORE_PARAMS_PACKAGE_FILE_NOT_FOUND'));
 		}
 		
 		if (!SunFwUtils::check_upload($backupFile['tmp_name']) || !SunFwUtils::check_xss($backupFile['tmp_name']))
 		{
-			JFile::delete($backupFile['tmp_name']);
+			SunFwFile::delete($backupFile['tmp_name']);
 			
-			throw new Exception(JText::_('SUNFW_ADVANCED_RESTORE_PARAMS_INSTALLER_PACKAGE_SAVING_FAILED'));
+			throw new Exception(Text::_('SUNFW_ADVANCED_RESTORE_PARAMS_INSTALLER_PACKAGE_SAVING_FAILED'));
 		}
 		
 		// Read template parameters in uploaded file
@@ -134,12 +138,12 @@ class SunFwAjaxMaintenance extends SunFwAjax
 		
 		if (!$params)
 		{
-			throw new Exception(JText::_('SUNFW_ADVANCED_RESTORE_PARAMS_READ_FILE_FAIL'));
+			throw new Exception(Text::_('SUNFW_ADVANCED_RESTORE_PARAMS_READ_FILE_FAIL'));
 		}
 		
 		if (substr($params, 0, 1) != '{' || substr($params, -1) != '}')
 		{
-			throw new Exception(JText::_('SUNFW_ADVANCED_RESTORE_PARAMS_INVALID_BACKUP'));
+			throw new Exception(Text::_('SUNFW_ADVANCED_RESTORE_PARAMS_INVALID_BACKUP'));
 		}
 		
 		$params = json_decode($params, true);
@@ -176,6 +180,6 @@ class SunFwAjaxMaintenance extends SunFwAjax
 			throw $e;
 		}
 		
-		$this->setResponse(JText::_('SUNFW_ADVANCED_RESTORE_PARAMS_SUCCESS'));
+		$this->setResponse(Text::_('SUNFW_ADVANCED_RESTORE_PARAMS_SUCCESS'));
 	}
 }

@@ -13,12 +13,15 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Language\Text;
+
 /**
  * Class for handling text related actions.
  *
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwText
 {
 	/**
@@ -35,7 +38,7 @@ class SunFwText
 
 		foreach ($keys as $key)
 		{
-			$map[strtoupper($key)] = JText::_($key, $json);
+			$map[strtoupper($key)] = Text::_($key, $json);
 		}
 
 		return $json ? json_encode($map) : $map;

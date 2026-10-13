@@ -13,12 +13,15 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Language\Text;
+
 /**
  * Handle Ajax requests from coming soon pane.
  *
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwAjaxComingSoon extends SunFwAjax
 {
 	/**
@@ -40,27 +43,27 @@ class SunFwAjaxComingSoon extends SunFwAjax
 			'settings' => SunFwHelper::findTemplateAdminJsonSettings(
 				JPATH_ROOT . '/plugins/system/sunfw/assets/joomlashine/admin/js/coming-soon', 'settings.json', true),
 			'textMapping' => array(
-				'coming-soon' => JText::_('SUNFW_COMING_SOON'),
-				'save-coming-soon' => JText::_('SUNFW_SAVE_COMING_SOON'),
-				'coming-soon-settings' => JText::_('SUNFW_COMING_SOON_SETTINGS'),
-				'coming-soon-not-enabled' => JText::_('SUNFW_COMING_SOON_NOT_ENABLED_MESSAGE'),
-				'preview-coming-soon' => JText::_('SUNFW_COMING_SOON_PREVIEW_LABEL'),
-				'enable-coming-soon' => JText::_('SUNFW_ENABLE_COMING_SOON'),
-				'enable-coming-soon-hint' => JText::_('SUNFW_ENABLE_COMING_SOON_HINT'),
-				'coming-soon-page-title' => JText::_('SUNFW_COMING_SOON_PAGE_TITLE'),
-				'coming-soon-page-title-hint' => JText::_('SUNFW_COMING_SOON_PAGE_TITLE_HINT'),
-				'coming-soon-page-content' => JText::_('SUNFW_COMING_SOON_PAGE_CONTENT'),
-				'coming-soon-page-content-hint' => JText::_('SUNFW_COMING_SOON_PAGE_CONTENT_HINT'),
-				'coming-soon-count-down' => JText::_('SUNFW_COMING_SOON_COUNT_DOWN'),
-				'coming-soon-logo' => JText::_('SUNFW_COMING_SOON_LOGO'),
-				'coming-soon-background-image' => JText::_('SUNFW_COMING_SOON_BACKGROUND_IMAGE'),
+				'coming-soon' => Text::_('SUNFW_COMING_SOON'),
+				'save-coming-soon' => Text::_('SUNFW_SAVE_COMING_SOON'),
+				'coming-soon-settings' => Text::_('SUNFW_COMING_SOON_SETTINGS'),
+				'coming-soon-not-enabled' => Text::_('SUNFW_COMING_SOON_NOT_ENABLED_MESSAGE'),
+				'preview-coming-soon' => Text::_('SUNFW_COMING_SOON_PREVIEW_LABEL'),
+				'enable-coming-soon' => Text::_('SUNFW_ENABLE_COMING_SOON'),
+				'enable-coming-soon-hint' => Text::_('SUNFW_ENABLE_COMING_SOON_HINT'),
+				'coming-soon-page-title' => Text::_('SUNFW_COMING_SOON_PAGE_TITLE'),
+				'coming-soon-page-title-hint' => Text::_('SUNFW_COMING_SOON_PAGE_TITLE_HINT'),
+				'coming-soon-page-content' => Text::_('SUNFW_COMING_SOON_PAGE_CONTENT'),
+				'coming-soon-page-content-hint' => Text::_('SUNFW_COMING_SOON_PAGE_CONTENT_HINT'),
+				'coming-soon-count-down' => Text::_('SUNFW_COMING_SOON_COUNT_DOWN'),
+				'coming-soon-logo' => Text::_('SUNFW_COMING_SOON_LOGO'),
+				'coming-soon-background-image' => Text::_('SUNFW_COMING_SOON_BACKGROUND_IMAGE'),
 
-			    'enable-coming-soon-popover-content' => JText::_('SUNFW_ENABLE_COMING_SOON_POPOVER_CONTENT'),
-                'coming-soon-page-title-popover-content' => JText::_('SUNFW_COMING_SOON_PAGE_TITLE_POPOVER_CONTENT'),
-			    'coming-soon-page-content-popover-content' => JText::_('SUNFW_COMING_SOON_PAGE_CONTENT_POPOVER_CONTENT'),
-                'coming-soon-count-down-popover-content' => JText::_('SUNFW_COMING_SOON_COUNT_DOWN_POPOVER_CONTENT'),
-			    'coming-soon-logo-popover-content' => JText::_('SUNFW_COMING_SOON_LOGO_POPOVER_CONTENT'),
-                'coming-soon-background-image-popover-content'  => JText::_('SUNFW_COMING_SOON_BACKGROUND_IMAGE_POPOVER_CONTENT'),
+			    'enable-coming-soon-popover-content' => Text::_('SUNFW_ENABLE_COMING_SOON_POPOVER_CONTENT'),
+                'coming-soon-page-title-popover-content' => Text::_('SUNFW_COMING_SOON_PAGE_TITLE_POPOVER_CONTENT'),
+			    'coming-soon-page-content-popover-content' => Text::_('SUNFW_COMING_SOON_PAGE_CONTENT_POPOVER_CONTENT'),
+                'coming-soon-count-down-popover-content' => Text::_('SUNFW_COMING_SOON_COUNT_DOWN_POPOVER_CONTENT'),
+			    'coming-soon-logo-popover-content' => Text::_('SUNFW_COMING_SOON_LOGO_POPOVER_CONTENT'),
+                'coming-soon-background-image-popover-content'  => Text::_('SUNFW_COMING_SOON_BACKGROUND_IMAGE_POPOVER_CONTENT'),
 			)
 		);
 
@@ -132,7 +135,7 @@ class SunFwAjaxComingSoon extends SunFwAjax
 		}
 
 		$this->setResponse(array(
-			'message' => JText::_('SUNFW_COMING_SOON_SAVED_SUCCESSFULLY')
+			'message' => Text::_('SUNFW_COMING_SOON_SAVED_SUCCESSFULLY')
 		));
 	}
 }

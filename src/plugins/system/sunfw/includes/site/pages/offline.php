@@ -13,6 +13,12 @@
 // No direct access to this file.
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+
 // Continue only if the current template supports custom coming soon.
 $xml = SunFwHelper::getManifest($this->template);
 
@@ -30,10 +36,10 @@ if (empty($settings['enabled']) || ! (int) $settings['enabled'])
 }
 
 // Get Joomla's global configuration.
-$config = JFactory::getConfig();
+$config = Factory::getConfig();
 
 // Get Joomla's document object.
-$document = JFactory::getDocument();
+$document = Factory::getDocument();
 
 // Prepare necessary data.
 $title = empty($settings['page-title']) ? $config->get('sitename') : $settings['page-title'];
@@ -46,9 +52,9 @@ if (!empty($settings['deadline']))
 }
 
 // Check if login with 2 factor methods is enabled?
-require_once JPATH_ADMINISTRATOR . '/components/com_users/helpers/users.php';
-
-$twofactormethods = UsersHelper::getTwoFactorMethods();
+// Joomla 4.2+ replaced the login secret-key field with Multi-factor Authentication,
+// which runs after the password step, so the form never needs a secret key field.
+$twofactormethods = array();
 
 // Get template's manifest cache.
 $manifest = SunFwHelper::getManifestCache($this->template);
@@ -68,20 +74,20 @@ if (is_file(JPATH_THEMES . "/{$this->template}/html/coming-soon.php"))
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<base href="<?php echo JURI::base(); ?>" />
+	<base href="<?php echo Uri::base(); ?>" />
 
 	<title><?php echo $title; ?></title>
 
-	<?php foreach ($document->_styleSheets as $src => $attrs) : ?>
-	<link href="<?php echo $src; ?>" type="<?php echo $attrs['type']; ?>" rel="stylesheet" />
-	<?php endforeach; ?>
+	<jdoc:include type="metas" />
+	<jdoc:include type="styles" />
 
 	<link href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template; ?>/css/template.css" rel="stylesheet" />
+	<?php if (is_file(JPATH_ROOT . '/templates/' . $this->template . '/css/custom/custom.css')) : ?>
 	<link href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template; ?>/css/custom/custom.css" rel="stylesheet" />
+	<?php endif; ?>
 	<link href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template; ?>/css/bootstrap.css" rel="stylesheet" />
 
 	<style type="text/css">
-		<?php echo implode("\n", $document->_style); ?>
 		#content {
 			display: flex;
 			height: calc(100vh);
@@ -108,16 +114,10 @@ if (is_file(JPATH_THEMES . "/{$this->template}/html/coming-soon.php"))
 	</style>
 
 	<?php if ($this->app->get('debug_lang', '0') == '1' || $this->app->get('debug', '0') == '1') : ?>
-	<link href="<?php echo $this->baseurl; ?>/media/cms/css/debug.css" rel="stylesheet" />
+	<link href="<?php echo $this->baseurl; ?>/media/plg_system_debug/css/debug.css" rel="stylesheet" />
 	<?php endif; ?>
 
-	<?php foreach ($document->_scripts as $src => $attrs) : ?>
-	<script src="<?php echo $src; ?>" type="<?php echo $attrs['type']; ?>"></script>
-	<?php endforeach; ?>
-
-	<script type="text/javascript">
-		<?php echo implode("\n", $document->_script); ?>
-	</script>
+	<jdoc:include type="scripts" />
 
 	<link href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template; ?>/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
 </head>
@@ -136,19 +136,19 @@ if (is_file(JPATH_THEMES . "/{$this->template}/html/coming-soon.php"))
 			<div class="countdown-timer" data-deadline="<?php echo $settings['deadline']; ?>">
                 <div class="day-container">
                     <div class="day countdown">&nbsp;&nbsp;</div>
-                    <?php echo JText::_('SUNFW_DAYS'); ?>
+                    <?php echo Text::_('SUNFW_DAYS'); ?>
                 </div>
                 <div class="hour-container">
                     <div class="hour countdown">&nbsp;&nbsp;</div>
-					<?php echo JText::_('SUNFW_HOURS'); ?>
+					<?php echo Text::_('SUNFW_HOURS'); ?>
                 </div>
                 <div class="minute-container">
                     <div class="minute countdown">&nbsp;&nbsp;</div>
-					<?php echo JText::_('SUNFW_MINUTES'); ?>
+					<?php echo Text::_('SUNFW_MINUTES'); ?>
                 </div>
                 <div class="second-container">
                     <div class="second countdown">&nbsp;&nbsp;</div>
-					<?php echo JText::_('SUNFW_SECONDS'); ?>
+					<?php echo Text::_('SUNFW_SECONDS'); ?>
                 </div>
             </div>
             <script type="text/javascript">
@@ -156,36 +156,36 @@ if (is_file(JPATH_THEMES . "/{$this->template}/html/coming-soon.php"))
             </script>
             <?php endif; ?>
 
-			<form action="<?php echo JRoute::_('index.php', true); ?>" method="post" id="form-login">
+			<form action="<?php echo Route::_('index.php', true); ?>" method="post" id="form-login">
 				<fieldset class="form-inline">
 					<div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-user"></i></span>
                         </div>
-						<input class="form-control" name="username" id="username" type="text" title="<?php echo JText::_('JGLOBAL_USERNAME'); ?>" />
+						<input class="form-control" name="username" id="username" type="text" title="<?php echo Text::_('JGLOBAL_USERNAME'); ?>" />
 					</div>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-lock"></i></span>
                         </div>
-						<input class="form-control" type="password" name="password" id="password" title="<?php echo JText::_('JGLOBAL_PASSWORD'); ?>" />
+						<input class="form-control" type="password" name="password" id="password" title="<?php echo Text::_('JGLOBAL_PASSWORD'); ?>" />
 					</div>
 
 					<?php if (count($twofactormethods) > 1) : ?>
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><?php echo JText::_('JGLOBAL_SECRETKEY'); ?></span>
+                            <span class="input-group-text"><?php echo Text::_('JGLOBAL_SECRETKEY'); ?></span>
                         </div>
-                        <input type="text" name="secretkey" id="secretkey" title="<?php echo JText::_('JGLOBAL_SECRETKEY'); ?>" />
+                        <input type="text" name="secretkey" id="secretkey" title="<?php echo Text::_('JGLOBAL_SECRETKEY'); ?>" />
                     </div>
 					<?php endif; ?>
 
-					<input type="submit" name="Submit" class="btn btn-primary" value="<?php echo JText::_('JLOGIN'); ?>" />
+					<input type="submit" name="Submit" class="btn btn-primary" value="<?php echo Text::_('JLOGIN'); ?>" />
 
 					<input type="hidden" name="option" value="com_users" />
 					<input type="hidden" name="task" value="user.login" />
-					<input type="hidden" name="return" value="<?php echo base64_encode(JUri::base()); ?>" />
-					<?php echo JHtml::_('form.token'); ?>
+					<input type="hidden" name="return" value="<?php echo base64_encode(Uri::base()); ?>" />
+					<?php echo HTMLHelper::_('form.token'); ?>
 				</fieldset>
 			</form>
 		</div>

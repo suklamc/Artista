@@ -16,6 +16,7 @@ namespace Leafo\ScssPhp;
  *
  * @author Leaf Corcoran <leafot@gmail.com>
  */
+#[\AllowDynamicProperties]
 class Colors
 {
     /**

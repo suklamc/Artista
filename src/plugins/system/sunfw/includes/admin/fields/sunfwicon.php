@@ -13,6 +13,12 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
 /**
  * Custom form field for selecting icon.
  *
@@ -20,7 +26,8 @@ defined('_JEXEC') or die('Restricted access');
  * @subpackage  Form
  * @since       1.0.0
  */
-class JFormFieldSunFwIcon extends JFormField
+#[\AllowDynamicProperties]
+class JFormFieldSunFwIcon extends FormField
 {
 
 	public $type = 'SunFwIcon';
@@ -70,7 +77,7 @@ class JFormFieldSunFwIcon extends JFormField
 				}
 			}
 			
-			$fontAwesomeCategoriesGenericList = JHTML::_('select.genericList', $cbFontAwesomeCategories, '', 'class="sunfw_font_category inputbox"', 
+			$fontAwesomeCategoriesGenericList = HTMLHelper::_('select.genericList', $cbFontAwesomeCategories, '', 'class="sunfw_font_category inputbox"', 
 				'value', 'text', 'all-icons');
 			
 			$script = ';var SunFwIconSelectorConfig = {
@@ -79,12 +86,12 @@ class JFormFieldSunFwIcon extends JFormField
 				allIcons: ' . json_encode($allFontAwesomes) . '
 			};';
 			
-			JFactory::getDocument()->addScriptDeclaration($script);
+			Factory::getDocument()->addScriptDeclaration($script);
 			
 			$html .= '<div id="sunFwModalIcon" class="modal hide" tabindex="-1" role="dialog">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-					<h3>' . JText::_('SUNFW_ICON_SELECTOR') . '</h3>
+					<h3>' . Text::_('SUNFW_ICON_SELECTOR') . '</h3>
 				</div>
 				<div class="modal-body">
 					<div class="pull-left">
@@ -96,8 +103,8 @@ class JFormFieldSunFwIcon extends JFormField
 					<div class="sunfw-show-icon-container"></div>
 				</div>
 				<div class="modal-footer">
-					<button class="btn btn-primary select-icon-btn" type="button">' . JText::_('SUNFW_OK') . '</button>
-					<button class="btn" data-dismiss="modal">' . JText::_('SUNFW_CANCEL') . '</button>
+					<button class="btn btn-primary select-icon-btn" type="button">' . Text::_('SUNFW_OK') . '</button>
+					<button class="btn" data-dismiss="modal">' . Text::_('SUNFW_CANCEL') . '</button>
 				</div>
 			</div>';
 			
@@ -121,8 +128,8 @@ class JFormFieldSunFwIcon extends JFormField
 
 	protected function addAssets()
 	{
-		$doc = JFactory::getDocument();
-		$plgPath = JUri::root(true) . '/plugins/system/sunfw';
+		$doc = Factory::getDocument();
+		$plgPath = Uri::root(true) . '/plugins/system/sunfw';
 		
 		$doc->addStylesheet("{$plgPath}/assets/3rd-party/font-awesome/css/font-awesome.min.css");
 		$doc->addStylesheet("{$plgPath}/includes/admin/fields/modal.css");

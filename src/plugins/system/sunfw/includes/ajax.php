@@ -13,12 +13,17 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Session\Session;
+
 /**
  * Handle Ajax requests.
  *
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwAjax
 {
 
@@ -100,7 +105,7 @@ class SunFwAjax
 	public static function execute()
 	{
 		// Get Joomla's application instance.
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// Prepare to execute Ajax action.
 		$context = $app->input->getCmd('context', 'common');
@@ -110,7 +115,7 @@ class SunFwAjax
 		try
 		{
 			// Verify token.
-			if (!JSession::checkToken('get'))
+			if (!Session::checkToken('get'))
 			{
 				throw new Exception('Invalid Token');
 			}
@@ -122,7 +127,7 @@ class SunFwAjax
 
 				parse_str($referer[1], $referer);
 
-				if ($referer['option'] != 'com_ajax' && !JFactory::getUser()->authorise('core.manage', $referer['option']))
+				if ($referer['option'] != 'com_ajax' && !Factory::getUser()->authorise('core.manage', $referer['option']))
 				{
 					// Set 403 header.
 					header('HTTP/1.1 403 Forbidden');
@@ -211,16 +216,16 @@ class SunFwAjax
 	public function __construct($template = '', $style_id = 0)
 	{
 		// Get necessary objects.
-		$this->app = JFactory::getApplication();
-		$this->dbo = JFactory::getDbo();
+		$this->app = Factory::getApplication();
+		$this->dbo = Factory::getDbo();
 		$this->input = $this->app->input;
-		$this->session = JFactory::getSession();
-		$this->language = JFactory::getLanguage();
+		$this->session = Factory::getSession();
+		$this->language = Factory::getLanguage();
 
 		// Build base Ajax URL.
 		$this->baseUrl = 'index.php?option=com_ajax&group=system&plugin=sunfw&format=' . $this->input->getCmd('format', 'json');
 		$this->baseUrl .= '&context=' . strtolower(preg_replace('/([a-z])([A-Z])/', '\\1-\\2', substr(get_class($this), 9)));
-		$this->baseUrl .= '&' . JSession::getFormToken() . '=1';
+		$this->baseUrl .= '&' . Session::getFormToken() . '=1';
 
 		// Prepare input data.
 		$this->templateName = $this->input->getCmd('template_name', $template);
@@ -269,8 +274,8 @@ class SunFwAjax
 			'id' => SunFwHelper::getTemplateIdentifiedName($name),
 			'edition' => SunFwHelper::getTemplateEdition($name),
 			'version' => SunFwHelper::getTemplateVersion($name),
-			'realName' => ( JText::_($name) == $name ) ? strtoupper(
-				preg_replace('/(\d+)$/', ' \\1', str_replace('_', ' ', str_replace('_pro', '', $name)))) : JText::_($name)
+			'realName' => ( Text::_($name) == $name ) ? strtoupper(
+				preg_replace('/(\d+)$/', ' \\1', str_replace('_', ' ', str_replace('_pro', '', $name)))) : Text::_($name)
 		);
 	}
 

@@ -19,6 +19,7 @@ defined('_JEXEC') or die('Restricted access');
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwAjaxImageSelector extends SunFwAjaxMedia
 {
 

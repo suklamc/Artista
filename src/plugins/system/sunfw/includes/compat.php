@@ -13,8 +13,10 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
-// Import necessary library.
-jimport('joomla.filesystem.file');
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
+
 
 /**
  * General helper class.
@@ -22,6 +24,7 @@ jimport('joomla.filesystem.file');
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwCompat
 {
 
@@ -53,17 +56,17 @@ class SunFwCompat
 	public static function isClient($client)
 	{
 		// Get Joomla application object.
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		switch ($client)
 		{
 			case 'site':
-				return ( method_exists($app, 'isClient') ? $app->isClient('site') : $app->isSite() );
+				return $app->isClient('site');
 			break;
 
 			case 'admin':
 			case 'administrator':
-				return ( method_exists($app, 'isClient') ? $app->isClient('administrator') : $app->isAdmin() );
+				return $app->isClient('administrator');
 			break;
 		}
 
@@ -71,33 +74,19 @@ class SunFwCompat
 	}
 
 	/**
-	 * Method to load jQuery script library.
+	 * Load jQuery. Joomla 4 and later ship it at media/vendor/jquery.
 	 *
 	 * @return  void
 	 */
 	public static function loadJquery()
 	{
-		if (self::isJoomla(4))
+		if (self::isClient('admin'))
 		{
-			if (self::isClient('admin'))
-			{
-				\JFactory::getDocument()->addScript(JUri::root(true) . '/media/vendor/jquery/js/jquery.min.js');
-			}
-			else
-			{
-				Joomla\CMS\HTML\HTMLHelper::_('jquery.framework');
-			}
+			Factory::getDocument()->addScript(Uri::root(true) . '/media/vendor/jquery/js/jquery.min.js');
 		}
 		else
 		{
-			if (self::isClient('admin'))
-			{
-				JFactory::getDocument()->addScript(JUri::root(true) . '/media/jui/js/jquery.js');
-			}
-			else
-			{
-				JHtml::_('jquery.framework');
-			}
+			HTMLHelper::_('jquery.framework');
 		}
 	}
 }

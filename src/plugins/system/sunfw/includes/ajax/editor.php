@@ -13,6 +13,10 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
+
 /**
  * Editor widget
  *
@@ -20,28 +24,28 @@ defined('_JEXEC') or die('Restricted access');
  * @subpackage  Template
  * @since       1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwAjaxEditor extends SunFwAjax
 {
 
 	public function indexAction()
 	{
 		// Get Joomla document object.
-		$doc = JFactory::getDocument();
+		$doc = Factory::getDocument();
 
-		// Load Bootstrap CSS if on Joomla 4.0 series.
-		if (SunFwCompat::isJoomla(4))
+		// Load the site template's Bootstrap CSS.
 		{
-			$doc->addStyleSheet(JUri::base(true) . '/templates/' . (PlgSystemSunFw::$template ? PlgSystemSunFw::$template->template : $this->app->getTemplate()) . '/css/bootstrap.css');
+			$doc->addStyleSheet(Uri::base(true) . '/templates/' . (PlgSystemSunFw::$template ? PlgSystemSunFw::$template->template : $this->app->getTemplate()) . '/css/bootstrap.css');
 		}
 
 		// Load admin template's stylesheet.
 		$doc->addStylesheet(
-			JUri::base(true) . '/templates/' . (PlgSystemSunFw::$template ? PlgSystemSunFw::$template->template : $this->app->getTemplate()) . '/css/template' . ( $doc->direction == 'rtl' ? '-rtl' : '' ) .
+			Uri::base(true) . '/templates/' . (PlgSystemSunFw::$template ? PlgSystemSunFw::$template->template : $this->app->getTemplate()) . '/css/template' . ( $doc->direction == 'rtl' ? '-rtl' : '' ) .
 				 '.css');
 
 		// Load required scripts.
-		JHtml::_('behavior.core');
-		JHtml::_('bootstrap.framework');
+		HTMLHelper::_('behavior.core');
+		HTMLHelper::_('bootstrap.framework');
 
 		$this->render('index');
 	}

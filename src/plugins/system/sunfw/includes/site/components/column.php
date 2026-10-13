@@ -16,7 +16,7 @@ defined('_JEXEC') or die('Restricted access');
 // Render items in column.
 $items_html = '';
 
-if (@count((array)$component['items']))
+if (count((array) $component['items']))
 {
 	foreach ($component['items'] as $itemIndex)
 	{

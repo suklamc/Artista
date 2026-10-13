@@ -15,7 +15,7 @@ defined('_JEXEC') or die('Restricted access');
 
 
 // Render columns in row.
-if (@count((array) $component['columns']))
+if (count((array) $component['columns']))
 {
 	$bootstrapVersion = SunFwSiteBootstrap::getVersion();
 	$columns = array();

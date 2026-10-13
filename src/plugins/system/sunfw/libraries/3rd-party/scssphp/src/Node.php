@@ -16,6 +16,7 @@ namespace Leafo\ScssPhp;
  *
  * @author Anthon Pang <anthon.pang@gmail.com>
  */
+#[\AllowDynamicProperties]
 abstract class Node
 {
     /**

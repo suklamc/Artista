@@ -13,8 +13,10 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Language\Text;
+
 // Render rows in section.
-if (@count((array) $component['rows']))
+if (count((array) $component['rows']))
 {
 	$rows = array();
 	foreach ($component['rows'] as $rowIndex)
@@ -46,7 +48,7 @@ if (@count((array) $component['rows']))
 			$layoutViewer = ' ' . implode(' ',
 				array(
 					'layout-element="section"',
-					'layout-element-type="' . JText::_('SUNFW_SECTION') . '"',
+					'layout-element-type="' . Text::_('SUNFW_SECTION') . '"',
 					'layout-element-name="' . $component['settings']['name'] . '"'
 				));
 		}

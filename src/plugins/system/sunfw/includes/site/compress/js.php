@@ -13,9 +13,9 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
-// Import necessary Joomla libraries
-jimport('joomla.filesystem.folder');
-jimport('joomla.filesystem.file');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+
 
 /**
  * Javascript compression class.
@@ -23,6 +23,7 @@ jimport('joomla.filesystem.file');
  * @package     SUN Framework
  * @since       1.0.0
  */
+#[\AllowDynamicProperties]
 abstract class SunFwSiteCompressJs
 {
 
@@ -38,7 +39,7 @@ abstract class SunFwSiteCompressJs
 		static $compressedFiles;
 
 		// Get object for working with URI
-		$uri = JUri::getInstance();
+		$uri = Uri::getInstance();
 
 		// Generate link prefix if current scheme is HTTPS
 		$prefix = '';
@@ -209,7 +210,7 @@ abstract class SunFwSiteCompressJs
 		$fileCompressed = array();
 
 		// Get template details
-		$templateName = PlgSystemSunFw::$template ? PlgSystemSunFw::$template->template : JFactory::getApplication()->getTemplate();
+		$templateName = PlgSystemSunFw::$template ? PlgSystemSunFw::$template->template : Factory::getApplication()->getTemplate();
 
 		// Generate path to store compressed files
 		$compressPath = SunFwSiteHelper::getCacheDirectory() . '/' . $templateName . '/';
@@ -217,7 +218,7 @@ abstract class SunFwSiteCompressJs
 		// Create directory if not exists
 		if (!is_dir($compressPath))
 		{
-			JFolder::create($compressPath);
+			SunFwFolder::create($compressPath);
 		}
 
 		// Loop to each compress element to compress file
@@ -282,7 +283,7 @@ abstract class SunFwSiteCompressJs
 
 					// Prepend path to source file
 					$source = str_replace(str_replace('\\', '/', JPATH_ROOT), '', str_replace('\\', '/', $filePath));
-					$source = "/* FILE: {$source} */\n" . self::minify(JFile::read($filePath));
+					$source = "/* FILE: {$source} */\n" . self::minify(SunFwFile::read($filePath));
 
 					// Get length of processed content
 					$length = strlen($source);
@@ -292,19 +293,19 @@ abstract class SunFwSiteCompressJs
 						if (!empty($buffer))
 						{
 							// Write buffer to cache file
-							JFile::write($compressPath . $compressFile, $buffer);
+							SunFwFile::write($compressPath . $compressFile, $buffer);
 
 							// Rename created cache file
 							if ($currentSize > 0)
 							{
 								$newFileName = md5(implode('', $processedFiles)) . '.js';
-								JFile::move($compressPath . $compressFile, $compressPath . $newFileName);
+								SunFwFile::move($compressPath . $compressFile, $compressPath . $newFileName);
 
 								// Save every compressed file associated with this page for maintenance later
 								$compressedFiles[] = str_replace('\\', '/', $compressPath) . $newFileName;
 
 								// Store splitted file URL for later reference
-								$splittedFiles[] = $prefix . str_replace(str_replace('\\', '/', JPATH_ROOT), JUri::root(true),
+								$splittedFiles[] = $prefix . str_replace(str_replace('\\', '/', JPATH_ROOT), Uri::root(true),
 									str_replace('\\', '/', $compressPath)) . $newFileName;
 							}
 
@@ -332,7 +333,7 @@ abstract class SunFwSiteCompressJs
 				}
 
 				// Write buffer to cache file
-				JFile::write($compressPath . $compressFile, $buffer);
+				SunFwFile::write($compressPath . $compressFile, $buffer);
 
 				// Save every compressed file associated with this page for maintenance later
 				$compressedFiles[] = str_replace('\\', '/', $compressPath) . $compressFile;
@@ -374,7 +375,7 @@ abstract class SunFwSiteCompressJs
 			}
 
 			// Add compressed file to the compress result list
-			$compressUrl = str_replace(str_replace('\\', '/', JPATH_ROOT), JUri::root(true), str_replace('\\', '/', $compressPath)) .
+			$compressUrl = str_replace(str_replace('\\', '/', JPATH_ROOT), Uri::root(true), str_replace('\\', '/', $compressPath)) .
 				 $compressFile;
 			$compressResult[] = sprintf('<script src="%s" type="text/javascript"></script>', $prefix . $compressUrl);
 			$fileCompressed[] = $prefix . $compressUrl;
@@ -384,7 +385,7 @@ abstract class SunFwSiteCompressJs
 		if (isset($compressedFiles))
 		{
 			$trackFile = $compressPath . 'tracking.php';
-			$pageLink = JUri::current();
+			$pageLink = Uri::current();
 			$cleanUp = array();
 
 			if (file_exists($trackFile))
@@ -427,7 +428,7 @@ abstract class SunFwSiteCompressJs
 
 							if ($removable && !$modifiedFlag)
 							{
-								JFile::delete($file);
+								SunFwFile::delete($file);
 							}
 						}
 					}
@@ -444,7 +445,7 @@ abstract class SunFwSiteCompressJs
 
 						if (!in_array($file, $compressedFiles))
 						{
-							JFile::delete($file);
+							SunFwFile::delete($file);
 						}
 					}
 				}
@@ -456,7 +457,7 @@ abstract class SunFwSiteCompressJs
 				// Create lock file
 				$content = 'Updating';
 
-				JFile::write("{$trackFile}.lock", $content);
+				SunFwFile::write("{$trackFile}.lock", $content);
 
 				// Preset tracking array
 				if (!isset($tracking))
@@ -472,10 +473,10 @@ abstract class SunFwSiteCompressJs
 				$content = "<?php\n\$tracking = json_decode('" . json_encode($tracking) . "', true);\n?>";
 
 				// Update tracking file
-				JFile::write($trackFile, $content);
+				SunFwFile::write($trackFile, $content);
 
 				// Remove lock file
-				JFile::delete("{$trackFile}.lock");
+				SunFwFile::delete("{$trackFile}.lock");
 			}
 		}
 

@@ -13,9 +13,8 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-// Import necessary Joomla libraries
-jimport('joomla.filesystem.folder');
-jimport('joomla.filesystem.file');
+use Joomla\CMS\Factory;
+
 
 /**
  * Class to recognize whether a template is made by JoomlaShine or not.
@@ -24,6 +23,7 @@ jimport('joomla.filesystem.file');
  * @subpackage  Recognization
  * @since       2.0.8
  */
+#[\AllowDynamicProperties]
 class SunFwRecognization
 {
 
@@ -45,7 +45,7 @@ class SunFwRecognization
 	{
 		if (empty($template))
 		{
-			$template = PlgSystemSunFw::$template ? PlgSystemSunFw::$template->template : JFactory::getApplication()->getTemplate();
+			$template = PlgSystemSunFw::$template ? PlgSystemSunFw::$template->template : Factory::getApplication()->getTemplate();
 		}
 
 		if (!isset(self::$templateDetails[$template]))

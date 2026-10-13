@@ -8,6 +8,10 @@
  */
 
 defined('_JEXEC') or die;
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filter\OutputFilter;
+use Joomla\CMS\HTML\HTMLHelper;
 ?>
 
 <?php
@@ -17,7 +21,7 @@ if (!empty($feed) && is_string($feed))
 }
 else
 {
-	$lang      = JFactory::getLanguage();
+	$lang      = Factory::getLanguage();
 	$myrtl     = $params->get('rssrtl');
 	$direction = ' ';
 
@@ -111,9 +115,9 @@ else
 						<div class="feed-item-description">
 						<?php
 							// Strip the images.
-							$text = JFilterOutput::stripImages($text);
+							$text = OutputFilter::stripImages($text);
 
-							$text = JHtml::_('string.truncate', $text, $params->get('word_count'));
+							$text = HTMLHelper::_('string.truncate', $text, $params->get('word_count'));
 							echo str_replace('&apos;', "'", $text);
 						?>
 						</div>

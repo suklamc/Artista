@@ -20,8 +20,8 @@ define('SUNFW_PATH', dirname(__FILE__));
 define('SUNFW_PATH_INCLUDES', SUNFW_PATH . '/includes');
 
 define('SUNFW_ID', 'tpl_sunframework');
-define('SUNFW_VERSION', '2.2.33');
-define('SUNFW_RELEASED_DATE', '07/09/2021');
+define('SUNFW_VERSION', '3.0.0');
+define('SUNFW_RELEASED_DATE', '10/13/2026');
 
 // Project home. JoomlaShine's servers have shut down, so the framework no longer
 // contacts any JoomlaShine URL; help links point here instead.

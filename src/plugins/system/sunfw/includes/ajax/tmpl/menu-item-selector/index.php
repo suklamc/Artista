@@ -14,8 +14,13 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Pagination\Pagination;
+
 // Get Joomla document object.
-$doc = JFactory::getDocument();
+$doc = Factory::getDocument();
 
 // @formatter:off
 ?>
@@ -49,7 +54,7 @@ $doc = JFactory::getDocument();
 					<input type="text" name="filter[search]" class="form-control" value="<?php
 						echo $this->model->getState('filter.search');
 					?>" placeholder="<?php
-						echo JText::_( 'SUNFW_SEARCH_FOR' );
+						echo Text::_( 'SUNFW_SEARCH_FOR' );
 					?>" />
 				</div>
 				<div class="searchtools-module-field-filter">
@@ -72,10 +77,10 @@ $doc = JFactory::getDocument();
 				</div>
 				<div class="d-flex justify-content-end">
 					<button type="submit" class="btn btn-default apply-filters">
-						<?php echo JText::_( 'SUNFW_APPLY' ); ?>
+						<?php echo Text::_( 'SUNFW_APPLY' ); ?>
 					</button>
 					<button type="reset" class="btn btn-default clear-filters">
-						<?php echo JText::_( 'SUNFW_CLEAR' ); ?>
+						<?php echo Text::_( 'SUNFW_CLEAR' ); ?>
 					</button>
 				</div>
 			</div>
@@ -85,25 +90,25 @@ $doc = JFactory::getDocument();
 					<thead>
 						<tr>
 							<th class="col-md-1">
-								<?php echo JText::_('JSTATUS'); ?>
+								<?php echo Text::_('JSTATUS'); ?>
 							</th>
 							<th class="col-md-3 align-left">
-								<?php echo JText::_('JGLOBAL_TITLE'); ?>
+								<?php echo Text::_('JGLOBAL_TITLE'); ?>
 							</th>
 							<th class="col-md-2">
-								<?php echo JText::_('COM_MENUS_HEADING_MENU'); ?>
+								<?php echo Text::_('COM_MENUS_HEADING_MENU'); ?>
 							</th>
 							<th class="col-md-2">
-								<?php echo JText::_('JGRID_HEADING_ACCESS'); ?>
+								<?php echo Text::_('JGRID_HEADING_ACCESS'); ?>
 							</th>
 							<th class="col-md-2">
-								<?php echo JText::_('JGRID_HEADING_LANGUAGE'); ?>
+								<?php echo Text::_('JGRID_HEADING_LANGUAGE'); ?>
 							</th>
 							<th class="col-md-1">
-								<?php echo JText::_('JGRID_HEADING_ID'); ?>
+								<?php echo Text::_('JGRID_HEADING_ID'); ?>
 							</th>
 							<th class="col-md-1">
-								<?php echo JText::_('SUNFW_ACTION'); ?>
+								<?php echo Text::_('SUNFW_ACTION'); ?>
 							</th>
 						</tr>
 					</thead>
@@ -142,15 +147,15 @@ $doc = JFactory::getDocument();
 								<?php
 								if ($item->language == '')
 								{
-									echo JText::_('JDEFAULT');
+									echo Text::_('JDEFAULT');
 								}
 								elseif ($item->language == '*')
 								{
-									echo JText::alt('JALL', 'language');
+									echo Text::alt('JALL', 'language');
 								}
 								else
 								{
-									echo $item->language_title ? JHtml::_('image', 'mod_languages/' . $item->language_image . '.gif', $item->language_title, array('title' => $item->language_title), true) . '&nbsp;' . $item->language_title : JText::_('JUNDEFINED');
+									echo $item->language_title ? HTMLHelper::_('image', 'mod_languages/' . $item->language_image . '.gif', $item->language_title, array('title' => $item->language_title), true) . '&nbsp;' . $item->language_title : Text::_('JUNDEFINED');
 								}
 								?>
 							</td>
@@ -170,7 +175,7 @@ $doc = JFactory::getDocument();
 								<input type="hidden" name="limitstart" value="" />
 								<?php
 								if ( ! $this->pagination ) {
-									$this->pagination = new JPagination($this->total, $this->start, $this->limit);
+									$this->pagination = new Pagination($this->total, $this->start, $this->limit);
 								}
 
 								echo $this->pagination->getPaginationLinks(null, array('showLimitBox' => false, 'showLimitStart' => false));

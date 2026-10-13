@@ -18,6 +18,7 @@ use Leafo\ScssPhp\Base\Range;
  *
  * @author Anthon Pang <anthon.pang@gmail.com>
  */
+#[\AllowDynamicProperties]
 class Util
 {
     /**

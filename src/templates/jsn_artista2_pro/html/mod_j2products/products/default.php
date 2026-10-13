@@ -6,6 +6,11 @@
 * @license 		GNU GPL v3 or later
 */
 defined('_JEXEC') or die;
+
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
 $total_cols = $params->get('number_of_coloums', 3);
 $total_count = count($list); $counter = 0;
 ?>
@@ -25,7 +30,7 @@ $total_count = count($list); $counter = 0;
 								} ?>
 								<?php if($product->pricing->base_price > $product->pricing->price) : ?>
 									<div class="sale-tag">
-										<?php echo JText::_('J2STORE_SALE_TAG_FOUND'); ?>
+										<?php echo Text::_('J2STORE_SALE_TAG_FOUND'); ?>
 									</div>
 								<?php endif;?>
 									<?php
@@ -49,7 +54,7 @@ $total_count = count($list); $counter = 0;
 									<h4 itemprop="name" class="product-title">
 										<?php if( $product->link_title ): ?>
 											<a itemprop="url"
-											href="<?php echo JRoute::_( $product->module_display_link ); ?>"
+											href="<?php echo Route::_( $product->module_display_link ); ?>"
 											title="<?php echo $product->product_name; ?>" >
 										<?php endif; ?>
 
@@ -112,7 +117,7 @@ $total_count = count($list); $counter = 0;
 											<?php $discount =(1 - ($product->pricing->price / $product->pricing->base_price) ) * 100; ?>
 											<?php if($discount > 0): ?>
 												<div class="discount-percentage">
-													<?php  echo round($discount).' % '.JText::_('J2STORE_PRODUCT_OFFER');?>
+													<?php  echo round($discount).' % '.Text::_('J2STORE_PRODUCT_OFFER');?>
 												</div>
 											<?php endif; ?>
 										<?php endif; ?>
@@ -122,7 +127,7 @@ $total_count = count($list); $counter = 0;
 										<?php if( $product->show_sku ) : ?>
 											<?php if(!empty($product->variant->sku)) : ?>
 												<div class="product-sku">
-													<span class="sku-text"><?php echo JText::_('J2STORE_SKU')?></span>
+													<span class="sku-text"><?php echo Text::_('J2STORE_SKU')?></span>
 													<span itemprop="sku" class="sku"> <?php echo $product->variant->sku; ?> </span>
 												</div>
 											<?php endif; ?>
@@ -137,14 +142,14 @@ $total_count = count($list); $counter = 0;
 												</span>
 												<?php else: ?>
 													<span class="outofstock">
-														<?php echo JText::_('J2STORE_OUT_OF_STOCK'); ?>
+														<?php echo Text::_('J2STORE_OUT_OF_STOCK'); ?>
 													</span>
 												<?php endif; ?>
 											</div>
 
 											<?php if($product->variant->allow_backorder == 2 && !$product->variant->availability): ?>
 												<span class="backorder-notification">
-													<?php echo JText::_('J2STORE_BACKORDER_NOTIFICATION'); ?>
+													<?php echo Text::_('J2STORE_BACKORDER_NOTIFICATION'); ?>
 												</span>
 											<?php endif; ?>
 										<?php endif; ?>
@@ -203,7 +208,7 @@ $total_count = count($list); $counter = 0;
 						?>
 						<?php elseif( $product->product_type=='configurable' || ($cart_type == 2 && count($product->options)) || $cart_type==3 ):?>
 							<!-- we have options so we just redirect -->
-							<a href="<?php echo $product->product_link; ?>" class="view-button <?php echo $params->get('choosebtn_class', 'btn btn-success'); ?>"><?php echo JText::_('J2STORE_VIEW_PRODUCT_DETAILS'); ?></a>
+							<a href="<?php echo $product->product_link; ?>" class="view-button <?php echo $params->get('choosebtn_class', 'btn btn-success'); ?>"><?php echo Text::_('J2STORE_VIEW_PRODUCT_DETAILS'); ?></a>
 							<?php $product->display_cart_block = false; ?>
 						<?php endif; ?>
 
@@ -213,9 +218,9 @@ $total_count = count($list); $counter = 0;
 							<!-- cart block -->
 							<div class="cart-action-complete" style="display:none;">
 								<p class="text-success">
-									<?php echo JText::_('J2STORE_ITEM_ADDED_TO_CART');?>
+									<?php echo Text::_('J2STORE_ITEM_ADDED_TO_CART');?>
 									<a href="<?php echo $product->checkout_link; ?>" class="j2store-checkout-link">
-										<?php echo JText::_('J2STORE_CHECKOUT'); ?>
+										<?php echo Text::_('J2STORE_CHECKOUT'); ?>
 									</a>
 								</p>
 							</div>
@@ -238,7 +243,7 @@ $total_count = count($list); $counter = 0;
 
 					 </div>
 					 <?php elseif( !$product->variant->availability ): ?>
-					 	<input value="<?php echo JText::_('J2STORE_OUT_OF_STOCK'); ?>" type="button" class="j2store_button_no_stock btn btn-warning" />
+					 	<input value="<?php echo Text::_('J2STORE_OUT_OF_STOCK'); ?>" type="button" class="j2store_button_no_stock btn btn-warning" />
 					 	<!-- end cart block -->
 					 <?php endif; ?>
 
@@ -248,8 +253,8 @@ $total_count = count($list); $counter = 0;
 					 <input type="hidden" name="view" value="carts" />
 					 <input type="hidden" name="task" value="addItem" />
 					 <input type="hidden" name="ajax" value="0" />
-					 <?php echo JHTML::_( 'form.token' ); ?>
-					 <input type="hidden" name="return" value="<?php echo base64_encode( JUri::getInstance()->toString() ); ?>" />
+					 <?php echo HTMLHelper::_( 'form.token' ); ?>
+					 <input type="hidden" name="return" value="<?php echo base64_encode( Uri::getInstance()->toString() ); ?>" />
 					 <div class="j2store-notifications"></div>
 					 <?php if ($product->product_type == 'variable'): ?>
 					 	<input type="hidden" name="variant_id" value="<?php echo $product->variant->j2store_variant_id; ?>" />
@@ -271,11 +276,10 @@ $total_count = count($list); $counter = 0;
 <!-- Quick view -->
 <?php if($product->show_quickview):?>
 	<?php if(strpos('?', $product->module_display_link)):?>
-		<?php $product->product_quickview_link = JRoute::_( $product->module_display_link.'&tmpl=component' );?>
+		<?php $product->product_quickview_link = Route::_( $product->module_display_link.'&tmpl=component' );?>
 		<?php else:?>
-			<?php $product->product_quickview_link = JRoute::_( $product->module_display_link ).'?tmpl=component';?>
+			<?php $product->product_quickview_link = Route::_( $product->module_display_link ).'?tmpl=component';?>
 		<?php endif;?>
-		<?php JHTML::_('behavior.modal', 'a.modal'); ?>
 		<a itemprop="url" style="display:inline;"
 		class="modal j2store-product-quickview-modal btn btn-default"
 		rel="{handler:'iframe',size:{x: window.innerWidth-180, y: window.innerHeight-180}}"

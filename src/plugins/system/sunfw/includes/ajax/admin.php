@@ -13,8 +13,14 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-// Import necessary library.
-jimport('joomla.filesystem.file');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\LanguageHelper;
+use Joomla\CMS\Language\Multilanguage;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Session\Session;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Uri\Uri;
+
 
 /**
  * Class that handles general template admin Ajax requests.
@@ -22,6 +28,7 @@ jimport('joomla.filesystem.file');
  * @package  SUN Framework
  * @since    1.3.0
  */
+#[\AllowDynamicProperties]
 class SunFwAjaxAdmin extends SunFwAjax
 {
 	/**
@@ -42,7 +49,7 @@ class SunFwAjaxAdmin extends SunFwAjax
 		$firstStyle = $this->dbo->loadResult();
 
 		// Get root URL.
-		$root = JUri::root();
+		$root = Uri::root();
 
 		// Get template style data.
 		$this->dbo->setQuery(
@@ -70,15 +77,15 @@ class SunFwAjaxAdmin extends SunFwAjax
 		$lang = array();
 
 		if (
-			JLanguageMultilang::isEnabled()
+			Multilanguage::isEnabled()
 			&&
 			method_exists('JLanguageHelper', 'getInstalledLanguages')
 		)
 		{
-			$lang = JLanguageHelper::getInstalledLanguages(0);
+			$lang = LanguageHelper::getInstalledLanguages(0);
 
 			// Get URL Language Code.
-			$dbo = JFactory::getDbo();
+			$dbo = Factory::getDbo();
 
 			$qry = $dbo->getQuery(true)
 				->select('lang_code, sef')
@@ -98,7 +105,7 @@ class SunFwAjaxAdmin extends SunFwAjax
 
 		// Define base Ajax URL.
 		$ajaxBase = "{$root}administrator/index.php?option=com_ajax&format=json&group=system&plugin=sunfw"
-			. "&template_name={$this->templateName}&style_id={$this->styleID}&" . JSession::getFormToken() . '=1';
+			. "&template_name={$this->templateName}&style_id={$this->styleID}&" . Session::getFormToken() . '=1';
 
 		// Documentation now lives with the project on GitHub.
 		$this->documentationLink        = ARTISTA_REPO_URL;
@@ -126,13 +133,10 @@ class SunFwAjaxAdmin extends SunFwAjax
 				'configManual' => $this->documentationLink,
 				'gettingStartedSeriesLink' => $this->gettingStartedSeriesLink,
 				'savePluginParams' => '&action=savePluginParams',
+				// Chosen ships with the framework (Joomla 6 no longer includes it).
 				'chosen' => array(
-					'css' => ( JFile::exists(JPATH_ROOT . '/media/legacy/css/chosen.min.css')
-						? '/media/legacy/css/chosen.min.css'
-						: '/media/jui/css/chosen.css' ),
-					'js' => ( JFile::exists(JPATH_ROOT . '/media/legacy/js/chosen.min.js')
-						? '/media/legacy/js/chosen.min.js'
-						: '/media/jui/js/chosen.jquery.min.js' )
+					'css' => 'plugins/system/sunfw/assets/3rd-party/chosen/chosen.css',
+					'js'  => 'plugins/system/sunfw/assets/3rd-party/chosen/chosen.jquery.min.js'
 				)
 			),
 			'components' => array(
@@ -163,277 +167,277 @@ class SunFwAjaxAdmin extends SunFwAjax
 				)
 			),
 			'textMapping' => array(
-				'ok' => JText::_('SUNFW_OK'),
-				'cancel' => JText::_('SUNFW_CANCEL'),
-				'close' => JText::_('SUNFW_CLOSE'),
-				'save' => JText::_('SUNFW_SAVE'),
-				'undo' => JText::_('SUNFW_UNDO'),
-				'redo' => JText::_('SUNFW_REDO'),
-				'loading' => JText::_('SUNFW_LOADING'),
-				'yes' => JText::_('SUNFW_YES'),
-				'no' => JText::_('SUNFW_NO'),
-				'left' => JText::_('SUNFW_LEFT'),
-				'center' => JText::_('SUNFW_CENTER'),
-				'right' => JText::_('SUNFW_RIGHT'),
-				'top' => JText::_('SUNFW_TOP'),
-				'middle' => JText::_('SUNFW_MIDDLE'),
-				'bottom' => JText::_('SUNFW_BOTTOM'),
-				'none' => JText::_('SUNFW_NONE'),
-				'text' => JText::_('SUNFW_TEXT'),
-				'link' => JText::_('SUNFW_LINK'),
-				'icon' => JText::_('SUNFW_ICON'),
-				'name' => JText::_('SUNFW_NAME'),
-				'normal' => JText::_('SUNFW_NORMAL'),
-				'select' => JText::_('SUNFW_SELECT'),
-				'effect' => JText::_('SUNFW_EFFECT'),
-				'push' => JText::_('SUNFW_PUSH'),
-				'slide' => JText::_('SUNFW_SLIDE'),
-				'title' => JText::_('SUNFW_TITLE'),
-				'general' => JText::_('SUNFW_GENERAL'),
-				'effects' => JText::_('SUNFW_EFFECTS'),
-				'menu' => JText::_('SUNFW_MENU'),
-				'image' => JText::_('SUNFW_IMAGE'),
-				'continue' => JText::_('SUNFW_CONTINUE'),
-				'all' => JText::_('SUNFW_ALL'),
-				'fading' => JText::_('SUNFW_FADING'),
-				'module' => JText::_('SUNFW_MODULE'),
-				'width' => JText::_('SUNFW_WIDTH'),
-				'height' => JText::_('SUNFW_HEIGHT'),
-				'back' => JText::_('SUNFW_BACK'),
-				'style' => JText::_('SUNFW_STYLE'),
-				'skip' => JText::_('SUNFW_SKIP'),
-				'color' => JText::_('SUNFW_COLOR'),
-				'border' => JText::_('SUNFW_BORDER'),
-				'standard' => JText::_('SUNFW_STANDARD'),
-				'google' => JText::_('SUNFW_GOOGLE'),
-				'custom' => JText::_('SUNFW_CUSTOM'),
-				'margin' => JText::_('SUNFW_MARGIN'),
-				'padding' => JText::_('SUNFW_PADDING'),
-				'icons' => JText::_('SUNFW_ICONS'),
-				'language' => JText::_('SUNFW_LANGUAGE'),
-				'section' => JText::_('SUNFW_SECTION'),
-				'row' => JText::_('SUNFW_ROW'),
-				'column' => JText::_('SUNFW_COLUMN'),
-				'block' => JText::_('SUNFW_BLOCK'),
-				'item' => JText::_('SUNFW_ITEM'),
-				'logo' => JText::_('SUNFW_LOGO'),
-				'mobile' => JText::_('SUNFW_MOBILE'),
-				'desktop' => JText::_('SUNFW_DESKTOP'),
-				'laptop' => JText::_('SUNFW_LATOP'),
-				'tablet' => JText::_('SUNFW_TABLET'),
-				'smartphone' => JText::_('SUNFW_SMARTPHONE'),
-				'visibility' => JText::_('SUNFW_VISIBLE'),
+				'ok' => Text::_('SUNFW_OK'),
+				'cancel' => Text::_('SUNFW_CANCEL'),
+				'close' => Text::_('SUNFW_CLOSE'),
+				'save' => Text::_('SUNFW_SAVE'),
+				'undo' => Text::_('SUNFW_UNDO'),
+				'redo' => Text::_('SUNFW_REDO'),
+				'loading' => Text::_('SUNFW_LOADING'),
+				'yes' => Text::_('SUNFW_YES'),
+				'no' => Text::_('SUNFW_NO'),
+				'left' => Text::_('SUNFW_LEFT'),
+				'center' => Text::_('SUNFW_CENTER'),
+				'right' => Text::_('SUNFW_RIGHT'),
+				'top' => Text::_('SUNFW_TOP'),
+				'middle' => Text::_('SUNFW_MIDDLE'),
+				'bottom' => Text::_('SUNFW_BOTTOM'),
+				'none' => Text::_('SUNFW_NONE'),
+				'text' => Text::_('SUNFW_TEXT'),
+				'link' => Text::_('SUNFW_LINK'),
+				'icon' => Text::_('SUNFW_ICON'),
+				'name' => Text::_('SUNFW_NAME'),
+				'normal' => Text::_('SUNFW_NORMAL'),
+				'select' => Text::_('SUNFW_SELECT'),
+				'effect' => Text::_('SUNFW_EFFECT'),
+				'push' => Text::_('SUNFW_PUSH'),
+				'slide' => Text::_('SUNFW_SLIDE'),
+				'title' => Text::_('SUNFW_TITLE'),
+				'general' => Text::_('SUNFW_GENERAL'),
+				'effects' => Text::_('SUNFW_EFFECTS'),
+				'menu' => Text::_('SUNFW_MENU'),
+				'image' => Text::_('SUNFW_IMAGE'),
+				'continue' => Text::_('SUNFW_CONTINUE'),
+				'all' => Text::_('SUNFW_ALL'),
+				'fading' => Text::_('SUNFW_FADING'),
+				'module' => Text::_('SUNFW_MODULE'),
+				'width' => Text::_('SUNFW_WIDTH'),
+				'height' => Text::_('SUNFW_HEIGHT'),
+				'back' => Text::_('SUNFW_BACK'),
+				'style' => Text::_('SUNFW_STYLE'),
+				'skip' => Text::_('SUNFW_SKIP'),
+				'color' => Text::_('SUNFW_COLOR'),
+				'border' => Text::_('SUNFW_BORDER'),
+				'standard' => Text::_('SUNFW_STANDARD'),
+				'google' => Text::_('SUNFW_GOOGLE'),
+				'custom' => Text::_('SUNFW_CUSTOM'),
+				'margin' => Text::_('SUNFW_MARGIN'),
+				'padding' => Text::_('SUNFW_PADDING'),
+				'icons' => Text::_('SUNFW_ICONS'),
+				'language' => Text::_('SUNFW_LANGUAGE'),
+				'section' => Text::_('SUNFW_SECTION'),
+				'row' => Text::_('SUNFW_ROW'),
+				'column' => Text::_('SUNFW_COLUMN'),
+				'block' => Text::_('SUNFW_BLOCK'),
+				'item' => Text::_('SUNFW_ITEM'),
+				'logo' => Text::_('SUNFW_LOGO'),
+				'mobile' => Text::_('SUNFW_MOBILE'),
+				'desktop' => Text::_('SUNFW_DESKTOP'),
+				'laptop' => Text::_('SUNFW_LATOP'),
+				'tablet' => Text::_('SUNFW_TABLET'),
+				'smartphone' => Text::_('SUNFW_SMARTPHONE'),
+				'visibility' => Text::_('SUNFW_VISIBLE'),
 
-				'please-wait' => JText::_('SUNFW_PLEASE_WAIT'),
-				'saving-data' => JText::_('SUNFW_SAVING_DATA'),
-				'save-success' => JText::_('SUNFW_SAVE_DATA_SUCCESS'),
-				'save-all' => JText::_('SUNFW_SAVE_ALL'),
-				'no-settings' => JText::_('SUNFW_NO_SETTINGS'),
-				'edit-item' => JText::_('SUNFW_EDIT_ITEM'),
-				'edit-icon' => JText::_('SUNFW_EDIT_ICON'),
-				'text-color' => JText::_('SUNFW_TEXT_COLOR'),
-				'text-hover-color' => JText::_('SUNFW_TEXT_TEXT_HOVER_COLOR'),
-				'custom-classes' => JText::_('SUNFW_CUSTOME_CLASSES'),
-				'search-for' => JText::_('SUNFW_SEARCH_FOR'),
-				'file-manager' => JText::_('SUNFW_FILE_MANAGER'),
-				'choose-image' => JText::_('SUNFW_CHOOSE_IMAGE'),
-				'joomla-module' => JText::_('SUNFW_SELECT_JOOMLA_MODULE'),
-				'module-style' => JText::_('SUNFW_SELECT_MODULE_STYLE'),
-				'alt-text' => JText::_('SUNFW_ALT_TEXT'),
-				'start-editing' => JText::_('SUNFW_START_EDITING'),
-				'click-to-select' => JText::_('SUNFW_CLICK_TO_SELECT'),
-				'title-cannot-be-blank' => JText::_('SUNFW_TITLE_CANNOT_BE_BLANK'),
-				'settings-not-available' => JText::_('SUNFW_SETTINGS_NOT_AVAILABLE'),
-				'powered-by' => JText::_('SUNFW_POWERED_BY'),
-				'update-to' => JText::_('SUNFW_UPDATE_TO'),
-				'learn-more' => JText::_('SUNFW_LEARN_MORE'),
-				'download-it' => JText::_('SUNFW_DOWNLOAD_IT'),
-				'update-product' => JText::_('SUNFW_UPDATE_PRODUCT'),
-				'see-tutorial' => JText::_('SUNFW_SEE_TUTORIAL'),
+				'please-wait' => Text::_('SUNFW_PLEASE_WAIT'),
+				'saving-data' => Text::_('SUNFW_SAVING_DATA'),
+				'save-success' => Text::_('SUNFW_SAVE_DATA_SUCCESS'),
+				'save-all' => Text::_('SUNFW_SAVE_ALL'),
+				'no-settings' => Text::_('SUNFW_NO_SETTINGS'),
+				'edit-item' => Text::_('SUNFW_EDIT_ITEM'),
+				'edit-icon' => Text::_('SUNFW_EDIT_ICON'),
+				'text-color' => Text::_('SUNFW_TEXT_COLOR'),
+				'text-hover-color' => Text::_('SUNFW_TEXT_TEXT_HOVER_COLOR'),
+				'custom-classes' => Text::_('SUNFW_CUSTOME_CLASSES'),
+				'search-for' => Text::_('SUNFW_SEARCH_FOR'),
+				'file-manager' => Text::_('SUNFW_FILE_MANAGER'),
+				'choose-image' => Text::_('SUNFW_CHOOSE_IMAGE'),
+				'joomla-module' => Text::_('SUNFW_SELECT_JOOMLA_MODULE'),
+				'module-style' => Text::_('SUNFW_SELECT_MODULE_STYLE'),
+				'alt-text' => Text::_('SUNFW_ALT_TEXT'),
+				'start-editing' => Text::_('SUNFW_START_EDITING'),
+				'click-to-select' => Text::_('SUNFW_CLICK_TO_SELECT'),
+				'title-cannot-be-blank' => Text::_('SUNFW_TITLE_CANNOT_BE_BLANK'),
+				'settings-not-available' => Text::_('SUNFW_SETTINGS_NOT_AVAILABLE'),
+				'powered-by' => Text::_('SUNFW_POWERED_BY'),
+				'update-to' => Text::_('SUNFW_UPDATE_TO'),
+				'learn-more' => Text::_('SUNFW_LEARN_MORE'),
+				'download-it' => Text::_('SUNFW_DOWNLOAD_IT'),
+				'update-product' => Text::_('SUNFW_UPDATE_PRODUCT'),
+				'see-tutorial' => Text::_('SUNFW_SEE_TUTORIAL'),
 
-				'get-started' => JText::_('SUNFW_GET_STARTED'),
-				'install-sample-data' => JText::_('SUNFW_INSTALL_SAMPLE_DATA'),
-				'install-sample-data-intro' => JText::_('SUNFW_INSTALL_SAMPLE_DATA_INTRO'),
-				'read-documentation' => JText::_('SUNFW_READ_DOCUMENTATION'),
-				'read-documentation-intro' => JText::_('SUNFW_READ_DOCUMENTATION_INTRO'),
-				'hide-get-started-message' => JText::_('SUNFW_HIDE_GET_STARTED_MESSAGE'),
-				'got-it' => JText::_('SUNFW_GOT_IT'),
-				'save-settings' => JText::_('SUNFW_SAVE_SETTINGS'),
-				'only-alphanumeric-characters-are-supported' => JText::_('SUNFW_ONLY_ALPHANUMERIC_CHARACTERS_ARE_SUPPORTED'),
+				'get-started' => Text::_('SUNFW_GET_STARTED'),
+				'install-sample-data' => Text::_('SUNFW_INSTALL_SAMPLE_DATA'),
+				'install-sample-data-intro' => Text::_('SUNFW_INSTALL_SAMPLE_DATA_INTRO'),
+				'read-documentation' => Text::_('SUNFW_READ_DOCUMENTATION'),
+				'read-documentation-intro' => Text::_('SUNFW_READ_DOCUMENTATION_INTRO'),
+				'hide-get-started-message' => Text::_('SUNFW_HIDE_GET_STARTED_MESSAGE'),
+				'got-it' => Text::_('SUNFW_GOT_IT'),
+				'save-settings' => Text::_('SUNFW_SAVE_SETTINGS'),
+				'only-alphanumeric-characters-are-supported' => Text::_('SUNFW_ONLY_ALPHANUMERIC_CHARACTERS_ARE_SUPPORTED'),
 
-				'AwEwCtWR' => JText::_('SUNFW_PRIVACY_SETTINGS_TITLE'),
-				'Vw6nEmbC' => JText::_('SUNFW_PRIVACY_SETTINGS_CONTENT'),
-				'm8Z3DzfB' => JText::_('SUNFW_PRIVACY_SETTINGS_ACCEPT'),
-				'HNeEdv2Z' => JText::_('SUNFW_PRIVACY_SETTINGS_DECLINE'),
-				'uVDbHsJD' => JText::_('SUNFW_PRIVACY_SETTINGS_INTRO'),
+				'AwEwCtWR' => Text::_('SUNFW_PRIVACY_SETTINGS_TITLE'),
+				'Vw6nEmbC' => Text::_('SUNFW_PRIVACY_SETTINGS_CONTENT'),
+				'm8Z3DzfB' => Text::_('SUNFW_PRIVACY_SETTINGS_ACCEPT'),
+				'HNeEdv2Z' => Text::_('SUNFW_PRIVACY_SETTINGS_DECLINE'),
+				'uVDbHsJD' => Text::_('SUNFW_PRIVACY_SETTINGS_INTRO'),
 
-				'module-position' => JText::_('SUNFW_MODULE_POSITION'),
-				'create-position' => JText::_('SUNFW_CREATE_POSITION'),
-				'position-name' => JText::_('SUNFW_POSITION_NAME'),
+				'module-position' => Text::_('SUNFW_MODULE_POSITION'),
+				'create-position' => Text::_('SUNFW_CREATE_POSITION'),
+				'position-name' => Text::_('SUNFW_POSITION_NAME'),
 
-				'filter-menu-items-by-language' => JText::_('SUNFW_FILTER_MENU_ITEM_BY_LANGUAGE'),
-				'select-menu-item' => JText::_('SUNFW_SELECT_MENU_ITEM'),
-				'edit-menu-item' => JText::_('SUNFW_EDIT_MENU_ITEM'),
+				'filter-menu-items-by-language' => Text::_('SUNFW_FILTER_MENU_ITEM_BY_LANGUAGE'),
+				'select-menu-item' => Text::_('SUNFW_SELECT_MENU_ITEM'),
+				'edit-menu-item' => Text::_('SUNFW_EDIT_MENU_ITEM'),
 
-				'select-module' => JText::_('SUNFW_SELECT_MODULE'),
-				'choose-module' => JText::_('SUNFW_CHOOSE_MODULE'),
-				'configure-module' => JText::_('SUNFW_CONFIGURE_MODULE'),
-				'select-module-style' => JText::_('SUNFW_SELECT_MODULE_STYLE'),
+				'select-module' => Text::_('SUNFW_SELECT_MODULE'),
+				'choose-module' => Text::_('SUNFW_CHOOSE_MODULE'),
+				'configure-module' => Text::_('SUNFW_CONFIGURE_MODULE'),
+				'select-module-style' => Text::_('SUNFW_SELECT_MODULE_STYLE'),
 
-				'html-content' => JText::_('SUNFW_HTML_CONTENT'),
-				'set-html-content' => JText::_('SUNFW_SET_HTML_CONTENT'),
+				'html-content' => Text::_('SUNFW_HTML_CONTENT'),
+				'set-html-content' => Text::_('SUNFW_SET_HTML_CONTENT'),
 
-				'background-color' => JText::_('SUNFW_BACKGROUND_COLOR'),
-				'background-hover-color' => JText::_('SUNFW_BACKGROUND_HOVER_COLOR'),
-				'background-image' => JText::_('SUNFW_BACKGROUND_IMAGE'),
-				'background-image-settings' => JText::_('SUNFW_BACKGROUND_IMAGE_SETTINGS'),
-				'background-repeat' => JText::_('SUNFW_BACKGROUND_REPEAT'),
-				'background-size' => JText::_('SUNFW_BACKGROUND_SIZE'),
-				'background-attachment' => JText::_('SUNFW_BACKGROUND_ATTACHMENT'),
-				'background-position' => JText::_('SUNFW_BACKGROUND_POSITION'),
+				'background-color' => Text::_('SUNFW_BACKGROUND_COLOR'),
+				'background-hover-color' => Text::_('SUNFW_BACKGROUND_HOVER_COLOR'),
+				'background-image' => Text::_('SUNFW_BACKGROUND_IMAGE'),
+				'background-image-settings' => Text::_('SUNFW_BACKGROUND_IMAGE_SETTINGS'),
+				'background-repeat' => Text::_('SUNFW_BACKGROUND_REPEAT'),
+				'background-size' => Text::_('SUNFW_BACKGROUND_SIZE'),
+				'background-attachment' => Text::_('SUNFW_BACKGROUND_ATTACHMENT'),
+				'background-position' => Text::_('SUNFW_BACKGROUND_POSITION'),
 
-				'border-settings' => JText::_('SUNFW_BORDER_SETTINGS'),
-				'border-width' => JText::_('SUNFW_BORDER_WIDTH'),
-				'border-style' => JText::_('SUNFW_BORDER_STYLE'),
-				'border-color' => JText::_('SUNFW_BORDER_COLOR'),
-				'border-top' => JText::_('SUNFW_BORDER_TOP'),
-				'border-right' => JText::_('SUNFW_BORDER_RIGHT'),
-				'border-bottom' => JText::_('SUNFW_BORDER_BOTTOM'),
-				'border-left' => JText::_('SUNFW_BORDER_LEFT'),
-				'border-color-hover' => JText::_('SUNFW_BORDER_COLOR_HOVER'),
+				'border-settings' => Text::_('SUNFW_BORDER_SETTINGS'),
+				'border-width' => Text::_('SUNFW_BORDER_WIDTH'),
+				'border-style' => Text::_('SUNFW_BORDER_STYLE'),
+				'border-color' => Text::_('SUNFW_BORDER_COLOR'),
+				'border-top' => Text::_('SUNFW_BORDER_TOP'),
+				'border-right' => Text::_('SUNFW_BORDER_RIGHT'),
+				'border-bottom' => Text::_('SUNFW_BORDER_BOTTOM'),
+				'border-left' => Text::_('SUNFW_BORDER_LEFT'),
+				'border-color-hover' => Text::_('SUNFW_BORDER_COLOR_HOVER'),
 
-				'font-type' => JText::_('SUNFW_FONT_TYPE'),
-				'font-family' => JText::_('SUNFW_FONT_FAMILY'),
-				'google-font-selector' => JText::_('SUNFW_GOOGLE_FONT_SELECTOR'),
-				'google-font-categories' => JText::_('SUNFW_GOOGLE_FONT_CATEGORIES'),
-				'google-font-subsets' => JText::_('SUNFW_GOOGLE_FONT_SUBSETS'),
-				'google-font-total' => JText::_('SUNFW_GOOGLE_FONT_TOTAL'),
-				'google-font-search' => JText::_('SUNFW_GOOGLE_FONT_SEARCH'),
-				'google-font-variants' => JText::_('SUNFW_GOOGLE_FONT_VARIANTS'),
-				'google-font-variant' => JText::_('SUNFW_GOOGLE_FONT_VARIANT'),
-				'google-font-subset' => JText::_('SUNFW_GOOGLE_FONT_SUBSET'),
-				'font-file' => JText::_('SUNFW_FONT_FILE'),
-				'choose-custom-font' => JText::_('SUNFW_CHOOSE_CUSTOM_FONT'),
+				'font-type' => Text::_('SUNFW_FONT_TYPE'),
+				'font-family' => Text::_('SUNFW_FONT_FAMILY'),
+				'google-font-selector' => Text::_('SUNFW_GOOGLE_FONT_SELECTOR'),
+				'google-font-categories' => Text::_('SUNFW_GOOGLE_FONT_CATEGORIES'),
+				'google-font-subsets' => Text::_('SUNFW_GOOGLE_FONT_SUBSETS'),
+				'google-font-total' => Text::_('SUNFW_GOOGLE_FONT_TOTAL'),
+				'google-font-search' => Text::_('SUNFW_GOOGLE_FONT_SEARCH'),
+				'google-font-variants' => Text::_('SUNFW_GOOGLE_FONT_VARIANTS'),
+				'google-font-variant' => Text::_('SUNFW_GOOGLE_FONT_VARIANT'),
+				'google-font-subset' => Text::_('SUNFW_GOOGLE_FONT_SUBSET'),
+				'font-file' => Text::_('SUNFW_FONT_FILE'),
+				'choose-custom-font' => Text::_('SUNFW_CHOOSE_CUSTOM_FONT'),
 
-				'text-transform' => JText::_('SUNFW_TEXT_TRANSFORM'),
-				'text-transform-capitalize' => JText::_('SUNFW_TEXT_TRANSFORM_CAPITALIZE'),
-				'text-transform-uppercase' => JText::_('SUNFW_TEXT_TRANSFORM_UPPERCASE'),
-				'text-transform-lowercase' => JText::_('SUNFW_TEXT_TRANSFORM_LOWERCASE'),
+				'text-transform' => Text::_('SUNFW_TEXT_TRANSFORM'),
+				'text-transform-capitalize' => Text::_('SUNFW_TEXT_TRANSFORM_CAPITALIZE'),
+				'text-transform-uppercase' => Text::_('SUNFW_TEXT_TRANSFORM_UPPERCASE'),
+				'text-transform-lowercase' => Text::_('SUNFW_TEXT_TRANSFORM_LOWERCASE'),
 
-				'base-size' => JText::_('SUNFW_TEXT_BASE_SIZE'),
-				'font-size' => JText::_('SUNFW_FONT_SIZE'),
-				'font-style' => JText::_('SUNFW_FONT_STYLE'),
-				'font-style-normal' => JText::_('SUNFW_FONT_STYLE_NORMAL'),
-				'font-style-italic' => JText::_('SUNFW_FONT_STYLE_ITALIC'),
-				'font-style-oblique' => JText::_('SUNFW_FONT_STYLE_OBLIQUE'),
-				'font-weight' => JText::_('SUNFW_FONT_WEIGHT'),
-				'font-weight-bold' => JText::_('SUNFW_FONT_WEIGHT_BOLD'),
-				'line-height' => JText::_('SUNFW_LINE_HEIGHT'),
-				'letter-spacing' => JText::_('SUNFW_TEXT_LETTER_SPACING'),
+				'base-size' => Text::_('SUNFW_TEXT_BASE_SIZE'),
+				'font-size' => Text::_('SUNFW_FONT_SIZE'),
+				'font-style' => Text::_('SUNFW_FONT_STYLE'),
+				'font-style-normal' => Text::_('SUNFW_FONT_STYLE_NORMAL'),
+				'font-style-italic' => Text::_('SUNFW_FONT_STYLE_ITALIC'),
+				'font-style-oblique' => Text::_('SUNFW_FONT_STYLE_OBLIQUE'),
+				'font-weight' => Text::_('SUNFW_FONT_WEIGHT'),
+				'font-weight-bold' => Text::_('SUNFW_FONT_WEIGHT_BOLD'),
+				'line-height' => Text::_('SUNFW_LINE_HEIGHT'),
+				'letter-spacing' => Text::_('SUNFW_TEXT_LETTER_SPACING'),
 
-				'box-shadow' => JText::_('SUNFW_BOX_SHADOW'),
-				'box-shadow-settings' => JText::_('SUNFW_BOX_SHADOW_SETTINGS'),
-				'box-shadow-h-shadow' => JText::_('SUNFW_BOX_SHADOW_H_SHADOW'),
-				'box-shadow-v-shadow' => JText::_('SUNFW_BOX_SHADOW_V_SHADOW'),
-				'box-shadow-blur' => JText::_('SUNFW_BOX_SHADOW_BLUR'),
-				'box-shadow-spread' => JText::_('SUNFW_BOX_SHADOW_SPREAD'),
-				'box-shadow-color' => JText::_('SUNFW_BOX_SHADOW_COLOR'),
-				'box-shadow-inset' => JText::_('SUNFW_BOX_SHADOW_INSET'),
-				'box-shadow-opacity' => JText::_('SUNFW_BOX_SHADOW_OPACITY'),
+				'box-shadow' => Text::_('SUNFW_BOX_SHADOW'),
+				'box-shadow-settings' => Text::_('SUNFW_BOX_SHADOW_SETTINGS'),
+				'box-shadow-h-shadow' => Text::_('SUNFW_BOX_SHADOW_H_SHADOW'),
+				'box-shadow-v-shadow' => Text::_('SUNFW_BOX_SHADOW_V_SHADOW'),
+				'box-shadow-blur' => Text::_('SUNFW_BOX_SHADOW_BLUR'),
+				'box-shadow-spread' => Text::_('SUNFW_BOX_SHADOW_SPREAD'),
+				'box-shadow-color' => Text::_('SUNFW_BOX_SHADOW_COLOR'),
+				'box-shadow-inset' => Text::_('SUNFW_BOX_SHADOW_INSET'),
+				'box-shadow-opacity' => Text::_('SUNFW_BOX_SHADOW_OPACITY'),
 
-				'text-shadow' => JText::_('SUNFW_TEXT_TEXT_SHADOW'),
-				'text-shadow-settings' => JText::_('SUNFW_TEXT_SHADOW_SETTINGS'),
+				'text-shadow' => Text::_('SUNFW_TEXT_TEXT_SHADOW'),
+				'text-shadow-settings' => Text::_('SUNFW_TEXT_SHADOW_SETTINGS'),
 
-				'margin-settings' => JText::_('SUNFW_MARGIN_SETTINGS'),
-				'margin-top' => JText::_('SUNFW_MARGIN_TOP'),
-				'margin-right' => JText::_('SUNFW_MARGIN_RIGHT'),
-				'margin-bottom' => JText::_('SUNFW_MARGIN_BOTTOM'),
-				'margin-left' => JText::_('SUNFW_MARGIN_LEFT'),
+				'margin-settings' => Text::_('SUNFW_MARGIN_SETTINGS'),
+				'margin-top' => Text::_('SUNFW_MARGIN_TOP'),
+				'margin-right' => Text::_('SUNFW_MARGIN_RIGHT'),
+				'margin-bottom' => Text::_('SUNFW_MARGIN_BOTTOM'),
+				'margin-left' => Text::_('SUNFW_MARGIN_LEFT'),
 
-				'padding-settings' => JText::_('SUNFW_PADDING_SETTINGS'),
-				'padding-top' => JText::_('SUNFW_PADDING_TOP'),
-				'padding-right' => JText::_('SUNFW_PADDING_RIGHT'),
-				'padding-bottom' => JText::_('SUNFW_PADDING_BOTTOM'),
-				'padding-left' => JText::_('SUNFW_PADDING_LEFT'),
+				'padding-settings' => Text::_('SUNFW_PADDING_SETTINGS'),
+				'padding-top' => Text::_('SUNFW_PADDING_TOP'),
+				'padding-right' => Text::_('SUNFW_PADDING_RIGHT'),
+				'padding-bottom' => Text::_('SUNFW_PADDING_BOTTOM'),
+				'padding-left' => Text::_('SUNFW_PADDING_LEFT'),
 
-				'border-radius' => JText::_('SUNFW_TEXT_BORDER_RADIUS'),
-				'border-radius-settings' => JText::_('SUNFW_BORDER_RADIUS_SETTINGS'),
-				'border-radius-top' => JText::_('SUNFW_BORDER_RADIUS_TOP'),
-				'border-radius-right' => JText::_('SUNFW_BORDER_RADIUS_RIGHT'),
-				'border-radius-bottom' => JText::_('SUNFW_BORDER_RADIUS_BOTTOM'),
-				'border-radius-left' => JText::_('SUNFW_BORDER_RADIUS_LEFT'),
+				'border-radius' => Text::_('SUNFW_TEXT_BORDER_RADIUS'),
+				'border-radius-settings' => Text::_('SUNFW_BORDER_RADIUS_SETTINGS'),
+				'border-radius-top' => Text::_('SUNFW_BORDER_RADIUS_TOP'),
+				'border-radius-right' => Text::_('SUNFW_BORDER_RADIUS_RIGHT'),
+				'border-radius-bottom' => Text::_('SUNFW_BORDER_RADIUS_BOTTOM'),
+				'border-radius-left' => Text::_('SUNFW_BORDER_RADIUS_LEFT'),
 
-				'social-icons' => JText::_('SUNFW_SOCIAL_ICONS'),
-				'icon-color' => JText::_('SUNFW_ICON_COLOR'),
-				'icon-hover-color' => JText::_('SUNFW_ICON_HOVER_COLOR'),
-				'icon-size' => JText::_('SUNFW_ICON_SIZE'),
-				'link-target' => JText::_('SUNFW_LINK_TARGET'),
-				'add-social-icon' => JText::_('SUNFW_SOCIAL_ICON_ADD'),
-				'social-network' => JText::_('SUNFW_SOCIAL_NETWORK'),
-				'social-icon' => JText::_('SUNFW_SOCIAL_ICON'),
-				'profile-link' => JText::_('SUNFW_SOCIAL_PROFILE_LINK'),
+				'social-icons' => Text::_('SUNFW_SOCIAL_ICONS'),
+				'icon-color' => Text::_('SUNFW_ICON_COLOR'),
+				'icon-hover-color' => Text::_('SUNFW_ICON_HOVER_COLOR'),
+				'icon-size' => Text::_('SUNFW_ICON_SIZE'),
+				'link-target' => Text::_('SUNFW_LINK_TARGET'),
+				'add-social-icon' => Text::_('SUNFW_SOCIAL_ICON_ADD'),
+				'social-network' => Text::_('SUNFW_SOCIAL_NETWORK'),
+				'social-icon' => Text::_('SUNFW_SOCIAL_ICON'),
+				'profile-link' => Text::_('SUNFW_SOCIAL_PROFILE_LINK'),
 
-				'show-module-title' => JText::_('SUNFW_TEXT_SHOW_MODULE_TITLE'),
-				'social-icon-setting' => JText::_('SUNFW_SOCIAL_ICONS_SETTING'),
-				'social-title' => JText::_('SUNFW_SOCIAL_TITLE'),
+				'show-module-title' => Text::_('SUNFW_TEXT_SHOW_MODULE_TITLE'),
+				'social-icon-setting' => Text::_('SUNFW_SOCIAL_ICONS_SETTING'),
+				'social-title' => Text::_('SUNFW_SOCIAL_TITLE'),
 
-				'color-picker-main-color' => JText::_('SUNFW_MAIN_COLOR'),
-				'color-picker-sub-color' => JText::_('SUNFW_SUB_COLOR'),
-				'color-picker-custom-color' => JText::_('SUNFW_CUSTOM_COLOR'),
+				'color-picker-main-color' => Text::_('SUNFW_MAIN_COLOR'),
+				'color-picker-sub-color' => Text::_('SUNFW_SUB_COLOR'),
+				'color-picker-custom-color' => Text::_('SUNFW_CUSTOM_COLOR'),
 
-				'article-selector' => JText::_('SUNFW_ARTICLE_PICKER'),
-				'edit-article' => JText::_('SUNFW_EDIT_ARTICLE'),
-				'select-article' => JText::_('SUNFW_SELECT_ARTICLE'),
-				'choose-article' => JText::_('SUNFW_CHOOSE_ARTICLE'),
+				'article-selector' => Text::_('SUNFW_ARTICLE_PICKER'),
+				'edit-article' => Text::_('SUNFW_EDIT_ARTICLE'),
+				'select-article' => Text::_('SUNFW_SELECT_ARTICLE'),
+				'choose-article' => Text::_('SUNFW_CHOOSE_ARTICLE'),
 
-				'JxPmqKxB-Gjfd4Sxv' => JText::_('SUNFW_USER_VERIFICATION_TITLE'),
-				'yUsBHMth' => JText::_('SUNFW_SELECT_EXISTING_ACCOUNT'),
-				'HYffw0aK' => JText::_('SUNFW_REGISTER_NEW_ACCOUNT'),
-				'JxPmqKxB-td6Tz2Gb' => JText::_('SUNFW_USER_VERIFICATION_MESSAGE'),
-				'JxPmqKxB-HYffw0aK' => JText::_('SUNFW_USER_VERIFICATION_REGISTER'),
-				'JxPmqKxB-Qe77Z23Y' => JText::_('SUNFW_USER_VERIFICATION_PRIMARY_BUTTON'),
-				'JxPmqKxB-UBp6A5Q9' => JText::_('SUNFW_USER_VERIFICATION_SECONDARY_BUTTON'),
+				'JxPmqKxB-Gjfd4Sxv' => Text::_('SUNFW_USER_VERIFICATION_TITLE'),
+				'yUsBHMth' => Text::_('SUNFW_SELECT_EXISTING_ACCOUNT'),
+				'HYffw0aK' => Text::_('SUNFW_REGISTER_NEW_ACCOUNT'),
+				'JxPmqKxB-td6Tz2Gb' => Text::_('SUNFW_USER_VERIFICATION_MESSAGE'),
+				'JxPmqKxB-HYffw0aK' => Text::_('SUNFW_USER_VERIFICATION_REGISTER'),
+				'JxPmqKxB-Qe77Z23Y' => Text::_('SUNFW_USER_VERIFICATION_PRIMARY_BUTTON'),
+				'JxPmqKxB-UBp6A5Q9' => Text::_('SUNFW_USER_VERIFICATION_SECONDARY_BUTTON'),
 
-				'NBp9UaGE-Gjfd4Sxv' => JText::_('SUNFW_PRODUCT_VERIFICATION_TITLE'),
-				'NBp9UaGE-wvJcKMWJ' => JText::_('SUNFW_PRODUCT_VERIFICATION_ALL_DONE'),
-				'mPSFCX47' => JText::_('SUNFW_YOUR_WEBSITE_IS_REGISTERED_TO_FOLLOWING_PRODUCT_LICENSE'),
-				'NgZ6fjv2' => JText::_('SUNFW_PRODUCT_VERIFICATION_THANK_YOU'),
-				'Az99s9KS' => JText::_('SUNFW_PRODUCT_VERIFICATION_LETS_GET_STARTED'),
-				'mQXvSGWx' => JText::_('SUNFW_PRODUCT_VERIFICATION_FREE_EDITION'),
-				'NBp9UaGE-got-it' => JText::_('SUNFW_PRODUCT_VERIFICATION_GOT_IT'),
+				'NBp9UaGE-Gjfd4Sxv' => Text::_('SUNFW_PRODUCT_VERIFICATION_TITLE'),
+				'NBp9UaGE-wvJcKMWJ' => Text::_('SUNFW_PRODUCT_VERIFICATION_ALL_DONE'),
+				'mPSFCX47' => Text::_('SUNFW_YOUR_WEBSITE_IS_REGISTERED_TO_FOLLOWING_PRODUCT_LICENSE'),
+				'NgZ6fjv2' => Text::_('SUNFW_PRODUCT_VERIFICATION_THANK_YOU'),
+				'Az99s9KS' => Text::_('SUNFW_PRODUCT_VERIFICATION_LETS_GET_STARTED'),
+				'mQXvSGWx' => Text::_('SUNFW_PRODUCT_VERIFICATION_FREE_EDITION'),
+				'NBp9UaGE-got-it' => Text::_('SUNFW_PRODUCT_VERIFICATION_GOT_IT'),
 
-				'K53G78yE-Gjfd4Sxv' => JText::_('SUNFW_TIME_TO_GO_PRO_TITLE'),
-				'K53G78yE-td6Tz2Gb' => JText::_('SUNFW_TIME_TO_GO_PRO_MESSAGE'),
-				'KW6yu9fy-td6Tz2Gb' => JText::_('SUNFW_TRIAL_EXPIRED_MESSAGE'),
-				'K53G78yE-Qe77Z23Y' => JText::_('SUNFW_TIME_TO_GO_PRO_PRIMARY_BUTTON'),
-				'K53G78yE-UBp6A5Q9' => JText::_('SUNFW_TIME_TO_GO_PRO_SECONDARY_BUTTON'),
-				'K53G78yE-Z23xaNm4' => JText::_('SUNFW_TIME_TO_GO_PRO_MAYBE_LATER_BUTTON'),
-				'K53G78yE-xtJ1Gs8h' => JText::_('SUNFW_TIME_TO_GO_PRO_NO_THANKS_BUTTON'),
+				'K53G78yE-Gjfd4Sxv' => Text::_('SUNFW_TIME_TO_GO_PRO_TITLE'),
+				'K53G78yE-td6Tz2Gb' => Text::_('SUNFW_TIME_TO_GO_PRO_MESSAGE'),
+				'KW6yu9fy-td6Tz2Gb' => Text::_('SUNFW_TRIAL_EXPIRED_MESSAGE'),
+				'K53G78yE-Qe77Z23Y' => Text::_('SUNFW_TIME_TO_GO_PRO_PRIMARY_BUTTON'),
+				'K53G78yE-UBp6A5Q9' => Text::_('SUNFW_TIME_TO_GO_PRO_SECONDARY_BUTTON'),
+				'K53G78yE-Z23xaNm4' => Text::_('SUNFW_TIME_TO_GO_PRO_MAYBE_LATER_BUTTON'),
+				'K53G78yE-xtJ1Gs8h' => Text::_('SUNFW_TIME_TO_GO_PRO_NO_THANKS_BUTTON'),
 
-				'extra-menu-options-Gjfd4Sxv' => JText::_('SUNFW_MENU_OPTIONS_LIMITATION_TITLE'),
-				'extra-menu-options-td6Tz2Gb' => JText::_('SUNFW_MENU_OPTIONS_LIMITATION_MESSAGE'),
+				'extra-menu-options-Gjfd4Sxv' => Text::_('SUNFW_MENU_OPTIONS_LIMITATION_TITLE'),
+				'extra-menu-options-td6Tz2Gb' => Text::_('SUNFW_MENU_OPTIONS_LIMITATION_MESSAGE'),
 
-				'extra-article-options-Gjfd4Sxv' => JText::_('SUNFW_ARTICLE_OPTIONS_LIMITATION_TITLE'),
-				'extra-article-options-td6Tz2Gb' => JText::_('SUNFW_ARTICLE_OPTIONS_LIMITATION_MESSAGE'),
+				'extra-article-options-Gjfd4Sxv' => Text::_('SUNFW_ARTICLE_OPTIONS_LIMITATION_TITLE'),
+				'extra-article-options-td6Tz2Gb' => Text::_('SUNFW_ARTICLE_OPTIONS_LIMITATION_MESSAGE'),
 
-				'KBwZeTmw-Gjfd4Sxv' => JText::_('SUNFW_THANK_YOU_TRIAL_EDITION_TITLE'),
-				'KBwZeTmw-td6Tz2Gb' => JText::_('SUNFW_THANK_YOU_TRIAL_EDITION_MESSAGE'),
-				'KBwZeTmw-NdnhAJdA' => JText::_('SUNFW_THANK_YOU_TRIAL_EDITION_BUTTON_TEXT'),
+				'KBwZeTmw-Gjfd4Sxv' => Text::_('SUNFW_THANK_YOU_TRIAL_EDITION_TITLE'),
+				'KBwZeTmw-td6Tz2Gb' => Text::_('SUNFW_THANK_YOU_TRIAL_EDITION_MESSAGE'),
+				'KBwZeTmw-NdnhAJdA' => Text::_('SUNFW_THANK_YOU_TRIAL_EDITION_BUTTON_TEXT'),
 
-				'ct4pYJcT-Gjfd4Sxv' => JText::_('SUNFW_SORRY_TRIAL_EXPIRED_TITLE'),
-				'ct4pYJcT-td6Tz2Gb' => JText::_('SUNFW_LIGHTCART_API_ERROR_12'),
-				'ct4pYJcT-NdnhAJdA' => JText::_('SUNFW_SORRY_TRIAL_EDITION_BUTTON_TEXT'),
+				'ct4pYJcT-Gjfd4Sxv' => Text::_('SUNFW_SORRY_TRIAL_EXPIRED_TITLE'),
+				'ct4pYJcT-td6Tz2Gb' => Text::_('SUNFW_LIGHTCART_API_ERROR_12'),
+				'ct4pYJcT-NdnhAJdA' => Text::_('SUNFW_SORRY_TRIAL_EDITION_BUTTON_TEXT'),
 
-				'xpz0tWTT' => JText::_('SUNFW_DISCOUNT_OFFER_EXPIRED'),
+				'xpz0tWTT' => Text::_('SUNFW_DISCOUNT_OFFER_EXPIRED'),
 				'UccWXSfV' => empty($params['clickedPurchase']) ? null : $params['clickedPurchase'],
 				'qUTvD2zQ' => empty($params['currentDiscount']) ? null : $params['currentDiscount'],
 
-			    'read-getting-started-series' => JText::_('SUNFW_READ_GETTING_STARTED_SERIES'),
-			    'read-getting-started-series-intro' => JText::_('SUNFW_READ_GETTING_STARTED_SERIES_INFO'),
-			    'read-guide' => JText::_('SUNFW_READ_GUIDE'),
-			    'video-guide' => JText::_('SUNFW_VIDEO_GUIDE'),
-			    'getting-started' => JText::_('SUNFW_GETTING_STARTED'),
-			    'get-help' => JText::_('SUNFW_GET_HELP')
+			    'read-getting-started-series' => Text::_('SUNFW_READ_GETTING_STARTED_SERIES'),
+			    'read-getting-started-series-intro' => Text::_('SUNFW_READ_GETTING_STARTED_SERIES_INFO'),
+			    'read-guide' => Text::_('SUNFW_READ_GUIDE'),
+			    'video-guide' => Text::_('SUNFW_VIDEO_GUIDE'),
+			    'getting-started' => Text::_('SUNFW_GETTING_STARTED'),
+			    'get-help' => Text::_('SUNFW_GET_HELP')
 			)
 		));
 	}
@@ -463,12 +467,12 @@ class SunFwAjaxAdmin extends SunFwAjax
 	protected function getComponentHeader()
 	{
 		// Get site URL.
-		$root = JUri::root(true);
+		$root = Uri::root(true);
 
 		// Define header nav bar.
 		$data = array(
 			'logo' => array(
-				'link' => JUri::root(),
+				'link' => Uri::root(),
 				'image' => "{$root}/plugins/system/sunfw/assets/images/logo.png",
 				'title' => htmlspecialchars(
 					$this->app->getCfg('sitename'), ENT_QUOTES, 'UTF-8'
@@ -479,14 +483,14 @@ class SunFwAjaxAdmin extends SunFwAjax
 					'href' => '#',
 					'icon' => 'database',
 					'type' => 'trigger-other',
-					'title' => JText::_('SUNFW_MAINTENANCE_TAB'),
+					'title' => Text::_('SUNFW_MAINTENANCE_TAB'),
 					'target' => '#maintenance'
 				),
 				array(
 					'href' => '#',
 					'icon' => 'info',
 					'type' => 'trigger-other',
-					'title' => JText::_('SUNFW_ABOUT'),
+					'title' => Text::_('SUNFW_ABOUT'),
 					'target' => '#about'
 				),
 				array(
@@ -497,22 +501,22 @@ class SunFwAjaxAdmin extends SunFwAjax
 				)
 			),
 			'textMapping' => array(
-				'y37Rm2cT' => JText::sprintf('SUNFW_UPGRADE_TO_PRO_FOR_ADVANCED_FEATURES', $this->templateName),
-				'zntBTB4M' => JText::_('SUNFW_YOUR_TRIAL_LICENSE_WILL_EXPIRE_IN'),
-				'AVyacBDn' => JText::_('SUNFW_YOUR_TRIAL_LICENSE_IS_EXPIRED'),
-				'WRJJEdEg' => JText::_('SUNFW_YOUR_PRO_LICENSE_IS_EXPIRED'),
-				'BcBkJNHJ' => JText::_('SUNFW_PURCHASE_PRO'),
-				'bMz6gJBY' => JText::_('SUNFW_RENEW_PRO'),
-				'cQVnkpgC' => JText::_('SUNFW_RENEW_LITE'),
+				'y37Rm2cT' => Text::sprintf('SUNFW_UPGRADE_TO_PRO_FOR_ADVANCED_FEATURES', $this->templateName),
+				'zntBTB4M' => Text::_('SUNFW_YOUR_TRIAL_LICENSE_WILL_EXPIRE_IN'),
+				'AVyacBDn' => Text::_('SUNFW_YOUR_TRIAL_LICENSE_IS_EXPIRED'),
+				'WRJJEdEg' => Text::_('SUNFW_YOUR_PRO_LICENSE_IS_EXPIRED'),
+				'BcBkJNHJ' => Text::_('SUNFW_PURCHASE_PRO'),
+				'bMz6gJBY' => Text::_('SUNFW_RENEW_PRO'),
+				'cQVnkpgC' => Text::_('SUNFW_RENEW_LITE'),
 
-				'w2b97wVJ-Gjfd4Sxv' => JText::_('SUNFW_ADVANCED_FEATURES_LIMITATION_TITLE'),
-				'w2b97wVJ-td6Tz2Gb' => JText::_('SUNFW_ADVANCED_FEATURES_LIMITATION_MESSAGE'),
+				'w2b97wVJ-Gjfd4Sxv' => Text::_('SUNFW_ADVANCED_FEATURES_LIMITATION_TITLE'),
+				'w2b97wVJ-td6Tz2Gb' => Text::_('SUNFW_ADVANCED_FEATURES_LIMITATION_MESSAGE'),
 
-				'w4NZZZgN-PbjM7szs' => JText::_('SUNFW_RENEW_PRO_MODAL_TITLE'),
-				'w4NZZZgN-Gjfd4Sxv' => JText::_('SUNFW_RENEW_PRO_TITLE'),
-				'w4NZZZgN-M3qrv0Rh' => JText::_('SUNFW_RENEW_PRO_MESSAGE_1'),
-				'w4NZZZgN-sDVgQf7K' => JText::_('SUNFW_RENEW_PRO_MESSAGE_2'),
-				'w4NZZZgN-NdnhAJdA' => JText::_('SUNFW_RENEW_PRO_BUTTON_TEXT')
+				'w4NZZZgN-PbjM7szs' => Text::_('SUNFW_RENEW_PRO_MODAL_TITLE'),
+				'w4NZZZgN-Gjfd4Sxv' => Text::_('SUNFW_RENEW_PRO_TITLE'),
+				'w4NZZZgN-M3qrv0Rh' => Text::_('SUNFW_RENEW_PRO_MESSAGE_1'),
+				'w4NZZZgN-sDVgQf7K' => Text::_('SUNFW_RENEW_PRO_MESSAGE_2'),
+				'w4NZZZgN-NdnhAJdA' => Text::_('SUNFW_RENEW_PRO_BUTTON_TEXT')
 			)
 		);
 
@@ -530,12 +534,12 @@ class SunFwAjaxAdmin extends SunFwAjax
 	protected function getComponentBody()
 	{
 		// Get site URL.
-		$root = JUri::root(true);
+		$root = Uri::root(true);
 
 		// Build URL to save a copy of the current template style.
 		$saveAsCopy = "index.php?option=com_ajax&format=json&group=system&plugin=sunfw&context=admin"
 			. "&action=saveAsCopy&template_name={$this->templateName}&style_id={$this->styleID}&"
-			. JSession::getFormToken() . '=1';
+			. Session::getFormToken() . '=1';
 
 		// Get all input components.
 		$inputs = array();
@@ -562,7 +566,7 @@ class SunFwAjaxAdmin extends SunFwAjax
 			'tabs' => array(
 				array(
 					'href' => '#layout',
-					'title' => JText::_('SUNFW_LAYOUT_TAB'),
+					'title' => Text::_('SUNFW_LAYOUT_TAB'),
 					'render' => array(
 						'name' => 'PaneLayout',
 						'data' => ( new SunFwAjaxLayout() )->getAction(true),
@@ -573,7 +577,7 @@ class SunFwAjaxAdmin extends SunFwAjax
 				),
 				array(
 					'href' => '#styles',
-					'title' => JText::_('SUNFW_STYLES_TAB'),
+					'title' => Text::_('SUNFW_STYLES_TAB'),
 					'render' => array(
 						'name' => 'PaneStyles',
 						'data' => ( new SunFwAjaxStyles() )->getAction(true),
@@ -584,7 +588,7 @@ class SunFwAjaxAdmin extends SunFwAjax
 				),
 				array(
 					'href' => '#mega-menu',
-					'title' => JText::_('SUNFW_MEGAMENU_TAB'),
+					'title' => Text::_('SUNFW_MEGAMENU_TAB'),
 					'render' => array(
 						'name' => 'PaneMegaMenu',
 						'data' => ( new SunFwAjaxMegaMenu() )->getAction(true),
@@ -595,7 +599,7 @@ class SunFwAjaxAdmin extends SunFwAjax
 				),
 				array(
 					'href' => '#system',
-					'title' => JText::_('SUNFW_SYSTEM_TAB'),
+					'title' => Text::_('SUNFW_SYSTEM_TAB'),
 					'render' => array(
 						'name' => 'PaneSystem',
 						'data' => ( new SunFwAjaxSystem() )->getAction(true),
@@ -606,11 +610,11 @@ class SunFwAjaxAdmin extends SunFwAjax
 				),
 				array(
 					'href' => '#extras',
-					'title' => JText::_('SUNFW_EXTRAS_TAB'),
+					'title' => Text::_('SUNFW_EXTRAS_TAB'),
 					'items' => array(
 						array(
 							'href' => '#cookie-law',
-							'title' => JText::_('SUNFW_COOKIE_LAW_TAB'),
+							'title' => Text::_('SUNFW_COOKIE_LAW_TAB'),
 							'render' => array(
 								'name' => 'PaneCookieLaw',
 								'data' => ( new SunFwAjaxCookieLaw() )->getAction(true),
@@ -621,7 +625,7 @@ class SunFwAjaxAdmin extends SunFwAjax
 						),
 						array(
 							'href' => '#social-share',
-							'title' => JText::_('SUNFW_SOCIAL_SHARE_TAB'),
+							'title' => Text::_('SUNFW_SOCIAL_SHARE_TAB'),
 							'render' => array(
 								'name' => 'PaneSocialShare',
 								'data' => ( new SunFwAjaxSocialShare() )->getAction(true),
@@ -632,7 +636,7 @@ class SunFwAjaxAdmin extends SunFwAjax
 						),
 						array(
 							'href' => '#commenting',
-							'title' => JText::_('SUNFW_COMMENTING_TAB'),
+							'title' => Text::_('SUNFW_COMMENTING_TAB'),
 							'render' => array(
 								'name' => 'PaneCommenting',
 								'data' => ( new SunFwAjaxCommenting() )->getAction(true),
@@ -643,7 +647,7 @@ class SunFwAjaxAdmin extends SunFwAjax
 						),
 						array(
 							'href' => '#custom-404',
-							'title' => JText::_('SUNFW_CUSTOM_404_TAB'),
+							'title' => Text::_('SUNFW_CUSTOM_404_TAB'),
 							'render' => array(
 								'name' => 'PaneCustom404',
 								'data' => ( new SunFwAjaxCustom404() )->getAction(true),
@@ -654,7 +658,7 @@ class SunFwAjaxAdmin extends SunFwAjax
 						),
 						array(
 							'href' => '#coming-soon',
-							'title' => JText::_('SUNFW_COMING_SOON_TAB'),
+							'title' => Text::_('SUNFW_COMING_SOON_TAB'),
 							'render' => array(
 								'name' => 'PaneComingSoon',
 								'data' => ( new SunFwAjaxComingSoon() )->getAction(true),
@@ -668,7 +672,7 @@ class SunFwAjaxAdmin extends SunFwAjax
 				),
 				array(
 					'href' => '#menu-assignment',
-					'title' => JText::_('SUNFW_MENU_ASSIGNMENT_TAB'),
+					'title' => Text::_('SUNFW_MENU_ASSIGNMENT_TAB'),
 					'render' => array(
 						'name' => 'PaneAssignment',
 						'data' => ( new SunFwAjaxAssignment() )->getAction(true),
@@ -679,12 +683,12 @@ class SunFwAjaxAdmin extends SunFwAjax
 				),
 				array(
 					'href' => '#data',
-					'title' => JText::_('SUNFW_DATA_TAB'),
+					'title' => Text::_('SUNFW_DATA_TAB'),
 					'listClass' => 'hidden',
 					'items' => array(
 						array(
 							'href' => '#maintenance',
-							'title' => JText::_('SUNFW_MAINTENANCE_TAB'),
+							'title' => Text::_('SUNFW_MAINTENANCE_TAB'),
 							'render' => array(
 								'name' => 'PaneMaintenance',
 								'data' => ( new SunFwAjaxMaintenance() )->getAction(true),
@@ -697,7 +701,7 @@ class SunFwAjaxAdmin extends SunFwAjax
 				),
 				array(
 					'href' => '#about',
-					'title' => JText::_('SUNFW_ABOUT'),
+					'title' => Text::_('SUNFW_ABOUT'),
 					'render' => array(
 						'name' => 'PaneAbout',
 						'data' => ( new SunFwAjaxAbout() )->getAction(true),
@@ -715,7 +719,7 @@ class SunFwAjaxAdmin extends SunFwAjax
 						'href' => '#',
 						'type' => 'success',
 						'icon' => 'pencil-square-o mr-1',
-						'label' => JText::_('SUNFW_SAVE_ALL'),
+						'label' => Text::_('SUNFW_SAVE_ALL'),
 						'disabled' => true
 					),
 					array(
@@ -725,7 +729,7 @@ class SunFwAjaxAdmin extends SunFwAjax
 							array(
 								'id' => 'sunfw-save-as-copy',
 								'href' => $saveAsCopy,
-								'title' => JText::_('SUNFW_SAVE_AS_COPY')
+								'title' => Text::_('SUNFW_SAVE_AS_COPY')
 							)
 						),
 						'menuClass' => 'dropdown-menu-right'
@@ -734,91 +738,91 @@ class SunFwAjaxAdmin extends SunFwAjax
 				array(
 					'href' => 'index.php?option=com_templates',
 					'icon' => 'times px-2',
-					'label' => JText::_('SUNFW_CLOSE'),
+					'label' => Text::_('SUNFW_CLOSE'),
 					'className' => 'sub-btn'
 				)
 			),
 			'inputs' => $inputs,
 			'gettingStarted' => $gettingStarted,
 			'textMapping' => array(
-				'TQRUYEYz-Gjfd4Sxv' => JText::_('SUNFW_TEMPLATE_STYLE_LIMITATION_TITLE'),
-				'TQRUYEYz-td6Tz2Gb' => JText::_('SUNFW_TEMPLATE_STYLE_LIMITATION_MESSAGE'),
+				'TQRUYEYz-Gjfd4Sxv' => Text::_('SUNFW_TEMPLATE_STYLE_LIMITATION_TITLE'),
+				'TQRUYEYz-td6Tz2Gb' => Text::_('SUNFW_TEMPLATE_STYLE_LIMITATION_MESSAGE'),
 
-				'XFnHMC0g-Gjfd4Sxv' => JText::_('SUNFW_SAMPLE_DATA_LIMITATION_TITLE'),
-				'XFnHMC0g-td6Tz2Gb' => JText::_('SUNFW_SAMPLE_DATA_LIMITATION_MESSAGE'),
+				'XFnHMC0g-Gjfd4Sxv' => Text::_('SUNFW_SAMPLE_DATA_LIMITATION_TITLE'),
+				'XFnHMC0g-td6Tz2Gb' => Text::_('SUNFW_SAMPLE_DATA_LIMITATION_MESSAGE'),
 
-				'pane-layout-Gjfd4Sxv' => JText::_('SUNFW_PANE_LAYOUT_LIMITATION_TITLE'),
-				'pane-layout-td6Tz2Gb' => JText::_('SUNFW_PANE_LAYOUT_LIMITATION_MESSAGE'),
+				'pane-layout-Gjfd4Sxv' => Text::_('SUNFW_PANE_LAYOUT_LIMITATION_TITLE'),
+				'pane-layout-td6Tz2Gb' => Text::_('SUNFW_PANE_LAYOUT_LIMITATION_MESSAGE'),
 
-				'pane-layout-custom-Gjfd4Sxv' => JText::_('SUNFW_PANE_CUSTOM_LAYOUT_LIMITATION_TITLE'),
-				'pane-layout-custom-td6Tz2Gb' => JText::_('SUNFW_PANE_CUSTOM_LAYOUT_LIMITATION_MESSAGE'),
+				'pane-layout-custom-Gjfd4Sxv' => Text::_('SUNFW_PANE_CUSTOM_LAYOUT_LIMITATION_TITLE'),
+				'pane-layout-custom-td6Tz2Gb' => Text::_('SUNFW_PANE_CUSTOM_LAYOUT_LIMITATION_MESSAGE'),
 
-				'pane-styles-Gjfd4Sxv' => JText::_('SUNFW_PANE_STYLES_LIMITATION_TITLE'),
-				'pane-styles-td6Tz2Gb' => JText::_('SUNFW_PANE_STYLES_LIMITATION_MESSAGE'),
+				'pane-styles-Gjfd4Sxv' => Text::_('SUNFW_PANE_STYLES_LIMITATION_TITLE'),
+				'pane-styles-td6Tz2Gb' => Text::_('SUNFW_PANE_STYLES_LIMITATION_MESSAGE'),
 
-				'pane-mega-menu-Gjfd4Sxv' => JText::_('SUNFW_PANE_MEGA_MENU_LIMITATION_TITLE'),
-				'pane-mega-menu-td6Tz2Gb' => JText::_('SUNFW_PANE_MEGA_MENU_LIMITATION_MESSAGE'),
+				'pane-mega-menu-Gjfd4Sxv' => Text::_('SUNFW_PANE_MEGA_MENU_LIMITATION_TITLE'),
+				'pane-mega-menu-td6Tz2Gb' => Text::_('SUNFW_PANE_MEGA_MENU_LIMITATION_MESSAGE'),
 
-				'pane-cookie-law-Gjfd4Sxv' => JText::_('SUNFW_PANE_COOKIE_LAW_LIMITATION_TITLE'),
-				'pane-cookie-law-td6Tz2Gb' => JText::_('SUNFW_PANE_COOKIE_LAW_LIMITATION_MESSAGE'),
+				'pane-cookie-law-Gjfd4Sxv' => Text::_('SUNFW_PANE_COOKIE_LAW_LIMITATION_TITLE'),
+				'pane-cookie-law-td6Tz2Gb' => Text::_('SUNFW_PANE_COOKIE_LAW_LIMITATION_MESSAGE'),
 
-				'pane-social-share-Gjfd4Sxv' => JText::_('SUNFW_PANE_SOCIAL_SHARE_LIMITATION_TITLE'),
-				'pane-social-share-td6Tz2Gb' => JText::_('SUNFW_PANE_SOCIAL_SHARE_LIMITATION_MESSAGE'),
+				'pane-social-share-Gjfd4Sxv' => Text::_('SUNFW_PANE_SOCIAL_SHARE_LIMITATION_TITLE'),
+				'pane-social-share-td6Tz2Gb' => Text::_('SUNFW_PANE_SOCIAL_SHARE_LIMITATION_MESSAGE'),
 
-				'pane-commenting-Gjfd4Sxv' => JText::_('SUNFW_PANE_COMMENTING_LIMITATION_TITLE'),
-				'pane-commenting-td6Tz2Gb' => JText::_('SUNFW_PANE_COMMENTING_LIMITATION_MESSAGE'),
+				'pane-commenting-Gjfd4Sxv' => Text::_('SUNFW_PANE_COMMENTING_LIMITATION_TITLE'),
+				'pane-commenting-td6Tz2Gb' => Text::_('SUNFW_PANE_COMMENTING_LIMITATION_MESSAGE'),
 
-				'pane-custom-404-Gjfd4Sxv' => JText::_('SUNFW_PANE_CUSTOM_404_LIMITATION_TITLE'),
-				'pane-custom-404-td6Tz2Gb' => JText::_('SUNFW_PANE_CUSTOM_404_LIMITATION_MESSAGE'),
+				'pane-custom-404-Gjfd4Sxv' => Text::_('SUNFW_PANE_CUSTOM_404_LIMITATION_TITLE'),
+				'pane-custom-404-td6Tz2Gb' => Text::_('SUNFW_PANE_CUSTOM_404_LIMITATION_MESSAGE'),
 
-				'pane-coming-soon-Gjfd4Sxv' => JText::_('SUNFW_PANE_COMING_SOON_LIMITATION_TITLE'),
-				'pane-coming-soon-td6Tz2Gb' => JText::_('SUNFW_PANE_COMING_SOON_LIMITATION_MESSAGE'),
+				'pane-coming-soon-Gjfd4Sxv' => Text::_('SUNFW_PANE_COMING_SOON_LIMITATION_TITLE'),
+				'pane-coming-soon-td6Tz2Gb' => Text::_('SUNFW_PANE_COMING_SOON_LIMITATION_MESSAGE'),
 
-				'xrZVPjMr-Gjfd4Sxv' => JText::_('SUNFW_ADD_LAYOUT_ITEM_LIMITATION_TITLE'),
-				'xrZVPjMr-td6Tz2Gb' => JText::_('SUNFW_ADD_LAYOUT_ITEM_LIMITATION_MESSAGE'),
+				'xrZVPjMr-Gjfd4Sxv' => Text::_('SUNFW_ADD_LAYOUT_ITEM_LIMITATION_TITLE'),
+				'xrZVPjMr-td6Tz2Gb' => Text::_('SUNFW_ADD_LAYOUT_ITEM_LIMITATION_MESSAGE'),
 
-				'h6qjVrwy-Gjfd4Sxv' => JText::_('SUNFW_ADD_LAYOUT_ITEM_LIMITATION_TITLE'),
-				'h6qjVrwy-td6Tz2Gb' => JText::_('SUNFW_ADD_LAYOUT_ITEM_LIMITATION_MESSAGE'),
+				'h6qjVrwy-Gjfd4Sxv' => Text::_('SUNFW_ADD_LAYOUT_ITEM_LIMITATION_TITLE'),
+				'h6qjVrwy-td6Tz2Gb' => Text::_('SUNFW_ADD_LAYOUT_ITEM_LIMITATION_MESSAGE'),
 
-				'setting-responsive-support-Gjfd4Sxv' => JText::_('SUNFW_RESPONSIVE_LAYOUT_LIMITATION_TITLE'),
-				'setting-responsive-support-td6Tz2Gb' => JText::_('SUNFW_RESPONSIVE_LAYOUT_LIMITATION_MESSAGE'),
+				'setting-responsive-support-Gjfd4Sxv' => Text::_('SUNFW_RESPONSIVE_LAYOUT_LIMITATION_TITLE'),
+				'setting-responsive-support-td6Tz2Gb' => Text::_('SUNFW_RESPONSIVE_LAYOUT_LIMITATION_MESSAGE'),
 
-				'setting-joomlashine-branding-Gjfd4Sxv' => JText::_('SUNFW_JOOMLASHINE_BRANDING_LIMITATION_TITLE'),
-				'setting-joomlashine-branding-td6Tz2Gb' => JText::_('SUNFW_JOOMLASHINE_BRANDING_LIMITATION_MESSAGE'),
+				'setting-joomlashine-branding-Gjfd4Sxv' => Text::_('SUNFW_JOOMLASHINE_BRANDING_LIMITATION_TITLE'),
+				'setting-joomlashine-branding-td6Tz2Gb' => Text::_('SUNFW_JOOMLASHINE_BRANDING_LIMITATION_MESSAGE'),
 
-				'setting-assets-compression-Gjfd4Sxv' => JText::_('SUNFW_ASSETS_COMPRESSION_LIMITATION_TITLE'),
-				'setting-assets-compression-td6Tz2Gb' => JText::_('SUNFW_ASSETS_COMPRESSION_LIMITATION_MESSAGE'),
+				'setting-assets-compression-Gjfd4Sxv' => Text::_('SUNFW_ASSETS_COMPRESSION_LIMITATION_TITLE'),
+				'setting-assets-compression-td6Tz2Gb' => Text::_('SUNFW_ASSETS_COMPRESSION_LIMITATION_MESSAGE'),
 
-				'ErWVstHA-Gjfd4Sxv' => JText::_('SUNFW_BANNER_REMOVAL_TITLE'),
-				'ErWVstHA-td6Tz2Gb' => JText::_('SUNFW_BANNER_REMOVAL_MESSAGE'),
+				'ErWVstHA-Gjfd4Sxv' => Text::_('SUNFW_BANNER_REMOVAL_TITLE'),
+				'ErWVstHA-td6Tz2Gb' => Text::_('SUNFW_BANNER_REMOVAL_MESSAGE'),
 
-				'KW6yu9fy' => JText::_('SUNFW_TRIAL_EXPIRED'),
-				'Sbrr2pJQ' => JText::_('SUNFW_PRO_BADGE_TEXT'),
-				'XNqRzhzv' => JText::_('SUNFW_TRY_PRO_LINK_TEXT'),
-				'Q3TX2PUM' => JText::_('SUNFW_PRO_TOOLTIP_TEXT'),
+				'KW6yu9fy' => Text::_('SUNFW_TRIAL_EXPIRED'),
+				'Sbrr2pJQ' => Text::_('SUNFW_PRO_BADGE_TEXT'),
+				'XNqRzhzv' => Text::_('SUNFW_TRY_PRO_LINK_TEXT'),
+				'Q3TX2PUM' => Text::_('SUNFW_PRO_TOOLTIP_TEXT'),
 
-				'icon-selector' => JText::_('SUNFW_ICON_SELECTOR'),
-				'all-icons' => JText::_('SUNFW_ICON_SELECTOR_ALL_ICONS'),
-				'new-icons-4-7' => JText::_('SUNFW_ICON_SELECTOR_NEW_47'),
-				'web-development' => JText::_('SUNFW_ICON_SELECTOR_WEB_DEVELOPMENT'),
-				'accessibility' => JText::_('SUNFW_ICON_SELECTOR_ACCESSIBILITY'),
-				'hand' => JText::_('SUNFW_ICON_SELECTOR_HAND'),
-				'transportation' => JText::_('SUNFW_ICON_SELECTOR_TRANSPORTATION'),
-				'gender' => JText::_('SUNFW_ICON_SELECTOR_GENDER'),
-				'file-type' => JText::_('SUNFW_ICON_SELECTOR_FILE_TYPE'),
-				'spinner' => JText::_('SUNFW_ICON_SELECTOR_SPINNER'),
-				'form-control' => JText::_('SUNFW_ICON_SELECTOR_FORM_CONTROL'),
-				'payment' => JText::_('SUNFW_ICON_SELECTOR_PAYMENT'),
-				'chart' => JText::_('SUNFW_ICON_SELECTOR_CHART'),
-				'currency' => JText::_('SUNFW_ICON_SELECTOR_CURRENCY'),
-				'text-editor' => JText::_('SUNFW_ICON_SELECTOR_TEXT_EDITOR'),
-				'directional' => JText::_('SUNFW_ICON_SELECTOR_DIRECTIONAL'),
-				'video-player' => JText::_('SUNFW_ICON_SELECTOR_VIDEO_PLAYER'),
-				'brand' => JText::_('SUNFW_ICON_SELECTOR_BRAND'),
-				'medical' => JText::_('SUNFW_ICON_SELECTOR_MEDICAL'),
+				'icon-selector' => Text::_('SUNFW_ICON_SELECTOR'),
+				'all-icons' => Text::_('SUNFW_ICON_SELECTOR_ALL_ICONS'),
+				'new-icons-4-7' => Text::_('SUNFW_ICON_SELECTOR_NEW_47'),
+				'web-development' => Text::_('SUNFW_ICON_SELECTOR_WEB_DEVELOPMENT'),
+				'accessibility' => Text::_('SUNFW_ICON_SELECTOR_ACCESSIBILITY'),
+				'hand' => Text::_('SUNFW_ICON_SELECTOR_HAND'),
+				'transportation' => Text::_('SUNFW_ICON_SELECTOR_TRANSPORTATION'),
+				'gender' => Text::_('SUNFW_ICON_SELECTOR_GENDER'),
+				'file-type' => Text::_('SUNFW_ICON_SELECTOR_FILE_TYPE'),
+				'spinner' => Text::_('SUNFW_ICON_SELECTOR_SPINNER'),
+				'form-control' => Text::_('SUNFW_ICON_SELECTOR_FORM_CONTROL'),
+				'payment' => Text::_('SUNFW_ICON_SELECTOR_PAYMENT'),
+				'chart' => Text::_('SUNFW_ICON_SELECTOR_CHART'),
+				'currency' => Text::_('SUNFW_ICON_SELECTOR_CURRENCY'),
+				'text-editor' => Text::_('SUNFW_ICON_SELECTOR_TEXT_EDITOR'),
+				'directional' => Text::_('SUNFW_ICON_SELECTOR_DIRECTIONAL'),
+				'video-player' => Text::_('SUNFW_ICON_SELECTOR_VIDEO_PLAYER'),
+				'brand' => Text::_('SUNFW_ICON_SELECTOR_BRAND'),
+				'medical' => Text::_('SUNFW_ICON_SELECTOR_MEDICAL'),
 
-				'settings-live-chat-popup' => JText::_('SUNFW_LIVE_CHAT_SETTINGS_ENABLE_POPUP'),
-				'settings-live-chat-popup-hint' => JText::_('SUNFW_LIVE_CHAT_SETTINGS_ENABLE_POPUP_HINT')
+				'settings-live-chat-popup' => Text::_('SUNFW_LIVE_CHAT_SETTINGS_ENABLE_POPUP'),
+				'settings-live-chat-popup-hint' => Text::_('SUNFW_LIVE_CHAT_SETTINGS_ENABLE_POPUP_HINT')
 			)
 		);
 
@@ -914,7 +918,7 @@ class SunFwAjaxAdmin extends SunFwAjax
 					'version' => $this->template['version']
 				),
 				'framework' => array(
-					'name' => JText::_('PLG_SYSTEM_SUNFW'),
+					'name' => Text::_('PLG_SYSTEM_SUNFW'),
 					'link' => ARTISTA_REPO_URL,
 					'version' => SUNFW_VERSION
 				)
@@ -942,8 +946,8 @@ class SunFwAjaxAdmin extends SunFwAjax
 		$data = array(
 			'url' => '',
 			'modalTitle' => array(
-				'framework' => JText::_('SUNFW_UPDATE_FRAMEWORK_TITLE'),
-				'template' => JText::_('SUNFW_UPDATE_TEMPLATE_TITLE')
+				'framework' => Text::_('SUNFW_UPDATE_FRAMEWORK_TITLE'),
+				'template' => Text::_('SUNFW_UPDATE_TEMPLATE_TITLE')
 			)
 		);
 
@@ -1031,7 +1035,7 @@ class SunFwAjaxAdmin extends SunFwAjax
 		}
 
 		$this->setResponse(array(
-			'message' => JText::_('SUNFW_TEMPLATE_STYLE_SAVED_SUCCESSFULLY')
+			'message' => Text::_('SUNFW_TEMPLATE_STYLE_SAVED_SUCCESSFULLY')
 		));
 	}
 
@@ -1043,7 +1047,7 @@ class SunFwAjaxAdmin extends SunFwAjax
 	public function saveAsCopyAction()
 	{
 		// Detect disabled extension
-		$extension = JTable::getInstance('Extension');
+		$extension = Table::getInstance('Extension');
 
 		if ($extension->load(
 			array(
@@ -1053,13 +1057,13 @@ class SunFwAjaxAdmin extends SunFwAjax
 				'client_id' => 0
 			)))
 		{
-			throw new Exception(JText::_('SUNFW_ERROR_SAVE_DISABLED_TEMPLATE'));
+			throw new Exception(Text::_('SUNFW_ERROR_SAVE_DISABLED_TEMPLATE'));
 		}
 
 		// Load 'template_styles' table object.
-		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_templates/tables');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_templates/tables');
 
-		$styleTbl = JTable::getInstance('Style', 'TemplatesTable');
+		$styleTbl = Table::getInstance('Style', 'TemplatesTable');
 
 		$styleTbl->load(0);
 
@@ -1067,7 +1071,7 @@ class SunFwAjaxAdmin extends SunFwAjax
 
 		if (!count((array) $currentStyle))
 		{
-			throw new Exception(JText::_('SUNFW_ERROR_STYLE_IS_INVALID'));
+			throw new Exception(Text::_('SUNFW_ERROR_STYLE_IS_INVALID'));
 		}
 
 		$currentStyle = (array) $currentStyle;
@@ -1150,9 +1154,9 @@ class SunFwAjaxAdmin extends SunFwAjax
 	 */
 	protected function generateNewTitle($categoryId, $alias, $title)
 	{
-		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_templates/tables');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_templates/tables');
 
-		$table = JTable::getInstance('Style', 'TemplatesTable');
+		$table = Table::getInstance('Style', 'TemplatesTable');
 
 		while ($table->load(array(
 			'title' => $title
@@ -1173,7 +1177,7 @@ class SunFwAjaxAdmin extends SunFwAjax
 	{
 		// Get requested JSON file.
 		$file = $this->input->getString('file');
-		$root = JUri::root(true);
+		$root = Uri::root(true);
 
 		if (!empty($root) && strpos($file, $root) === 0)
 		{

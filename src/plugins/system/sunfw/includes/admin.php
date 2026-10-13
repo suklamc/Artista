@@ -13,9 +13,15 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
-// Import necessary libraries.
-jimport('joomla.filesystem.file');
-jimport('joomla.filesystem.folder');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\BaseController;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
+use Joomla\CMS\Uri\Uri;
+
 
 /**
  * Template administration class.
@@ -23,6 +29,7 @@ jimport('joomla.filesystem.folder');
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwAdmin
 {
 	/**
@@ -155,7 +162,7 @@ class SunFwAdmin
 		}
 
 		// Make sure the table `sunfw_styles` exists.
-		$dbo = JFactory::getDbo();
+		$dbo = Factory::getDbo();
 		$tables = $dbo->setQuery('SHOW TABLES;')->loadColumn();
 
 		if (!in_array($dbo->getPrefix() . 'sunfw_styles', $tables))
@@ -167,7 +174,7 @@ class SunFwAdmin
 		{
 			// Make sure all extra columns exists.
 			$columns = $dbo->setQuery('SHOW COLUMNS FROM #__sunfw_styles;')->loadColumn();
-			$updates = JFolder::files(SUNFW_PATH . '/database/mysql/updates', '\.sql$');
+			$updates = SunFwFolder::files(SUNFW_PATH . '/database/mysql/updates', '\.sql$');
 
 			foreach ($updates as $update)
 			{
@@ -192,10 +199,10 @@ class SunFwAdmin
 		}
 
 		// Get Joomla application instance.
-		$this->app = JFactory::getApplication();
+		$this->app = Factory::getApplication();
 
 		// Get Joomla document instance.
-		$this->doc = JFactory::getDocument();
+		$this->doc = Factory::getDocument();
 
 		// Get editing template style.
 		$this->style = SunFwHelper::getTemplateStyle($this->app->input->getInt('id'));
@@ -213,7 +220,7 @@ class SunFwAdmin
 		}
 		else
 		{
-			$this->controller = JControllerLegacy::getInstance('Templates');
+			$this->controller = BaseController::getInstance('Templates');
 		}
 
 		$this->extensionInfo = SunFwHelper::getExtensionInfo($this->template, 'template');
@@ -222,7 +229,7 @@ class SunFwAdmin
 		$this->templateManifestCache = SunFwHelper::getManifestCache($this->template);
 
 		// Get template data.
-		$this->templateForm = JForm::getInstance(
+		$this->templateForm = Form::getInstance(
             'com_templates.style',
             'style',
 			array(
@@ -234,16 +241,14 @@ class SunFwAdmin
 		$this->sunfwParams = SunFwHelper::getExtensionParams('plugin', 'sunfw', 'system');
 
 		// Register event to load assets for template administration.
-		$this->app->registerEvent('onBeforeRender', array(
-			'SunFwHelper',
-			'loadAssets'
-		));
+		$this->app->registerEvent('onBeforeRender', function () {
+			SunFwHelper::loadAssets();
+		});
 
 		// Register event to render template administration screen.
-		$this->app->registerEvent('onAfterRender', array(
-			&$this,
-			'renderHtml'
-		));
+		$this->app->registerEvent('onAfterRender', function () {
+			$this->renderHtml();
+		});
 
 	}
 
@@ -255,9 +260,9 @@ class SunFwAdmin
 	public function renderHtml()
 	{
 		// Define base Ajax URL.
-		$ajaxBase = JUri::root(true) .
+		$ajaxBase = Uri::root(true) .
 			 "/administrator/index.php?option=com_ajax&format=json&group=system&plugin=sunfw&template_name={$this->template}&style_id=" .
-			 $this->app->input->getInt('id') . '&' . JSession::getFormToken() . '=1&context=admin&action=get';
+			 $this->app->input->getInt('id') . '&' . Session::getFormToken() . '=1&context=admin&action=get';
 
 		// Generate HTML output.
 		ob_start();
@@ -265,7 +270,7 @@ class SunFwAdmin
 		// @formatter:off
 		?>
 		<form id="style-form" method="post" name="adminForm" onSubmit="return false;" action="<?php
-			echo JRoute::_('index.php?option=com_templates&layout=edit&id=' . $this->app->input->getInt('id'));
+			echo Route::_('index.php?option=com_templates&layout=edit&id=' . $this->app->input->getInt('id'));
 		?>">
 			<div id="template-admin" class="sunfw-template-admin" data-render="TemplateAdmin" data-url="<?php
 				echo $ajaxBase;
@@ -273,7 +278,7 @@ class SunFwAdmin
 			<div id="template-admin-form" class="hidden">
 				<div class="form-group">
 					<input type="text" name="style_title" value="<?php echo $this->style->title; ?>" placeholder="<?php
-						echo JText::_('SUNFW_STYLE_NAME');
+						echo Text::_('SUNFW_STYLE_NAME');
 					?>" />
 					<?php
 					$home = $this->templateForm->getInput('home');
@@ -285,12 +290,12 @@ class SunFwAdmin
 				</div>
 			</div>
 			<input type="hidden" name="task" value="" />
-			<input type="hidden" id="jsn-tpl-root" value="<?php echo Juri::root(); ?>" />
+			<input type="hidden" id="jsn-tpl-root" value="<?php echo Uri::root(); ?>" />
 			<input type="hidden" id="jsn-tpl-name" value="<?php echo $this->template; ?>" />
-			<input type="hidden" id="jsn-tpl-token" value="<?php echo JSession::getFormToken(); ?>" />
+			<input type="hidden" id="jsn-tpl-token" value="<?php echo Session::getFormToken(); ?>" />
 			<input type="hidden" id="jsn-style-id" value="<?php echo $this->app->input->getInt('id'); ?>" />
 			<input type="hidden" id="jsn-extension-id" value="<?php echo $this->extensionInfo->extension_id; ?>" />
-			<?php echo JHtml::_('form.token'); ?>
+			<?php echo HTMLHelper::_('form.token'); ?>
 		</form>
 		<form id="sunfw-maintenance-form" method="post" enctype="multipart/form-data" target="sunfw-hidden-iframe" class="hidden">
 			<input type="file" name="sunfw-advanced-backup-upload" />
@@ -298,7 +303,7 @@ class SunFwAdmin
 		<iframe id="sunfw-hidden-iframe" name="sunfw-hidden-iframe" class="hidden" src="about:blank"></iframe>
         <div id="sunfw-loading" class="jsn-loading">
             <div class="loader">
-                <img src="<?php echo JUri::root(true); ?>/plugins/system/sunfw/assets/images/logo-loading.svg">
+                <img src="<?php echo Uri::root(true); ?>/plugins/system/sunfw/assets/images/logo-loading.svg">
                 <div class="circle"></div>
                 <div class="circle"></div>
                 <div class="circle"></div>
@@ -332,9 +337,25 @@ class SunFwAdmin
 				var hasChange = document.querySelector('#template-admin a.toggle-pane.changed');
 
 				if (hasChange) {
-					return '<?php echo JText::_('SUNFW_CONFIRM_LEAVE_PAGE'); ?>'
+					return '<?php echo Text::_('SUNFW_CONFIRM_LEAVE_PAGE'); ?>'
 				}
 			}
+
+			// Start the editor once the page is parsed. The framework otherwise only starts on a
+			// later DOM change, which Joomla 4+ admin pages don't reliably produce.
+			;(function() {
+				var start = function() {
+					if (window.pwVc && window.pwVc.renderComponents) {
+						window.pwVc.renderComponents();
+					}
+				};
+
+				if (document.readyState === 'loading') {
+					document.addEventListener('DOMContentLoaded', start);
+				} else {
+					start();
+				}
+			})();
 
 			// Fix compatibility problem with MooTools loaded by the admin bar of JSN PowerAdmin.
 			if (window.MooTools !== undefined) {
@@ -358,17 +379,18 @@ class SunFwAdmin
 
 		ob_end_clean();
 
-		// Parse current response body
-		if (strpos($this->app->getBody(), '<div id="wrapper" class="d-flex wrapper0">'))
+		// Split the admin page at the <body> tag. (Joomla 3/early 4 versions matched Atum's
+		// wrapper div exactly, which breaks whenever its sidebar-state class changes.)
+		$page = (string) $this->app->getBody();
+
+		if (!preg_match('#^(.*?<body\b[^>]*>)(.*)(</body>.*)$#is', $page, $parts))
 		{
-			list($header, $tmp) = explode('<div id="wrapper" class="d-flex wrapper0">', $this->app->getBody(), 2);
-		}
-		else
-		{
-			list($header, $tmp) = explode('<!-- Header -->', $this->app->getBody(), 2);
+			// Not a full HTML page (e.g. an error page); leave it untouched.
+			return;
 		}
 
-		list($tmp, $footer) = explode('</body>', $tmp, 2);
+		$header = $parts[1];
+		$footer = substr($parts[3], strlen('</body>'));
 
 		// Remove all unnecessary stylesheets and scrips.
 		$patterns = array(
@@ -414,7 +436,7 @@ class SunFwAdmin
 	protected function renderTab($name, $config_file)
 	{
 		// Instantiate a JForm object.
-		$form = new JForm($name);
+		$form = new Form($name);
 
 		// Add path to our custom fields.
 		$form->addFieldPath(dirname(__FILE__) . '/admin/fields');

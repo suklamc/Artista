@@ -22,6 +22,7 @@ use Leafo\ScssPhp\Type;
  *
  * @author Leaf Corcoran <leafot@gmail.com>
  */
+#[\AllowDynamicProperties]
 class Parser
 {
     const SOURCE_INDEX  = -1;
@@ -790,7 +791,7 @@ class Parser
         }
 
         $r = '/' . $regex . '/' . $this->patternModifiers;
-        $result = preg_match($r, $this->buffer, $out, null, $from);
+        $result = preg_match($r, $this->buffer, $out, 0, $from);
 
         return $result;
     }
@@ -871,7 +872,7 @@ class Parser
 
         $r = '/' . $regex . '/' . $this->patternModifiers;
 
-        if (preg_match($r, $this->buffer, $out, null, $this->count)) {
+        if (preg_match($r, $this->buffer, $out, 0, $this->count)) {
             $this->count += strlen($out[0]);
 
             if ($eatWhitespace) {
@@ -922,7 +923,7 @@ class Parser
     {
         $gotWhite = false;
 
-        while (preg_match(self::$whitePattern, $this->buffer, $m, null, $this->count)) {
+        while (preg_match(self::$whitePattern, $this->buffer, $m, 0, $this->count)) {
             if (isset($m[1]) && empty($this->commentsSeen[$this->count])) {
                 $this->appendComment([Type::T_COMMENT, $m[1]]);
 
@@ -1949,7 +1950,7 @@ class Parser
             self::$whitePattern,
             $this->buffer,
             $m,
-            null,
+            0,
             $this->count
         )) {
             if (! empty($m[0])) {

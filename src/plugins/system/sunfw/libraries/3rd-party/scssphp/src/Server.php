@@ -20,6 +20,7 @@ use Leafo\ScssPhp\Version;
  *
  * @author Leaf Corcoran <leafot@gmail.com>
  */
+#[\AllowDynamicProperties]
 class Server
 {
     /**
@@ -208,7 +209,7 @@ class Server
 
         $v    = Version::VERSION;
         $t    = date('r');
-        $css  = "/* compiled by scssphp $v on $t (${elapsed}s) */\n\n" . $css;
+        $css  = "/* compiled by scssphp $v on $t ({$elapsed}s) */\n\n" . $css;
         $etag = md5($css);
 
         file_put_contents($out, $css);

@@ -13,12 +13,18 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\Component\Menus\Administrator\Helper\MenusHelper;
+
 /**
  * Handle Ajax requests from menu assignment pane.
  *
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwAjaxAssignment extends SunFwAjax
 {
 
@@ -31,23 +37,17 @@ class SunFwAjaxAssignment extends SunFwAjax
 	 */
 	public function getAction($return = false)
 	{
-		// Load 'MenusHelper' class if needed.
-		if (!class_exists('MenusHelper'))
-		{
-			require_once JPATH_ADMINISTRATOR . '/components/com_menus/helpers/menus.php';
-		}
-		
 		/**
 		 * Prepare response data.
 		 */
 		$data = array(
 			'url' => $this->baseUrl,
-			'userId' => (string) JFactory::getUser()->id,
+			'userId' => (string) Factory::getUser()->id,
 			'styleId' => (string) $this->styleID,
 			'menus' => MenusHelper::getMenuLinks(),
 			'textMapping' => array(
-				'menu-assignment' => JText::_('SUNFW_MENU_ASSIGNMENT'),
-				'save-menu-assignment' => JText::_('SUNFW_SAVE_ASSIGNMENT')
+				'menu-assignment' => Text::_('SUNFW_MENU_ASSIGNMENT'),
+				'save-menu-assignment' => Text::_('SUNFW_SAVE_ASSIGNMENT')
 			)
 		);
 		
@@ -78,7 +78,7 @@ class SunFwAjaxAssignment extends SunFwAjax
 		$data = $data['items'];
 		
 		// Detect disabled extension
-		$extension = JTable::getInstance('Extension');
+		$extension = Table::getInstance('Extension');
 		
 		if ($extension->load(array(
 			'enabled' => 0,
@@ -87,10 +87,10 @@ class SunFwAjaxAssignment extends SunFwAjax
 			'client_id' => 0
 		)))
 		{
-			throw new Exception(JText::_('SUNFW_ERROR_SAVE_DISABLED_TEMPLATE'));
+			throw new Exception(Text::_('SUNFW_ERROR_SAVE_DISABLED_TEMPLATE'));
 		}
 		
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		
 		if ($user->authorise('core.edit', 'com_menus') && is_array($data))
 		{
@@ -143,7 +143,7 @@ class SunFwAjaxAssignment extends SunFwAjax
 		}
 		
 		$this->setResponse(array(
-			'message' => JText::_('SUNFW_MENU_ASSIGNMENT_SAVED_SUCCESSFULLY')
+			'message' => Text::_('SUNFW_MENU_ASSIGNMENT_SAVED_SUCCESSFULLY')
 		));
 	}
 }

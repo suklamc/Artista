@@ -13,8 +13,16 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
-// Import necessary library.
-jimport('joomla.filesystem.file');
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Version;
+use Joomla\Filesystem\Path;
+use Joomla\Registry\Registry;
+
 
 /**
  * General helper class.
@@ -22,6 +30,7 @@ jimport('joomla.filesystem.file');
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwHelper
 {
 
@@ -35,7 +44,7 @@ class SunFwHelper
 	{
 		if (!isset(self::$registry))
 		{
-			self::$registry = new JRegistry();
+			self::$registry = new Registry();
 		}
 
 		return self::$registry;
@@ -60,7 +69,7 @@ class SunFwHelper
 
 		if (!$registry->exists($key) || $refresh)
 		{
-			$dbo = JFactory::getDbo();
+			$dbo = Factory::getDbo();
 			$qry = $dbo->getQuery(true)
 				->select('manifest_cache')
 				->from('#__extensions')
@@ -172,7 +181,7 @@ class SunFwHelper
 
 		if (!isset($styles) || !isset($styles[$template]))
 		{
-			$db = JFactory::getDbo();
+			$db = Factory::getDbo();
 			$q = $db->getQuery(true);
 
 			$q->select('*')
@@ -204,7 +213,7 @@ class SunFwHelper
 	 */
 	public static function getTemplateStyle($id)
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$q = $db->getQuery(true);
 
 		$q->select('*')
@@ -239,7 +248,7 @@ class SunFwHelper
 
 		if ($force || !isset($styles) || !array_key_exists($id, $styles))
 		{
-			$db = JFactory::getDbo();
+			$db = Factory::getDbo();
 
 			$db->setQuery(
 				$db->getQuery(true)
@@ -290,7 +299,7 @@ class SunFwHelper
 						{
 							$structures = glob(JPATH_THEMES . "/{$template}/structures/*.json");
 
-							if (count($structures) == 1)
+							if (count((array) $structures) == 1)
 							{
 								$structures = explode(DIRECTORY_SEPARATOR, current($structures));
 								$defaultStructure = substr(array_pop($structures), 0, -5);
@@ -424,9 +433,9 @@ class SunFwHelper
 		foreach ((array) $directories as $directory)
 		{
 			// If directory not exists, create it.
-			if (!JFolder::exists($directory))
+			if (!SunFwFolder::exists($directory))
 			{
-				if (!JFolder::create($directory))
+				if (!SunFwFolder::create($directory))
 				{
 					continue;
 				}
@@ -440,12 +449,12 @@ class SunFwHelper
 
 				chown($directory, $user);
 
-				if (!JPath::setPermissions($directory, '0644'))
+				if (!Path::setPermissions($directory, '0644'))
 				{
 					continue;
 				}
 
-				if (!JPath::isOwner($directory))
+				if (!Path::isOwner($directory))
 				{
 					continue;
 				}
@@ -470,7 +479,7 @@ class SunFwHelper
 		$languageExisting = self::getExistingLanguageList();
 
 		// Get Joomla's database object.
-		$dbo = JFactory::getDbo();
+		$dbo = Factory::getDbo();
 
 		// Get list of menu type.
 		$query = $dbo->getQuery(true);
@@ -550,10 +559,10 @@ class SunFwHelper
 	public static function getDefaultModuleStyle($styleID)
 	{
 		$style = self::getTemplateStyle($styleID);
-		$file = JPath::clean(JPATH_SITE . "/templates/{$style->template}/module-styles/default_styles.json");
+		$file = Path::clean(JPATH_SITE . "/templates/{$style->template}/module-styles/default_styles.json");
 		$result = array();
 
-		if (JFile::exists($file))
+		if (SunFwFile::exists($file))
 		{
 			$content = file_get_contents($file);
 			$content = trim($content);
@@ -656,7 +665,7 @@ class SunFwHelper
 	 */
 	public static function getJoomlaVersion($size = null, $includeDot = true)
 	{
-		$joomlaVersion = new JVersion();
+		$joomlaVersion = new Version();
 		$versionPieces = explode('.', $joomlaVersion->getShortVersion());
 
 		if (is_numeric($size) && $size > 0 && $size < count($versionPieces))
@@ -764,7 +773,7 @@ class SunFwHelper
 
 		if (!count((array) $installedExtensions))
 		{
-			$db = JFactory::getDbo();
+			$db = Factory::getDbo();
 			$q = $db->getQuery(true);
 
 			$q->select('type, element, folder, manifest_cache')
@@ -802,7 +811,7 @@ class SunFwHelper
 	 */
 	public static function getExtensionParams($type, $element, $group = '')
 	{
-		$dbo = JFactory::getDbo();
+		$dbo = Factory::getDbo();
 		$q = $dbo->getQuery(true);
 
 		$q->select('params')
@@ -844,7 +853,7 @@ class SunFwHelper
 		$params = array_merge($curParams, $params);
 
 		// Store to database.
-		$dbo = JFactory::getDbo();
+		$dbo = Factory::getDbo();
 		$q = $dbo->getQuery(true);
 
 		$q->update('#__extensions')
@@ -875,7 +884,7 @@ class SunFwHelper
 	public static function updateManifest($template, $xml)
 	{
 		// Generate path to templateDetails.xml file.
-		$file = JPath::clean(JPATH_SITE . "/templates/{$template}/templateDetails.xml");
+		$file = Path::clean(JPATH_SITE . "/templates/{$template}/templateDetails.xml");
 
 		// Prepare template's manifest file for writting if requested.
 		if (!is_writable($file))
@@ -885,14 +894,14 @@ class SunFwHelper
 
 			chown($file, $user);
 
-			if (!JPath::setPermissions($file, '0644'))
+			if (!Path::setPermissions($file, '0644'))
 			{
-				throw new Exception(JText::sprintf('SUNFW_FILE_NOT_WRITABLE', 'templateDetails.xml'));
+				throw new Exception(Text::sprintf('SUNFW_FILE_NOT_WRITABLE', 'templateDetails.xml'));
 			}
 
-			if (!JPath::isOwner($file))
+			if (!Path::isOwner($file))
 			{
-				throw new Exception(JText::_('SUNFW_CHECK_FILE_OWNERSHIP'));
+				throw new Exception(Text::_('SUNFW_CHECK_FILE_OWNERSHIP'));
 			}
 		}
 
@@ -909,12 +918,12 @@ class SunFwHelper
 
 		if (!is_string($xml))
 		{
-			throw new Exception(JText::_('SUNFW_INVALID_XML_DATA_FOR_MANIFEST_FILE'));
+			throw new Exception(Text::_('SUNFW_INVALID_XML_DATA_FOR_MANIFEST_FILE'));
 		}
 
-		if (!JFile::write($file, $xml))
+		if (!SunFwFile::write($file, $xml))
 		{
-			throw new Exception(JText::sprintf('SUNFW_ERROR_FAILED_TO_SAVE_FILENAME', 'templateDetails.xml'));
+			throw new Exception(Text::sprintf('SUNFW_ERROR_FAILED_TO_SAVE_FILENAME', 'templateDetails.xml'));
 		}
 	}
 
@@ -1032,7 +1041,7 @@ class SunFwHelper
 		if (!isset($niche))
 		{
 			// Get active template.
-			$template = PlgSystemSunFw::$template ?: JFactory::getApplication()->getTemplate(true);
+			$template = PlgSystemSunFw::$template ?: Factory::getApplication()->getTemplate(true);
 
 			if (!isset($template->id))
 			{
@@ -1090,7 +1099,7 @@ class SunFwHelper
 		{
 			if (!is_dir($path))
 			{
-				return JFolder::create($path);
+				return SunFwFolder::create($path);
 			}
 		}
 
@@ -1109,7 +1118,7 @@ class SunFwHelper
 
 		if (!isset($templateParams))
 		{
-			$dbo = JFactory::getDbo();
+			$dbo = Factory::getDbo();
 			$q = $dbo->getQuery(true);
 			$q->select('params')
 				->from('#__extensions')
@@ -1237,9 +1246,9 @@ class SunFwHelper
 					{
 						$filePath = $path . $file . '_' . md5($styleID) . '.css';
 
-						if (JFile::exists($filePath))
+						if (SunFwFile::exists($filePath))
 						{
-							JFile::delete($filePath);
+							SunFwFile::delete($filePath);
 						}
 					}
 				}
@@ -1256,7 +1265,7 @@ class SunFwHelper
 	 */
 	public static function getSunFwStyleListByName($templateName)
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$q = $db->getQuery(true);
 
 		$q->select('*')
@@ -1286,7 +1295,7 @@ class SunFwHelper
 	{
 		//get style ids not in template ids
 		$check = $styleIDs;
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 
 		if (count((array) $check))
 		{
@@ -1329,7 +1338,7 @@ class SunFwHelper
 	 */
 	public static function getOnlySunFwStyle($id)
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$q = $db->getQuery(true);
 
 		$q->select('*')
@@ -1358,7 +1367,7 @@ class SunFwHelper
 	public static function getExistingLanguageList()
 	{
 		$result = array();
-		$languages = JHtml::_('contentlanguage.existing');
+		$languages = HTMLHelper::_('contentlanguage.existing');
 
 		if (count((array) $languages))
 		{
@@ -1485,7 +1494,7 @@ class SunFwHelper
 		if (!isset($items) || !isset($items[$key]))
 		{
 			// Get base URL.
-			$base_url = JUri::root(true);
+			$base_url = Uri::root(true);
 
 			// Prepare data store.
 			if (!isset($items))
@@ -1509,7 +1518,7 @@ class SunFwHelper
 						$file = str_replace(DIRECTORY_SEPARATOR, '/', $file);
 					}
 
-					if ($text == JText::_($text))
+					if ($text == Text::_($text))
 					{
 						// Generate display name from file name.
 						$text = trim(preg_replace('/([A-Z])/', ' \\1', $name));
@@ -1522,14 +1531,14 @@ class SunFwHelper
 						$text = ucwords($text);
 					}
 
-					if ($icon == JText::_($icon))
+					if ($icon == Text::_($icon))
 					{
 						$icon = '';
 					}
 
 					$items[$key][$name] = array(
-						'label' => JText::_($text),
-						'icon' => empty($icon) ? '' : JText::_($icon),
+						'label' => Text::_($text),
+						'icon' => empty($icon) ? '' : Text::_($icon),
 						'settings' => "{$base_url}{$file}?v=" . SUNFW_VERSION . '&d=' . SUNFW_RELEASED_DATE
 					);
 				}
@@ -1562,32 +1571,32 @@ class SunFwHelper
 		{
 			$settings = array();
 
-			if (JPluginHelper::importPlugin('system', 'jsnbrand'))
+			if (PluginHelper::importPlugin('system', 'jsnbrand'))
 			{
-				$dispatcher = JEventDispatcher::getInstance();
+				$dispatcher = Factory::getApplication();
 
-				$settings['showTplUpgradeButton'] = $dispatcher->trigger('showTplUpgradeButton');
+				$settings['showTplUpgradeButton'] = $dispatcher->triggerEvent('showTplUpgradeButton');
 				$settings['showTplUpgradeButton'] = (int) $settings['showTplUpgradeButton'][0];
 
-				$settings['showTplChangelog'] = $dispatcher->trigger('showTplChangelog');
+				$settings['showTplChangelog'] = $dispatcher->triggerEvent('showTplChangelog');
 				$settings['showTplChangelog'] = (int) $settings['showTplChangelog'][0];
 
-				$settings['showTplThumbnailLink'] = $dispatcher->trigger('showTplThumbnailLink');
+				$settings['showTplThumbnailLink'] = $dispatcher->triggerEvent('showTplThumbnailLink');
 				$settings['showTplThumbnailLink'] = (int) $settings['showTplThumbnailLink'][0];
 
-				$settings['showTplCopyrightContent'] = $dispatcher->trigger('showTplCopyrightContent');
+				$settings['showTplCopyrightContent'] = $dispatcher->triggerEvent('showTplCopyrightContent');
 				$settings['showTplCopyrightContent'] = (int) $settings['showTplCopyrightContent'][0];
 
-				$settings['replaceTplFooterContent'] = $dispatcher->trigger('replaceTplFooterContent');
+				$settings['replaceTplFooterContent'] = $dispatcher->triggerEvent('replaceTplFooterContent');
 				$settings['replaceTplFooterContent'] = (int) $settings['replaceTplFooterContent'][0];
 
-				$settings['getTplFooterContent'] = $dispatcher->trigger('getTplFooterContent');
+				$settings['getTplFooterContent'] = $dispatcher->triggerEvent('getTplFooterContent');
 				$settings['getTplFooterContent'] = (string) $settings['getTplFooterContent'][0];
 
-				$settings['replaceTplGettingStartedContent'] = $dispatcher->trigger('replaceTplGettingStartedContent');
+				$settings['replaceTplGettingStartedContent'] = $dispatcher->triggerEvent('replaceTplGettingStartedContent');
 				$settings['replaceTplGettingStartedContent'] = (int) $settings['replaceTplGettingStartedContent'][0];
 
-				$settings['getTplGettingStartedContent'] = $dispatcher->trigger('getTplGettingStartedContent');
+				$settings['getTplGettingStartedContent'] = $dispatcher->triggerEvent('getTplGettingStartedContent');
 				$settings['getTplGettingStartedContent'] = (string) $settings['getTplGettingStartedContent'][0];
 			}
 		}
@@ -1607,7 +1616,7 @@ class SunFwHelper
 	public static function loadAssets($admin = true, $bootstrap = false, $inline = false)
 	{
 		// Get Joomla document instance.
-		$doc = JFactory::getDocument();
+		$doc = Factory::getDocument();
 
 		if ($admin || $inline)
 		{
@@ -1616,7 +1625,7 @@ class SunFwHelper
 		}
 
 		// Generate base for assets URL.
-		$base = JUri::root(true) . '/plugins/system/sunfw/assets';
+		$base = Uri::root(true) . '/plugins/system/sunfw/assets';
 		$vd = 'v=' . SUNFW_VERSION . '&d=' . SUNFW_RELEASED_DATE;
 
 		if ($admin)
@@ -1768,7 +1777,7 @@ class SunFwHelper
 
 	public static function getExtensionInfo($element, $type, $folder="")
 	{
-	    $extension = JTable::getInstance('Extension');
+	    $extension = Table::getInstance('Extension');
 	    $extension->load(
 	        array(
 	            'element'	=> $element,

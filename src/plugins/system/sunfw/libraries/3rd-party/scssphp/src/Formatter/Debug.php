@@ -19,6 +19,7 @@ use Leafo\ScssPhp\Formatter\OutputBlock;
  *
  * @author Anthon Pang <anthon.pang@gmail.com>
  */
+#[\AllowDynamicProperties]
 class Debug extends Formatter
 {
     /**

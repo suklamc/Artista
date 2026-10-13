@@ -13,8 +13,12 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
-// Import necessary library.
-jimport('joomla.filesystem.file');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Helper\ModuleHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Session\Session;
+use Joomla\CMS\Uri\Uri;
+
 
 /**
  * Template rendering class.
@@ -22,6 +26,7 @@ jimport('joomla.filesystem.file');
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwSite
 {
 
@@ -96,6 +101,16 @@ class SunFwSite
 	protected $megamenu = array();
 
 	/**
+	 * Values the page templates read as $this->templateUrl etc. (Joomla 3 versions stored
+	 * them on Joomla's document object, which PHP 8.2+ no longer allows).
+	 */
+	public $templateUrl = '';
+	public $templatePrefix = '';
+	public $isMobileSwicher = null;
+	public $bodyClass = '';
+	public $activeMenu = null;
+
+	/**
 	 * Flag that states whether layout viewer is enabled.
 	 *
 	 * @var  boolean
@@ -117,14 +132,14 @@ class SunFwSite
 			die(implode('<br />', $resultCheckSystemRequirements));
 		}
 
-		// Initialize class overrides.
-		SunFwOverwrite::initialize();
+		// Joomla 3 versions replaced core Joomla classes here (SunFwOverwrite) to add extra
+		// layout override folders. Joomla 4+ uses its standard override lookup instead.
 
 		// Get Joomla's application instance.
-		$this->app = JFactory::getApplication();
+		$this->app = Factory::getApplication();
 
 		// Get Joomla's document object.
-		$this->doc = JFactory::getDocument();
+		$this->doc = Factory::getDocument();
 
 		// Get active template.
 		$this->tpl = PlgSystemSunFw::$template ?: $this->app->getTemplate(true);
@@ -168,39 +183,20 @@ class SunFwSite
 			$this->megamenu = & $this->mega_menu_data;
 		}
 
-		// Register necessary event handlers.
-		$this->app->registerEvent('onBeforeRender', array(
-			'SunFwCookielaw',
-			'loadCookie'
-		));
+		// Register necessary event handlers. Joomla 4+ passes raw listeners a single Event
+		// object, so each handler is wrapped. Article social share and commenting are wired
+		// through the plugin's onContentBeforeDisplay / onContentAfterDisplay methods.
+		$this->app->registerEvent('onBeforeRender', function () {
+			SunFwCookielaw::loadCookie();
+		});
 
-		$this->app->registerEvent('onBeforeCompileHead', array(
-			&$this,
-			'optimizeAssets'
-		));
+		$this->app->registerEvent('onBeforeCompileHead', function () {
+			$this->optimizeAssets();
+		});
 
-		$this->app->registerEvent('onAfterRender', array(
-			&$this,
-			'finalizeOutput'
-		));
-
-		$this->app->registerEvent('onContentBeforeDisplay', array(
-			&$this,
-			'renderSocialShare'
-		));
-		$this->app->registerEvent('onContentAfterDisplay', array(
-			&$this,
-			'renderSocialShare'
-		));
-
-		$this->app->registerEvent('onContentBeforeDisplay', array(
-			&$this,
-			'renderCommenting'
-		));
-		$this->app->registerEvent('onContentAfterDisplay', array(
-			&$this,
-			'renderCommenting'
-		));
+		$this->app->registerEvent('onAfterRender', function () {
+			$this->finalizeOutput();
+		});
 	}
 
 	/**
@@ -226,6 +222,16 @@ class SunFwSite
 		}
 
 		return null;
+	}
+
+	/**
+	 * Whether the site renderer has been created for this request.
+	 *
+	 * @return  boolean
+	 */
+	public static function hasInstance()
+	{
+		return isset(self::$instance);
 	}
 
 	/**
@@ -428,7 +434,7 @@ class SunFwSite
 
 			if ($Itemid && !$this->app->input->getCmd('option'))
 			{
-				$dbo = JFactory::getDbo();
+				$dbo = Factory::getDbo();
 				$qry = $dbo->getQuery(true)
 					->select('link')
 					->from('#__menu')
@@ -462,8 +468,8 @@ class SunFwSite
 				sunfw = window.sunfw || {};
 				sunfw.layout_viewer = ' . json_encode(
 					array(
-						'show-layout' => JText::_('SUNFW_LAYOUT_VIEWER_LABEL_SHOW'),
-						'hide-layout' => JText::_('SUNFW_LAYOUT_VIEWER_LABEL_HIDE')
+						'show-layout' => Text::_('SUNFW_LAYOUT_VIEWER_LABEL_SHOW'),
+						'hide-layout' => Text::_('SUNFW_LAYOUT_VIEWER_LABEL_HIDE')
 					)) . ';
 			');
 		}
@@ -589,7 +595,7 @@ class SunFwSite
 			$layoutViewer = ' ' . implode(' ',
 				array(
 					'layout-element="item"',
-					'layout-element-type="' . JText::_('SUNFW_ITEM') . '"',
+					'layout-element-type="' . Text::_('SUNFW_ITEM') . '"',
 					'layout-element-name="' . $item['settings']['name'] . '"'
 				));
 
@@ -644,7 +650,7 @@ class SunFwSite
 	 *
 	 * @return  string|boolean
 	 */
-	public function renderSocialShare($context, &$row, &$params, $page = 0)
+	public function renderSocialShare($context, &$row, &$params, $page = 0, $eventName = null)
 	{
 		// Simply return if not rendering content article.
 		if ($context != 'com_content.article')
@@ -655,7 +661,7 @@ class SunFwSite
 		// Get social share data.
 		$socialShare = isset($this->social_share_data) ? $this->social_share_data : array();
 
-		if (empty($socialShare['enabled']) || !(int) $socialShare['enabled'] || !@count( (array) $socialShare['buttons']))
+		if (empty($socialShare['enabled']) || !(int) $socialShare['enabled'] || !count((array) $socialShare['buttons']))
 		{
 			return false;
 		}
@@ -668,9 +674,11 @@ class SunFwSite
 		}
 
 		// Detect the name of the current event.
-		static $currentEvent;
+		static $toggle;
 
-		$currentEvent = isset($currentEvent) ? 'onContentAfterDisplay' : 'onContentBeforeDisplay';
+		// Joomla 4+: the plugin passes the event name. The toggle is the Joomla 3 fallback.
+		$toggle = isset($toggle) ? 'onContentAfterDisplay' : 'onContentBeforeDisplay';
+		$currentEvent = $eventName ?: $toggle;
 
 		if ($currentEvent == 'onContentBeforeDisplay' && strpos($socialShare['buttons-position'], 'top-') === false)
 		{
@@ -718,7 +726,7 @@ class SunFwSite
 			if (!empty($link))
 			{
 				$link .= urlencode(
-					JUri::getInstance()->toString(array(
+					Uri::getInstance()->toString(array(
 						'scheme',
 						'host',
 						'port',
@@ -762,7 +770,7 @@ class SunFwSite
 	 *
 	 * @return  string|boolean
 	 */
-	public function renderCommenting($context, &$row, &$params, $page = 0)
+	public function renderCommenting($context, &$row, &$params, $page = 0, $eventName = null)
 	{
 		// Simply return if not rendering content article.
 		if ($context != 'com_content.article')
@@ -786,9 +794,11 @@ class SunFwSite
 		}
 
 		// Detect the name of the current event.
-		static $currentEvent;
+		static $toggle;
 
-		$currentEvent = isset($currentEvent) ? 'onContentAfterDisplay' : 'onContentBeforeDisplay';
+		// Joomla 4+: the plugin passes the event name. The toggle is the Joomla 3 fallback.
+		$toggle = isset($toggle) ? 'onContentAfterDisplay' : 'onContentBeforeDisplay';
+		$currentEvent = $eventName ?: $toggle;
 
 		if ($currentEvent == 'onContentBeforeDisplay' && ( empty($commenting['show-counter']) || !(int) $commenting['show-counter'] ))
 		{
@@ -797,7 +807,7 @@ class SunFwSite
 
 		// Render commenting.
 		$html = array();
-		$page = JUri::getInstance()->toString(array(
+		$page = Uri::getInstance()->toString(array(
 			'scheme',
 			'host',
 			'port',
@@ -840,7 +850,7 @@ class SunFwSite
 					$html[] = '</script>';
 					$html[] = '<noscript>';
 					$html[] = "<a href=\"https://{$commenting['disqus-subdomain']}.disqus.com/?url=ref\">";
-					$html[] = JText::_('SUNFW_VIEW_THE_DISCUSSION_THREAD');
+					$html[] = Text::_('SUNFW_VIEW_THE_DISCUSSION_THREAD');
 					$html[] = '</a>';
 					$html[] = '</noscript>';
 				}
@@ -961,24 +971,20 @@ class SunFwSite
 	 */
 	public function optimizeAssets()
 	{
-		// Remove default Bootstrap.
-		unset($this->doc->_scripts[JUri::root(true) . '/media/jui/js/bootstrap.min.js']);
-		unset($this->doc->_scripts[JUri::root(true) . '/media/jui/js/bootstrap-tooltip-extended.min.js']);
-
 		// Get list of extensions supported by the active template.
 		$xml = SunFwHelper::getManifest($this->template);
 
 		if (isset($xml->assets) && isset($xml->assets->file))
 		{
 			// Get Joomla database object.
-			$dbo = JFactory::getDbo();
+			$dbo = Factory::getDbo();
 
 			// Get list of extension that will be loaded on the requested page.
 			$extensions = array($this->app->input->getCmd('option'));
 
 			foreach (SunFwHelper::getModulePositions($this->template) as $position)
 			{
-				$extensions = array_merge($extensions, JModuleHelper::getModules($position));
+				$extensions = array_merge($extensions, ModuleHelper::getModules($position));
 			}
 
 			foreach ($extensions as &$extension)
@@ -990,7 +996,7 @@ class SunFwSite
 			}
 
 			// Load additional assets, if has, for the requested component and loaded modules.
-			$base_link = JUri::root(true) . "/templates/{$this->template}";
+			$base_link = Uri::root(true) . "/templates/{$this->template}";
 
 			foreach ($xml->assets->file as $file)
 			{
@@ -1058,12 +1064,11 @@ class SunFwSite
 
 		foreach ($this->doc->_scripts as $script => $options)
 		{
-			// Fix a conflict with jQuery on Joomla 4.0 series.
-			if (SunFwCompat::isJoomla(4)
-				&& preg_match('#/templates/[^/]+/js/template\.js#', $script, $match))
+			// Load the template script through the framework to avoid a jQuery conflict on Joomla 4+.
+			if (preg_match('#/templates/[^/]+/js/template\.js#', $script, $match))
 			{
-				$script = JUri::root(true) . '/index.php?option=com_ajax&group=system&plugin=sunfw&format=raw&context=load-assets';
-				$script .= '&action=get-js&files=' . $match[0] . '&' . JSession::getFormToken() . '=1';
+				$script = Uri::root(true) . '/index.php?option=com_ajax&group=system&plugin=sunfw&format=raw&context=load-assets';
+				$script .= '&action=get-js&files=' . $match[0] . '&' . Session::getFormToken() . '=1';
 			}
 
 			// Verify script path.
@@ -1072,28 +1077,28 @@ class SunFwSite
 				// Parse script URL.
 				$url = parse_url($script);
 
-				if (JUri::root(true) != '')
+				if (Uri::root(true) != '')
 				{
-					$path = str_replace(JUri::root(true), JPATH_ROOT, $url['path']);
+					$path = str_replace(Uri::root(true), JPATH_ROOT, $url['path']);
 				}
 				else
 				{
 					$path = JPATH_ROOT . $url['path'];
 				}
 
-				if (!JFile::exists($path))
+				if (!SunFwFile::exists($path))
 				{
 					// Refine script path.
 					$parts = explode('/', trim($url['path'], '/'));
 
-					while (count($parts) && !JFile::exists(JPATH_ROOT . '/' . implode('/', $parts)))
+					while (count($parts) && !SunFwFile::exists(JPATH_ROOT . '/' . implode('/', $parts)))
 					{
 						array_shift($parts);
 					}
 
 					if (count($parts))
 					{
-						$script = JUri::root(true) . '/' . implode('/', $parts);
+						$script = Uri::root(true) . '/' . implode('/', $parts);
 
 						if (!empty($url['query']))
 						{
@@ -1113,9 +1118,9 @@ class SunFwSite
 		$compressJS = false;
 		$compressCSS = false;
 
-		if (@count((array) $systemData) && isset($systemData['compression']) && @count((array) $systemData['compression']))
+		if (count((array) $systemData) && isset($systemData['compression']) && count((array) $systemData['compression']))
 		{
-			$config = JFactory::getConfig();
+			$config = Factory::getConfig();
 
 			// Verify cache directory.
 			$cachePath = SunFwSiteHelper::getCacheDirectory($this);
@@ -1260,7 +1265,7 @@ class SunFwSite
 								case 'link_image':
 									if ($mItemParams->get('menu_image', '') != '')
 									{
-										$html .= '<img src="' . JUri::root(true) . '/' . $mItemParams->get('menu_image') . '" />';
+										$html .= '<img src="' . Uri::root(true) . '/' . $mItemParams->get('menu_image') . '" />';
 									}
 								break;
 
@@ -1307,7 +1312,7 @@ class SunFwSite
 
 			// Find all asset links except external URLs.
 			$regex = '#("|\'|\()('
-				. JUri::base() . '|' . JUri::base(true) . '/'
+				. Uri::base() . '|' . Uri::base(true) . '/'
 				. ')([^"\'\)\r\n]+)(\.[a-z0-9]{2,4})(\?[a-z0-9]+)?("|\'|\))#i';
 
 			if (preg_match_all($regex, $buffer, $matches, PREG_SET_ORDER))
@@ -1326,8 +1331,8 @@ class SunFwSite
 					foreach (array(SunFwSiteHelper::getCacheDirectory(), $this->app->get('tmp_path')) as $tmp_path)
 					{
 						$tmp_links = implode('|', array(
-							str_replace(JPATH_ROOT . '/', JUri::base(), $tmp_path),
-							str_replace(JPATH_ROOT, JUri::base(true), $tmp_path)
+							str_replace(JPATH_ROOT . '/', Uri::base(), $tmp_path),
+							str_replace(JPATH_ROOT, Uri::base(true), $tmp_path)
 						));
 
 						if (preg_match('#^(' . $tmp_links . ')/#', $match[2] . $match[3]))
@@ -1396,7 +1401,7 @@ class SunFwSite
 
 		$systemData = isset($renderer->system_data) ? $renderer->system_data : array();
 
-		if (!@count( (array) $systemData) || !isset($systemData['minifyHTML']) || !(int) $systemData['minifyHTML'])
+		if (!count((array) $systemData) || !isset($systemData['minifyHTML']) || !(int) $systemData['minifyHTML'])
 		{
 			return $body;
 		}
@@ -1467,8 +1472,8 @@ class SunFwSite
 	public static function moveScriptTags($html)
 	{
 		// Get Joomla input object
-		$input = JFactory::getApplication()->input;
-		$doc = JFactory::getDocument();
+		$input = Factory::getApplication()->input;
+		$doc = Factory::getDocument();
 		// Only continue if requested return format is html
 		if ($input->getCmd('format', null) != null and $input->getCmd('format') != 'html')
 		{
@@ -1499,7 +1504,7 @@ class SunFwSite
 
 		$systemData = isset($renderer->system_data) ? $renderer->system_data : array();
 
-		if (!@count((array) $systemData) || !isset($systemData['moveJSToBottom']) || !(int) $systemData['moveJSToBottom'])
+		if (!count((array) $systemData) || !isset($systemData['moveJSToBottom']) || !(int) $systemData['moveJSToBottom'])
 		{
 			return $html;
 		}

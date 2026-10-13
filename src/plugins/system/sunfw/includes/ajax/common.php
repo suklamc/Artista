@@ -13,12 +13,18 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Multilanguage;
+use Joomla\CMS\Language\Text;
+
 /**
  * Handle common Ajax requests from template admin.
  *
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwAjaxCommon extends SunFwAjax
 {
 	/**
@@ -31,17 +37,11 @@ class SunFwAjaxCommon extends SunFwAjax
 		// Load language file for modules component.
 		$this->app->getLanguage()->load('com_modules');
 
-		// Generate path to the modules component.
-		$com_modules = JPATH_ADMINISTRATOR . '/components/com_modules';
-
-		// Register path to load the ModulesHelper class.
-		JLoader::register('ModulesHelper', "{$com_modules}/helpers/modules.php");
-
-		// Register path to load the HTML helpers of the modules component.
-		JHtml::addIncludePath("{$com_modules}/helpers/html");
+		// Booting the modules component registers its 'modules.*' HTML helpers.
+		$this->app->bootComponent('com_modules');
 
 		// Get module positions from all installed templates.
-		$positions = JHtml::_('modules.positions', 0, 1, '');
+		$positions = HTMLHelper::_('modules.positions', 0, 1, '');
 
 		$this->setResponse($positions);
 	}
@@ -68,7 +68,7 @@ class SunFwAjaxCommon extends SunFwAjax
 		{
 			if ((string) $pos == $position)
 			{
-				throw new Exception(JText::_('SUNFW_POSITION_IS_EXISTED'));
+				throw new Exception(Text::_('SUNFW_POSITION_IS_EXISTED'));
 			}
 		}
 
@@ -85,7 +85,7 @@ class SunFwAjaxCommon extends SunFwAjax
 		}
 
 		$this->setResponse(array(
-			'message' => JText::_('SUNFW_SAVED_SUCCESSFULLY')
+			'message' => Text::_('SUNFW_SAVED_SUCCESSFULLY')
 		));
 	}
 
@@ -152,11 +152,10 @@ class SunFwAjaxCommon extends SunFwAjax
 		// Get default language if multi-language is enabled.
 		$lang = '';
 
-		jimport('');
 
-		if (JLanguageMultilang::isEnabled())
+		if (Multilanguage::isEnabled())
 		{
-			$lang = JComponentHelper::getParams('com_languages')->get('site', 'en-GB');
+			$lang = ComponentHelper::getParams('com_languages')->get('site', 'en-GB');
 		}
 
 		// Get requested article.
@@ -185,13 +184,13 @@ class SunFwAjaxCommon extends SunFwAjax
 		$lang = $this->input->getString('lang', '');
 
 		// Get list of content category.
-		$categories = JHtml::_('category.options', $extension,
+		$categories = HTMLHelper::_('category.options', $extension,
 			array(
 				'filter.published' => empty($state) ? null : explode(',', $state),
 				'filter.language' => empty($lang) ? null : explode(',', $lang)
 			));
 
-		array_unshift($categories, JHtml::_('select.option', 'all', JText::_('SUNFW_ALL')));
+		array_unshift($categories, HTMLHelper::_('select.option', 'all', Text::_('SUNFW_ALL')));
 
 		$this->setResponse($categories);
 	}

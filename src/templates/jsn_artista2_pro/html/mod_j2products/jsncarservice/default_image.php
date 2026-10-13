@@ -5,7 +5,10 @@
 * @license GNU GPL v3 or later
 */
 defined('_JEXEC') or die;
-$image_root_path = JUri::root();
+
+use Joomla\CMS\Uri\Uri;
+use Joomla\Filesystem\Path;
+$image_root_path = Uri::root();
 $image_path = '' ;
 if ($product->image_type == 'thumbimage' && isset($product->thumb_image) ) {
 	$image_path = $product->thumb_image ; 
@@ -22,7 +25,7 @@ if($product->image_position == 'top'){
 ?>
 <?php if($product->show_image): ?>
 <div class="j2store-product-image  <?php echo $img_class; ?> ">
-	<?php if(JFile::exists(JPATH_SITE.'/'.JPath::clean($image_path))):?>
+	<?php if(SunFwFile::exists(JPATH_SITE.'/'.Path::clean($image_path))):?>
 		<?php if($product->module_display_link && $product->link_image ): ?>
 			<a href="<?php echo $product->module_display_link; ?>" title="<?php echo $product->product_name; ?>">
 		<?php endif;?>

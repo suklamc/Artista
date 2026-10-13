@@ -20,6 +20,7 @@ use Joomla\CMS\Language\Text;
  * @package  Artista
  * @since    3.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwStructure
 {
 	/**

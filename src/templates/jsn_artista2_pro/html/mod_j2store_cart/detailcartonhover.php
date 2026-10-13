@@ -11,7 +11,13 @@
 
 // no direct access
 defined('_JEXEC') or die('Restricted access');
-$app = JFactory::getApplication();
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Registry\Registry;
+$app = Factory::getApplication();
 require_once(JPATH_ADMINISTRATOR.'/components/com_j2store/helpers/j2store.php');
 J2Store::utilities()->nocache();
 $ajax = $app->getUserState('mod_j2store_mini_cart.isAjax');
@@ -30,10 +36,10 @@ $title = $params->get('cart_module_title', '');
 		<div class="j2store-minicart-button">
 			<div class="j2store-cart-info">
 				<h3 class="j2store-cart-info-link"   data-hover="dropdown" data-toggle="dropdown">
-					<a class="link" href="<?php echo JRoute::_('index.php?option=com_j2store&view=carts');?>">My Cart</a>
+					<a class="link" href="<?php echo Route::_('index.php?option=com_j2store&view=carts');?>">My Cart</a>
 					<?php if($list['product_count'] > 0): ?>
 						<span>
-							(<?php echo JText::sprintf($list['product_count'], $currency->format($list['total'])); ?>)
+							(<?php echo Text::sprintf($list['product_count'], $currency->format($list['total'])); ?>)
 						</span>
 						<?php else:?>
 								<span>(0)</span>
@@ -45,17 +51,17 @@ $title = $params->get('cart_module_title', '');
 					<div class="top-subtotal">
 						<?php if($list['product_count'] > 0): ?>
 							<span>
-								<?php echo JText::sprintf('J2STORE_CART_TOTAL', $list['product_count'], $currency->format($list['total'])); ?>
+								<?php echo Text::sprintf('J2STORE_CART_TOTAL', $list['product_count'], $currency->format($list['total'])); ?>
 							</span>
 							<?php else:?>
-								<?php echo JText::_('J2STORE_NO_ITEMS_IN_CART'); ?>
+								<?php echo Text::_('J2STORE_NO_ITEMS_IN_CART'); ?>
 							<?php endif;?>
 						</div>
 					</div>
 					<?php if($list['product_count'] > 0): ?>
 						<ul class="j2store-cart-list">
 							<?php foreach($advanced_list as $item):
-								$registry = new JRegistry;
+								$registry = new Registry;
 								$registry->loadString($item->orderitem_params);
 								$item->params = $registry;
 								$thumb_image = $item->params->get('thumb_image', '');
@@ -66,14 +72,14 @@ $title = $params->get('cart_module_title', '');
 
 										<?php if($params->get('show_thumbimage') && !empty($thumb_image)):?>
 										<span class="cart-thumb-image">
-											<img  alt="<?php echo $item->orderitem_name; ?>" src="<?php echo JUri::root(true).'/'.$thumb_image; ?>" />
+											<img  alt="<?php echo $item->orderitem_name; ?>" src="<?php echo Uri::root(true).'/'.$thumb_image; ?>" />
 										</span>
 									<?php endif;?>
 
 									<div class="item-product-details">
 										<?php if($params->get('show_cart_remove')):?>
 											<div class="access">
-												<a class="cart-remove text-error" href="<?php echo JRoute::_('index.php?option=com_j2store&view=carts&task=remove&cartitem_id='.$item->cartitem_id); ?>" > <i class="fa fa-remove"></i></a>
+												<a class="cart-remove text-error" href="<?php echo Route::_('index.php?option=com_j2store&view=carts&task=remove&cartitem_id='.$item->cartitem_id); ?>" > <i class="fa fa-remove"></i></a>
 											</div>
 										<?php endif;?>
 									</div>
@@ -89,7 +95,7 @@ $title = $params->get('cart_module_title', '');
 										<span class="cart-item-options">
 											<?php foreach ($item->orderitemattributes as $attribute): ?>
 												<small>
-													- <?php echo JText::_($attribute->orderitemattribute_name); ?> : <?php echo JText::_($attribute->orderitemattribute_value); ?>
+													- <?php echo Text::_($attribute->orderitemattribute_name); ?> : <?php echo Text::_($attribute->orderitemattribute_value); ?>
 												</small>
 												<br />
 											<?php endforeach;?>
@@ -103,14 +109,14 @@ $title = $params->get('cart_module_title', '');
 					<?php if( $params->get('enable_checkout') ||  $params->get('enable_view_cart') ):?>
 					<div class="j2store-cart-nav">
 						<?php if($params->get('enable_checkout')):?>
-							<a class="btn btn-primary btn-large"  href="<?php echo JRoute::_('index.php?option=com_j2store&view=checkout');?>">
-								<?php echo JText::_('J2STORE_CHECKOUT'); ?>
+							<a class="btn btn-primary btn-large"  href="<?php echo Route::_('index.php?option=com_j2store&view=checkout');?>">
+								<?php echo Text::_('J2STORE_CHECKOUT'); ?>
 							</a>
 						<?php endif;?>
 
 						<?php if($params->get('enable_view_cart')):?>
-							<a class="btn btn-default btn-large" href="<?php echo JRoute::_('index.php?option=com_j2store&view=carts');?>">
-								<?php echo JText::_('J2STORE_VIEW_CART');?>
+							<a class="btn btn-default btn-large" href="<?php echo Route::_('index.php?option=com_j2store&view=carts');?>">
+								<?php echo Text::_('J2STORE_VIEW_CART');?>
 							</a>
 						<?php endif;?>
 					</div>

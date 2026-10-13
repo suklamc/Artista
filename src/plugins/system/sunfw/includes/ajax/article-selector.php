@@ -13,12 +13,17 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+
 /**
  * Article selector widget.
  *
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwAjaxArticleSelector extends SunFwAjaxSelector
 {
 
@@ -46,14 +51,14 @@ class SunFwAjaxArticleSelector extends SunFwAjaxSelector
 	 */
 	public function renderStatusOptions($name, $selected, $parameters = '')
 	{
-		echo JHTML::_('select.genericlist',
+		echo HTMLHelper::_('select.genericlist',
 			array(
-				JHtml::_('select.option', '', JText::_('JOPTION_SELECT_PUBLISHED')),
-				JHtml::_('select.option', '-2', JText::_('JTRASHED')),
-				JHtml::_('select.option', '0', JText::_('JUNPUBLISHED')),
-				JHtml::_('select.option', '1', JText::_('JPUBLISHED')),
-				JHtml::_('select.option', '2', JText::_('JARCHIVED')),
-				JHtml::_('select.option', '*', JText::_('JALL'))
+				HTMLHelper::_('select.option', '', Text::_('JOPTION_SELECT_PUBLISHED')),
+				HTMLHelper::_('select.option', '-2', Text::_('JTRASHED')),
+				HTMLHelper::_('select.option', '0', Text::_('JUNPUBLISHED')),
+				HTMLHelper::_('select.option', '1', Text::_('JPUBLISHED')),
+				HTMLHelper::_('select.option', '2', Text::_('JARCHIVED')),
+				HTMLHelper::_('select.option', '*', Text::_('JALL'))
 			), $name, $parameters, 'value', 'text', $selected);
 	}
 
@@ -81,7 +86,7 @@ class SunFwAjaxArticleSelector extends SunFwAjaxSelector
 			$filters['filter.language'] = explode(',', $this->filter_language);
 		}
 
-		$options = JHtml::_('category.options', 'com_content', $filters);
+		$options = HTMLHelper::_('category.options', 'com_content', $filters);
 
 		// Displays language code if not set to All.
 		foreach ($options as $option)
@@ -103,11 +108,11 @@ class SunFwAjaxArticleSelector extends SunFwAjaxSelector
 		}
 
 		array_unshift($options, (object) array(
-			'text' => JText::_('JOPTION_SELECT_CATEGORY'),
+			'text' => Text::_('JOPTION_SELECT_CATEGORY'),
 			'value' => ''
 		));
 
-		echo JHTML::_('select.genericlist', $options, $name, $parameters, 'value', 'text', $selected);
+		echo HTMLHelper::_('select.genericlist', $options, $name, $parameters, 'value', 'text', $selected);
 	}
 
 	/**
@@ -137,11 +142,11 @@ class SunFwAjaxArticleSelector extends SunFwAjaxSelector
 		}
 
 		array_unshift($options, (object) array(
-			'text' => JText::_('JOPTION_SELECT_AUTHOR'),
+			'text' => Text::_('JOPTION_SELECT_AUTHOR'),
 			'value' => ''
 		));
 
-		echo JHTML::_('select.genericlist', $options, $name, $parameters, 'value', 'text', $selected);
+		echo HTMLHelper::_('select.genericlist', $options, $name, $parameters, 'value', 'text', $selected);
 	}
 
 	/**
@@ -199,7 +204,7 @@ class SunFwAjaxArticleSelector extends SunFwAjaxSelector
 		{
 			if ($language === 'current')
 			{
-				$query->where('a.language IN (' . $this->dbo->quote(JFactory::getLanguage()->getTag()) . ', "*")');
+				$query->where('a.language IN (' . $this->dbo->quote(Factory::getLanguage()->getTag()) . ', "*")');
 			}
 			else
 			{

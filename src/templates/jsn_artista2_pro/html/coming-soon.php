@@ -12,6 +12,12 @@
 // No direct access to this file.
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+
 // Continue only if the current template supports custom coming soon.
 $xml = SunFwHelper::getManifest($this->template);
 
@@ -29,10 +35,10 @@ if (empty($settings['enabled']) || ! (int) $settings['enabled'])
 }
 
 // Get Joomla's global configuration.
-$config = JFactory::getConfig();
+$config = Factory::getConfig();
 
 // Get Joomla's document object.
-$document = JFactory::getDocument();
+$document = Factory::getDocument();
 
 // Prepare necessary data.
 $title = empty($settings['page-title']) ? $config->get('sitename') : $settings['page-title'];
@@ -45,9 +51,9 @@ if (!empty($settings['deadline']))
 }
 
 // Check if login with 2 factor methods is enabled?
-require_once JPATH_ADMINISTRATOR . '/components/com_users/helpers/users.php';
-
-$twofactormethods = UsersHelper::getTwoFactorMethods();
+// Joomla 4.2+ replaced the login secret-key field with Multi-factor Authentication,
+// which runs after the password step, so the form never needs a secret key field.
+$twofactormethods = array();
 
 // Get template's manifest cache.
 $manifest = SunFwHelper::getManifestCache($this->template);
@@ -61,7 +67,7 @@ $manifest = SunFwHelper::getManifestCache($this->template);
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<base href="<?php echo JURI::base(); ?>" />
+	<base href="<?php echo Uri::base(); ?>" />
 
 	<title><?php echo $title; ?></title>
 
@@ -98,7 +104,7 @@ $manifest = SunFwHelper::getManifestCache($this->template);
 	</style>
 
 	<?php if ($this->app->get('debug_lang', '0') == '1' || $this->app->get('debug', '0') == '1') : ?>
-	<link href="<?php echo $this->baseurl; ?>/media/cms/css/debug.css" rel="stylesheet" />
+	<link href="<?php echo $this->baseurl; ?>/media/plg_system_debug/css/debug.css" rel="stylesheet" />
 	<?php endif; ?>
 
 	<?php foreach ($document->_scripts as $src => $attrs) : ?>
@@ -127,52 +133,52 @@ $manifest = SunFwHelper::getManifestCache($this->template);
 			<div class="countdown-timer" data-deadline="<?php echo $settings['deadline']; ?>">
                 <div class="day-container">
                     <div class="day countdown">&nbsp;&nbsp;</div>
-                    <?php echo JText::_('SUNFW_DAYS'); ?>
+                    <?php echo Text::_('SUNFW_DAYS'); ?>
                 </div>
                 <div class="hour-container">
                     <div class="hour countdown">&nbsp;&nbsp;</div>
-					<?php echo JText::_('SUNFW_HOURS'); ?>
+					<?php echo Text::_('SUNFW_HOURS'); ?>
                 </div>
                 <div class="minute-container">
                     <div class="minute countdown">&nbsp;&nbsp;</div>
-					<?php echo JText::_('SUNFW_MINUTES'); ?>
+					<?php echo Text::_('SUNFW_MINUTES'); ?>
                 </div>
                 <div class="second-container">
                     <div class="second countdown">&nbsp;&nbsp;</div>
-					<?php echo JText::_('SUNFW_SECONDS'); ?>
+					<?php echo Text::_('SUNFW_SECONDS'); ?>
                 </div>
             </div>
             <script type="text/javascript">
 	            JSN_Countdown_Timer("#content .countdown-timer");
             </script>
             <?php endif; ?>
-			<form action="<?php echo JRoute::_('index.php', true); ?>" method="post" id="form-login">
+			<form action="<?php echo Route::_('index.php', true); ?>" method="post" id="form-login">
 				<fieldset class="form-inline">
 					<div class="input-group">
-						<!-- <label for="username"><?php echo JText::_('JGLOBAL_USERNAME'); ?></label> -->
+						<!-- <label for="username"><?php echo Text::_('JGLOBAL_USERNAME'); ?></label> -->
 						<div class="input-group-prepend">
 							<i class="fa fa-user" aria-hidden="true"></i>
 						</div>
-						<input class="form-control pd-left" name="username" id="username" type="text" placeholder="Username" title="<?php echo JText::_('JGLOBAL_USERNAME'); ?>" />
+						<input class="form-control pd-left" name="username" id="username" type="text" placeholder="Username" title="<?php echo Text::_('JGLOBAL_USERNAME'); ?>" />
 					</div>
 					<div class="input-group">
-						<!-- <label for="password"><?php echo JText::_('JGLOBAL_PASSWORD'); ?></label> -->
+						<!-- <label for="password"><?php echo Text::_('JGLOBAL_PASSWORD'); ?></label> -->
 						<div class="input-group-prepend">
 							<i class="fa fa-lock" aria-hidden="true"></i>
 						</div>
-						<input class="form-control pd-left" type="password" name="password" id="password" placeholder="Password" title="<?php echo JText::_('JGLOBAL_PASSWORD'); ?>" />
+						<input class="form-control pd-left" type="password" name="password" id="password" placeholder="Password" title="<?php echo Text::_('JGLOBAL_PASSWORD'); ?>" />
 					</div>
 					<?php if (count($twofactormethods) > 1) : ?>
-					<label for="secretkey"><?php echo JText::_('JGLOBAL_SECRETKEY'); ?></label>
-					<input type="text" name="secretkey" id="secretkey" title="<?php echo JText::_('JGLOBAL_SECRETKEY'); ?>" />
+					<label for="secretkey"><?php echo Text::_('JGLOBAL_SECRETKEY'); ?></label>
+					<input type="text" name="secretkey" id="secretkey" title="<?php echo Text::_('JGLOBAL_SECRETKEY'); ?>" />
 					<?php endif; ?>
 
-					<input type="submit" name="Submit" class="btn btn-primary" value="<?php echo JText::_('JLOGIN'); ?>" />
+					<input type="submit" name="Submit" class="btn btn-primary" value="<?php echo Text::_('JLOGIN'); ?>" />
 
 					<input type="hidden" name="option" value="com_users" />
 					<input type="hidden" name="task" value="user.login" />
-					<input type="hidden" name="return" value="<?php echo base64_encode(JUri::base()); ?>" />
-					<?php echo JHtml::_('form.token'); ?>
+					<input type="hidden" name="return" value="<?php echo base64_encode(Uri::base()); ?>" />
+					<?php echo HTMLHelper::_('form.token'); ?>
 				</fieldset>
 			</form>
 		</div>

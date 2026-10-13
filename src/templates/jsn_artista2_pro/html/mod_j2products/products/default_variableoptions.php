@@ -6,6 +6,9 @@
 */
 // No direct access
 defined('_JEXEC') or die;
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
 $options = $product->options;
 ?>
 
@@ -23,7 +26,7 @@ $options = $product->options;
           <?php if ($option['required']) { ?>
           <span class="required">*</span>
           <?php } ?>
-          <b><?php echo JText::_($option['option_name']); ?>:</b><br />
+          <b><?php echo Text::_($option['option_name']); ?>:</b><br />
           <select name="product_option[<?php echo $option['productoption_id']; ?>]"
          	 onChange="doAjaxPrice(
          	 			<?php echo $product->j2store_product_id?>,
@@ -36,7 +39,7 @@ $options = $product->options;
             		<?php echo  $option_value['product_optionvalue_attribs'] ;?>
 					data-product_id="<?php echo $product->j2store_product_id?>"
            		  >
-            	<?php echo stripslashes(htmlspecialchars(JText::_($option_value['optionvalue_name']))); ?>
+            	<?php echo stripslashes(htmlspecialchars(Text::_($option_value['optionvalue_name']))); ?>
             </option>
             <?php } ?>
           </select>
@@ -50,7 +53,7 @@ $options = $product->options;
           <?php if ($option['required']) { ?>
           <span class="required">*</span>
           <?php } ?>
-          <b ><?php echo JText::_($option['option_name']); ?>:</b><br />
+          <b ><?php echo Text::_($option['option_name']); ?>:</b><br />
           <?php foreach ($option['optionvalue'] as $option_value) { ?>
           	<?php $checked = ''; if($option_value['product_optionvalue_default']) $checked = 'checked="checked"'; ?>
 
@@ -69,13 +72,13 @@ $options = $product->options;
           			!empty($option_value['optionvalue_image'])
 				):
           ?>
-			<img class="optionvalue-image-<?php echo $option_value['product_optionvalue_id']; ?>" src="<?php echo JUri::root(true).'/'.$option_value['optionvalue_image']; ?>"
+			<img class="optionvalue-image-<?php echo $option_value['product_optionvalue_id']; ?>" src="<?php echo Uri::root(true).'/'.$option_value['optionvalue_image']; ?>"
 			 	<?php echo $option_value['product_optionvalue_attribs'];?>
 			 />
           <?php endif; ?>
           <label for="option-value-<?php echo $option_value['product_optionvalue_id']; ?>"
           	<?php echo $option_value['product_optionvalue_attribs'];?> >
-          <?php echo stripslashes(htmlspecialchars(JText::_($option_value['optionvalue_name']))); ?>
+          <?php echo stripslashes(htmlspecialchars(Text::_($option_value['optionvalue_name']))); ?>
           </label>
           <br />
           <?php } ?>

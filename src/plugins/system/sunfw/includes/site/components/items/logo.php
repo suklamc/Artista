@@ -13,8 +13,11 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+
 // Get site name.
-$sitename = JFactory::getApplication()->get('sitename');
+$sitename = Factory::getApplication()->get('sitename');
 
 // Prepare logo parameters.
 $logo = isset($component['settings']['logo']) ? $component['settings']['logo'] : '';
@@ -28,12 +31,12 @@ $logoMobile = !empty($component['settings']['mobile-logo']) ? $component['settin
 // Prepare logo link.
 if ($logo != '' && !preg_match('#^(https?:)?//#', $logo))
 {
-	$logo = JUri::root() . ltrim($logo, '/');
+	$logo = Uri::root() . ltrim($logo, '/');
 }
 
 if ($logoMobile != '' && !preg_match('#^(https?:)?//#', $logoMobile))
 {
-	$logoMobile = JUri::root() . ltrim($logoMobile);
+	$logoMobile = Uri::root() . ltrim($logoMobile);
 }
 ?>
 <div class="sunfw-logo <?php echo SunFwSiteBootstrap::showOn($visible_in); ?>">

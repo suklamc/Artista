@@ -13,12 +13,16 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
 /**
  * Handle Ajax requests from custom 404 pane.
  *
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwAjaxCustomFourzerofour extends SunFwAjax
 {
 
@@ -32,7 +36,7 @@ class SunFwAjaxCustomFourzerofour extends SunFwAjax
 	public function getAction($return = false)
 	{
 		// Get root URL.
-		$root = JUri::root(true);
+		$root = Uri::root(true);
 
 		/**
 		 * Get custom 404 data.
@@ -48,23 +52,23 @@ class SunFwAjaxCustomFourzerofour extends SunFwAjax
 			'settings' => SunFwHelper::findTemplateAdminJsonSettings(
 				JPATH_ROOT . '/plugins/system/sunfw/assets/joomlashine/admin/js/custom-404', 'settings.json', true),
 			'textMapping' => array(
-				'custom-404' => JText::_('SUNFW_CUSTOM_404'),
-				'save-custom-404' => JText::_('SUNFW_SAVE_CUSTOM_404'),
-				'custom-404-settings' => JText::_('SUNFW_CUSTOM_404_SETTINGS'),
-				'custom-404-not-enabled' => JText::_('SUNFW_CUSTOM_404_NOT_ENABLED_MESSAGE'),
-				'enable-custom-404' => JText::_('SUNFW_ENABLE_CUSTOM_404'),
-				'enable-custom-404-hint' => JText::_('SUNFW_ENABLE_CUSTOM_404_HINT'),
-				'custom-404-type' => JText::_('SUNFW_CUSTOM_404_TYPE'),
-				'custom-404-type-hint' => JText::_('SUNFW_CUSTOM_404_TYPE_HINT'),
-				'custom-404-type-menu-item' => JText::_('SUNFW_CUSTOM_404_TYPE_MENU_ITEM'),
-				'custom-404-type-article' => JText::_('SUNFW_CUSTOM_404_TYPE_ARTICLE'),
-				'custom-404-menu-item' => JText::_('SUNFW_CUSTOM_404_SELECT_MENU_ITEM'),
-				'custom-404-menu-item-hint' => JText::_('SUNFW_CUSTOM_404_SELECT_MENU_ITEM_HINT'),
-				'custom-404-article' => JText::_('SUNFW_CUSTOM_404_SELECT_ARTICLE'),
-				'custom-404-article-hint' => JText::_('SUNFW_CUSTOM_404_SELECT_ARTICLE_HINT'),
-				'menu-item' => JText::_('SUNFW_MENU_ITEM'),
-				'article' => JText::_('SUNFW_ARTICLE'),
-				'preview' => JText::_('SUNFW_CUSTOM_404_PREVIEW_LABEL')
+				'custom-404' => Text::_('SUNFW_CUSTOM_404'),
+				'save-custom-404' => Text::_('SUNFW_SAVE_CUSTOM_404'),
+				'custom-404-settings' => Text::_('SUNFW_CUSTOM_404_SETTINGS'),
+				'custom-404-not-enabled' => Text::_('SUNFW_CUSTOM_404_NOT_ENABLED_MESSAGE'),
+				'enable-custom-404' => Text::_('SUNFW_ENABLE_CUSTOM_404'),
+				'enable-custom-404-hint' => Text::_('SUNFW_ENABLE_CUSTOM_404_HINT'),
+				'custom-404-type' => Text::_('SUNFW_CUSTOM_404_TYPE'),
+				'custom-404-type-hint' => Text::_('SUNFW_CUSTOM_404_TYPE_HINT'),
+				'custom-404-type-menu-item' => Text::_('SUNFW_CUSTOM_404_TYPE_MENU_ITEM'),
+				'custom-404-type-article' => Text::_('SUNFW_CUSTOM_404_TYPE_ARTICLE'),
+				'custom-404-menu-item' => Text::_('SUNFW_CUSTOM_404_SELECT_MENU_ITEM'),
+				'custom-404-menu-item-hint' => Text::_('SUNFW_CUSTOM_404_SELECT_MENU_ITEM_HINT'),
+				'custom-404-article' => Text::_('SUNFW_CUSTOM_404_SELECT_ARTICLE'),
+				'custom-404-article-hint' => Text::_('SUNFW_CUSTOM_404_SELECT_ARTICLE_HINT'),
+				'menu-item' => Text::_('SUNFW_MENU_ITEM'),
+				'article' => Text::_('SUNFW_ARTICLE'),
+				'preview' => Text::_('SUNFW_CUSTOM_404_PREVIEW_LABEL')
 			)
 		);
 
@@ -136,7 +140,7 @@ class SunFwAjaxCustomFourzerofour extends SunFwAjax
 		}
 
 		$this->setResponse(array(
-			'message' => JText::_('SUNFW_CUSTOM_404_SAVED_SUCCESSFULLY')
+			'message' => Text::_('SUNFW_CUSTOM_404_SAVED_SUCCESSFULLY')
 		));
 	}
 }

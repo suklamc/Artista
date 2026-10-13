@@ -14,11 +14,14 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Editor\Editor;
+use Joomla\CMS\Factory;
+
 // Get Joomla document object.
-$doc = JFactory::getDocument();
+$doc = Factory::getDocument();
 
 // Get default editor.
-$editor = $this->input->getCmd('editor', JFactory::getConfig()->get('editor'));
+$editor = $this->input->getCmd('editor', Factory::getConfig()->get('editor'));
 
 if (strpos($editor, 'pagebuilder') !== false)
 {
@@ -28,7 +31,7 @@ if (strpos($editor, 'pagebuilder') !== false)
 $isNone = $editor == 'none' ? true : false;
 
 // Init and render editor.
-$editor = JEditor::getInstance($editor);
+$editor = Editor::getInstance($editor);
 $setter = method_exists($editor, 'setContent') ? $editor->setContent('editor', '%CONTENT%') : null;
 
 ob_start();

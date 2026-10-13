@@ -13,9 +13,10 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-// Import necessary Joomla libraries.
-jimport('joomla.filesystem.folder');
-jimport('joomla.filesystem.file');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
 
 /**
  * Media selector widget.
@@ -23,6 +24,7 @@ jimport('joomla.filesystem.file');
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwAjaxMediaSelector extends SunFwAjax
 {
 
@@ -93,10 +95,10 @@ class SunFwAjaxMediaSelector extends SunFwAjax
 	public function indexAction()
 	{
 		// Get Joomla document object.
-		$doc = JFactory::getDocument();
+		$doc = Factory::getDocument();
 
 		// Get base URLs.
-		$root = JURI::root(true);
+		$root = Uri::root(true);
 
 		// Clear all currently loaded assets.
 		$doc->_styleSheets = $doc->_style = $doc->_scripts = $doc->_script = array();
@@ -144,7 +146,7 @@ class SunFwAjaxMediaSelector extends SunFwAjax
 			{
 				jexit(json_encode(array(
 					'success' => false,
-					'message' => JText::_('SUNFW_UPLOADED_FILE_IS_NOT_ALLOWED')
+					'message' => Text::_('SUNFW_UPLOADED_FILE_IS_NOT_ALLOWED')
 				)));
 			}
 
@@ -156,7 +158,7 @@ class SunFwAjaxMediaSelector extends SunFwAjax
 				jexit(
 					json_encode(
 						array(
-							'message' => JText::_('SUNFW_FILE_ALREADY_EXISTS'),
+							'message' => Text::_('SUNFW_FILE_ALREADY_EXISTS'),
 							'uri' => $_POST['filename'],
 							'list' => $this->listFiles()
 						)));
@@ -179,7 +181,7 @@ class SunFwAjaxMediaSelector extends SunFwAjax
 
 				jexit(json_encode(array(
 					'success' => false,
-					'message' => JText::_('SUNFW_UPLOADED_FILE_IS_NOT_ALLOWED')
+					'message' => Text::_('SUNFW_UPLOADED_FILE_IS_NOT_ALLOWED')
 				)));
 			}
 		}
@@ -205,15 +207,15 @@ class SunFwAjaxMediaSelector extends SunFwAjax
 		{
 			$result = array(
 				'success' => false,
-				'message' => JText::_('SUNFW_FOLDER_ALREADY_EXISTS'),
+				'message' => Text::_('SUNFW_FOLDER_ALREADY_EXISTS'),
 				'path' => $this->rel_dir . '/' . $name
 			);
 		}
-		elseif (JFolder::create($path))
+		elseif (SunFwFolder::create($path))
 		{
 			$result = array(
 				'success' => true,
-				'message' => JText::_('SUNFW_NEW_FOLDER_SUCCESSFULLY_CREATED'),
+				'message' => Text::_('SUNFW_NEW_FOLDER_SUCCESSFULLY_CREATED'),
 				'path' => $this->rel_dir . '/' . $name
 			);
 		}
@@ -221,7 +223,7 @@ class SunFwAjaxMediaSelector extends SunFwAjax
 		{
 			$result = array(
 				'success' => false,
-				'message' => JText::_('SUNFW_CREATING_NEW_FOLDER_FAILED'),
+				'message' => Text::_('SUNFW_CREATING_NEW_FOLDER_FAILED'),
 				'path' => $this->rel_dir . '/' . $name
 			);
 		}
@@ -240,11 +242,11 @@ class SunFwAjaxMediaSelector extends SunFwAjax
 	{
 		if (is_dir($this->abs_dir))
 		{
-			if (JFolder::delete($this->abs_dir))
+			if (SunFwFolder::delete($this->abs_dir))
 			{
 				$result = array(
 					'success' => true,
-					'message' => JText::sprintf('SUNFW_THE_FOLDER_HAS_BEEN_DELETED', $this->rel_dir),
+					'message' => Text::sprintf('SUNFW_THE_FOLDER_HAS_BEEN_DELETED', $this->rel_dir),
 					'path' => $this->rel_dir
 				);
 			}
@@ -252,7 +254,7 @@ class SunFwAjaxMediaSelector extends SunFwAjax
 			{
 				$result = array(
 					'success' => false,
-					'message' => JText::_('SUNFW_DELETING_FOLDER_FAILED'),
+					'message' => Text::_('SUNFW_DELETING_FOLDER_FAILED'),
 					'path' => $this->rel_dir
 				);
 			}
@@ -261,7 +263,7 @@ class SunFwAjaxMediaSelector extends SunFwAjax
 		{
 			$result = array(
 				'success' => false,
-				'message' => JText::_('SUNFW_FOLDER_DOES_NOT_EXIST'),
+				'message' => Text::_('SUNFW_FOLDER_DOES_NOT_EXIST'),
 				'path' => $this->rel_dir
 			);
 		}
@@ -280,11 +282,11 @@ class SunFwAjaxMediaSelector extends SunFwAjax
 	{
 		if (is_file($this->abs_dir))
 		{
-			if (JFile::delete($this->abs_dir))
+			if (SunFwFile::delete($this->abs_dir))
 			{
 				$result = array(
 					'success' => true,
-					'message' => JText::sprintf('SUNFW_THE_FILE_HAS_BEEN_DELETED', $this->rel_dir),
+					'message' => Text::sprintf('SUNFW_THE_FILE_HAS_BEEN_DELETED', $this->rel_dir),
 					'path' => $this->rel_dir
 				);
 			}
@@ -292,7 +294,7 @@ class SunFwAjaxMediaSelector extends SunFwAjax
 			{
 				$result = array(
 					'success' => false,
-					'message' => JText::_('SUNFW_DELETING_FILE_FAILED'),
+					'message' => Text::_('SUNFW_DELETING_FILE_FAILED'),
 					'path' => $this->rel_dir
 				);
 			}
@@ -301,7 +303,7 @@ class SunFwAjaxMediaSelector extends SunFwAjax
 		{
 			$result = array(
 				'success' => false,
-				'message' => JText::_('SUNFW_FILE_DOES_NOT_EXIST'),
+				'message' => Text::_('SUNFW_FILE_DOES_NOT_EXIST'),
 				'path' => $this->rel_dir
 			);
 		}
@@ -324,7 +326,7 @@ class SunFwAjaxMediaSelector extends SunFwAjax
 		{
 			$result = array(
 				'success' => false,
-				'message' => JText::_('SUNFW_ERROR_OCCURRED_TRY_AGAIN'),
+				'message' => Text::_('SUNFW_ERROR_OCCURRED_TRY_AGAIN'),
 				'path' => $this->rel_dir,
 				'newPath' => $newPath
 			);
@@ -333,16 +335,16 @@ class SunFwAjaxMediaSelector extends SunFwAjax
 		{
 			$result = array(
 				'success' => false,
-				'message' => JText::_('SUNFW_FOLDER_ALREADY_EXISTS'),
+				'message' => Text::_('SUNFW_FOLDER_ALREADY_EXISTS'),
 				'path' => $this->rel_dir,
 				'newPath' => $newPath
 			);
 		}
-		elseif (JFolder::move($this->abs_dir, JPATH_ROOT . '/' . $newPath))
+		elseif (SunFwFolder::move($this->abs_dir, JPATH_ROOT . '/' . $newPath))
 		{
 			$result = array(
 				'success' => true,
-				'message' => JText::_('SUNFW_RENAMED_FOLDER_SUCCESSFULLY'),
+				'message' => Text::_('SUNFW_RENAMED_FOLDER_SUCCESSFULLY'),
 				'path' => $this->rel_dir,
 				'newPath' => $newPath
 			);
@@ -351,7 +353,7 @@ class SunFwAjaxMediaSelector extends SunFwAjax
 		{
 			$result = array(
 				'success' => false,
-				'message' => JText::_('SUNFW_ERROR_OCCURRED_TRY_AGAIN'),
+				'message' => Text::_('SUNFW_ERROR_OCCURRED_TRY_AGAIN'),
 				'path' => $this->rel_dir,
 				'newPath' => $newPath
 			);
@@ -375,7 +377,7 @@ class SunFwAjaxMediaSelector extends SunFwAjax
 		{
 			$result = array(
 				'success' => false,
-				'message' => JText::_('SUNFW_ERROR_OCCURRED_TRY_AGAIN'),
+				'message' => Text::_('SUNFW_ERROR_OCCURRED_TRY_AGAIN'),
 				'path' => $this->rel_dir,
 				'newPath' => $newPath
 			);
@@ -384,18 +386,18 @@ class SunFwAjaxMediaSelector extends SunFwAjax
 		{
 			$result = array(
 				'success' => false,
-				'message' => JText::_('SUNFW_FILE_ALREADY_EXISTS'),
+				'message' => Text::_('SUNFW_FILE_ALREADY_EXISTS'),
 				'path' => $this->rel_dir,
 				'newPath' => $newPath
 			);
 		}
 		else
 		{
-			if (JFile::move($this->abs_dir, JPATH_ROOT . '/' . $newPath))
+			if (SunFwFile::move($this->abs_dir, JPATH_ROOT . '/' . $newPath))
 			{
 				$result = array(
 					'success' => true,
-					'message' => JText::_('SUNFW_RENAMED_FILE_SUCCESSFULLY'),
+					'message' => Text::_('SUNFW_RENAMED_FILE_SUCCESSFULLY'),
 					'path' => $this->rel_dir,
 					'newPath' => $newPath
 				);
@@ -404,7 +406,7 @@ class SunFwAjaxMediaSelector extends SunFwAjax
 			{
 				$result = array(
 					'success' => false,
-					'message' => JText::_('SUNFW_ERROR_OCCURRED_TRY_AGAIN'),
+					'message' => Text::_('SUNFW_ERROR_OCCURRED_TRY_AGAIN'),
 					'path' => $this->rel_dir,
 					'newPath' => $newPath
 				);

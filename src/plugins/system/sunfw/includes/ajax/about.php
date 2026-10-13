@@ -13,12 +13,16 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
 /**
  * Handle Ajax requests from about pane.
  *
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwAjaxAbout extends SunFwAjax
 {
 
@@ -32,7 +36,7 @@ class SunFwAjaxAbout extends SunFwAjax
 	public function getAction($return = false)
 	{
 		// Get root URL.
-		$root = JUri::root(true);
+		$root = Uri::root(true);
 		
 		// Get template manifest.
 		$templateManifest = SunFwHelper::getManifest($this->templateName);
@@ -50,13 +54,13 @@ class SunFwAjaxAbout extends SunFwAjax
 			// Attribution stays in the source file headers.
 			'showCopyright' => 0,
 			'textMapping' => array(
-				'framework' => JText::_('SUNFW_FRAMEWORK'),
-				'template' => JText::_('SUNFW_TEMPLATE'),
-				'version' => JText::_('SUNFW_VERSION'),
-				'update-available' => JText::_('SUNFW_FRAMEWORK_UPDATE_AVAILABEL'),
-				'latest-version' => JText::_('SUNFW_FRAMEWORK_LATEST_VERSION'),
-				'release-date' => JText::_('SUNFW_TEMPLATE_RELEASED_DATE'),
-				'copyright-by' => JText::_('SUNFW_COPYRIGHT')
+				'framework' => Text::_('SUNFW_FRAMEWORK'),
+				'template' => Text::_('SUNFW_TEMPLATE'),
+				'version' => Text::_('SUNFW_VERSION'),
+				'update-available' => Text::_('SUNFW_FRAMEWORK_UPDATE_AVAILABEL'),
+				'latest-version' => Text::_('SUNFW_FRAMEWORK_LATEST_VERSION'),
+				'release-date' => Text::_('SUNFW_TEMPLATE_RELEASED_DATE'),
+				'copyright-by' => Text::_('SUNFW_COPYRIGHT')
 			)
 		);
 		

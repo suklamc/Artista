@@ -16,6 +16,7 @@ namespace Leafo\ScssPhp;
  *
  * @author Leaf Corcoran <leafot@gmail.com>
  */
+#[\AllowDynamicProperties]
 class Version
 {
     const VERSION = 'v0.6.5';

@@ -13,12 +13,19 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filter\OutputFilter;
+use Joomla\CMS\Language\Multilanguage;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+
 /**
  * General Menu class.
  *
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwMenu
 {
 
@@ -85,9 +92,9 @@ class SunFwMenu
 	 */
 	public static function getMenuList($menuType, $settings)
 	{
-		$menu = JFactory::getApplication()->getMenu();
+		$menu = Factory::getApplication()->getMenu();
 		$base = self::getActive();
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		$levels = $user->getAuthorisedViewLevels();
 
 		asort($levels);
@@ -130,7 +137,7 @@ class SunFwMenu
 				}
 
 				// Exclude item with menu item option set to exclude from menu modules
-				if (( $item->params->get('menu_show', 1) == 0 ) || in_array($item->parent_id, $hidden_parents))
+				if (( $item->getParams()->get('menu_show', 1) == 0 ) || in_array($item->parent_id, $hidden_parents))
 				{
 					$hidden_parents[] = $item->id;
 
@@ -183,7 +190,7 @@ class SunFwMenu
 					break;
 
 					case 'alias':
-						$item->flink = 'index.php?Itemid=' . $item->params->get('aliasoptions');
+						$item->flink = 'index.php?Itemid=' . $item->getParams()->get('aliasoptions');
 					break;
 
 					default:
@@ -193,19 +200,19 @@ class SunFwMenu
 
 				if (strcasecmp(substr($item->flink, 0, 4), 'http') && ( strpos($item->flink, 'index.php?') !== false ))
 				{
-					$item->flink = JRoute::_($item->flink, true, $item->params->get('secure'));
+					$item->flink = Route::_($item->flink, true, $item->getParams()->get('secure'));
 				}
 				else
 				{
-					$item->flink = JRoute::_($item->flink);
+					$item->flink = Route::_($item->flink);
 				}
 
 				// We prevent the double encoding because for some reason the $item is shared for menu modules
 				// and we get double encoding when the cause of that is found the argument should be removed.
 				$item->title = htmlspecialchars($item->title, ENT_COMPAT, 'UTF-8', false);
-				$item->anchor_css = htmlspecialchars($item->params->get('menu-anchor_css', ''), ENT_COMPAT, 'UTF-8', false);
-				$item->anchor_title = htmlspecialchars($item->params->get('menu-anchor_title', ''), ENT_COMPAT, 'UTF-8', false);
-				$item->menu_image = $item->params->get('menu_image', '') ? htmlspecialchars($item->params->get('menu_image', ''),
+				$item->anchor_css = htmlspecialchars($item->getParams()->get('menu-anchor_css', ''), ENT_COMPAT, 'UTF-8', false);
+				$item->anchor_title = htmlspecialchars($item->getParams()->get('menu-anchor_title', ''), ENT_COMPAT, 'UTF-8', false);
+				$item->menu_image = $item->getParams()->get('menu_image', '') ? htmlspecialchars($item->getParams()->get('menu_image', ''),
 					ENT_COMPAT, 'UTF-8', false) : '';
 			}
 
@@ -227,11 +234,11 @@ class SunFwMenu
 	 */
 	public static function getActive()
 	{
-		$menu = JFactory::getApplication()->getMenu('site');
-		$lang = JFactory::getLanguage();
+		$menu = Factory::getApplication()->getMenu('site');
+		$lang = Factory::getLanguage();
 
 		// Look for the home menu
-		if (JLanguageMultilang::isEnabled())
+		if (Multilanguage::isEnabled())
 		{
 			$home = $menu->getDefault($lang->getTag());
 		}
@@ -330,12 +337,12 @@ class SunFwMenu
 			}
 
 			// Render mega menu if has.
-			$megamenu = trim(self::renderMegaMenu($item->id));
+			$megamenu = trim((string) self::renderMegaMenu($item->id));
 
 			// Prepare class for menu item.
 			$class = 'item-' . $item->id;
 
-			if (( $item->id == $activeID ) or ( $item->type == 'alias' and $item->params->get('aliasoptions') == $activeID ))
+			if (( $item->id == $activeID ) or ( $item->type == 'alias' and $item->getParams()->get('aliasoptions') == $activeID ))
 			{
 				$class .= ' current';
 			}
@@ -346,7 +353,7 @@ class SunFwMenu
 			}
 			elseif ($item->type == 'alias')
 			{
-				$aliasToId = $item->params->get('aliasoptions');
+				$aliasToId = $item->getParams()->get('aliasoptions');
 
 				if (count((array) $path) > 0 && $aliasToId == $path[count((array) $path) - 1])
 				{
@@ -481,9 +488,9 @@ class SunFwMenu
 		$html = '';
 		$caret = '';
 		$class = '';
-		$nofollow = (int) $item->params->get('sunfw-no-follow', '0') ? ' rel="nofollow"' : '';
-		$link_icon = $item->params->get('sunfw-link-icon', '');
-		$link_description = $item->params->get('sunfw-link-description', '');
+		$nofollow = (int) $item->getParams()->get('sunfw-no-follow', '0') ? ' rel="nofollow"' : '';
+		$link_icon = $item->getParams()->get('sunfw-link-icon', '');
+		$link_description = $item->getParams()->get('sunfw-link-description', '');
 
 		if ($item->anchor_css)
 		{
@@ -512,7 +519,7 @@ class SunFwMenu
 
 		if ($item->menu_image)
 		{
-			$item->params->get('menu_text', 1) ? $linktype = '<img src="' . $item->menu_image . '" alt="' . $item->title .
+			$item->getParams()->get('menu_text', 1) ? $linktype = '<img src="' . $item->menu_image . '" alt="' . $item->title .
 				 '" /><span class="image-title">' . $item->title . '</span> ' : $linktype = '<img src="' . $item->menu_image . '" alt="' .
 				 $item->title . '" />';
 		}
@@ -579,12 +586,12 @@ class SunFwMenu
 		$html = '';
 		$caret = '';
 		$title = $item->anchor_title ? ' title="' . $item->anchor_title . '" ' : '';
-		$link_icon = $item->params->get('sunfw-link-icon', '');
-		$link_description = $item->params->get('sunfw-link-description', '');
+		$link_icon = $item->getParams()->get('sunfw-link-icon', '');
+		$link_description = $item->getParams()->get('sunfw-link-description', '');
 
 		if ($item->menu_image)
 		{
-			$item->params->get('menu_text', 1) ? $linktype = '<img src="' . $item->menu_image . '" alt="' . $item->title .
+			$item->getParams()->get('menu_text', 1) ? $linktype = '<img src="' . $item->menu_image . '" alt="' . $item->title .
 				 '" /><span class="image-title">' . $item->title . '</span> ' : $linktype = '<img src="' . $item->menu_image . '" alt="' .
 				 $item->title . '" />';
 		}
@@ -642,9 +649,9 @@ class SunFwMenu
 		$caret = '';
 		$title = $item->anchor_title ? 'title="' . $item->anchor_title . '" ' : '';
 
-		$nofollow = (int) $item->params->get('sunfw-no-follow', '0') ? ' rel="nofollow"' : '';
-		$link_icon = $item->params->get('sunfw-link-icon', '');
-		$link_description = $item->params->get('sunfw-link-description', '');
+		$nofollow = (int) $item->getParams()->get('sunfw-no-follow', '0') ? ' rel="nofollow"' : '';
+		$link_icon = $item->getParams()->get('sunfw-link-icon', '');
+		$link_description = $item->getParams()->get('sunfw-link-description', '');
 
 		if ($item->anchor_css)
 		{
@@ -671,7 +678,7 @@ class SunFwMenu
 
 		if ($item->menu_image)
 		{
-			$item->params->get('menu_text', 1) ? $linktype = '<img src="' . $item->menu_image . '" alt="' . $item->title .
+			$item->getParams()->get('menu_text', 1) ? $linktype = '<img src="' . $item->menu_image . '" alt="' . $item->title .
 				 '" /><span class="image-title">' . $item->title . '</span> ' : $linktype = '<img src="' . $item->menu_image . '" alt="' .
 				 $item->title . '" />';
 		}
@@ -682,7 +689,7 @@ class SunFwMenu
 
 		$flink = $item->flink;
 
-		$flink = JFilterOutput::ampReplace(htmlspecialchars($flink, ENT_COMPAT, 'UTF-8', false));
+		$flink = OutputFilter::ampReplace(htmlspecialchars($flink, ENT_COMPAT, 'UTF-8', false));
 
 		if ($link_description != '' && $showdescription != 0)
 		{
@@ -739,8 +746,8 @@ class SunFwMenu
 		$caret = '';
 		$title = $item->anchor_title ? 'title="' . $item->anchor_title . '" ' : '';
 
-		$link_icon = $item->params->get('sunfw-link-icon', '');
-		$link_description = $item->params->get('sunfw-link-description', '');
+		$link_icon = $item->getParams()->get('sunfw-link-icon', '');
+		$link_description = $item->getParams()->get('sunfw-link-description', '');
 
 		if (!empty($megamenu) || $item->deeper)
 		{
@@ -749,7 +756,7 @@ class SunFwMenu
 
 		if ($item->menu_image)
 		{
-			$item->params->get('menu_text', 1) ? $linktype = '<img src="' . $item->menu_image . '" alt="' . $item->title .
+			$item->getParams()->get('menu_text', 1) ? $linktype = '<img src="' . $item->menu_image . '" alt="' . $item->title .
 				 '" /><span class="image-title">' . $item->title . '</span> ' : $linktype = '<img src="' . $item->menu_image . '" alt="' .
 				 $item->title . '" />';
 		}
@@ -792,7 +799,7 @@ class SunFwMenu
 		}
 
 		// Make sure mega menu is enabled and has data.
-		if (!@count((array) $megamenu) || !@count((array) $megamenu['megamenu'][$root]['rows']))
+		if (!count((array) $megamenu) || !count((array) $megamenu['megamenu'][$root]['rows']))
 		{
 			return;
 		}
@@ -827,7 +834,7 @@ class SunFwMenu
 		}
 
 		// Add script declaration to document.
-		JFactory::getDocument()->addScriptDeclaration(
+		Factory::getDocument()->addScriptDeclaration(
 			'
 			jQuery(function($) {
 				$(document).ready(function() {
@@ -875,7 +882,7 @@ class SunFwMenu
 			// Prepare background image.
 			if (!preg_match('#^(https?:)?//#', $root['settings']['backgroundImage']))
 			{
-				$root['settings']['backgroundImage'] = JUri::root() . ltrim($root['settings']['backgroundImage']);
+				$root['settings']['backgroundImage'] = Uri::root() . ltrim($root['settings']['backgroundImage']);
 			}
 
 			$styles[] = "background-image:url({$root['settings']['backgroundImage']})";
@@ -950,7 +957,7 @@ class SunFwMenu
 			// Make sure row is enabled and has data.
 			$row = isset($rows[$rowIndex]) ? $rows[$rowIndex] : null;
 
-			if (!$row || !@count((array) $row['columns']) || ( @isset($row['settings']['disabled']) && intval($row['settings']['disabled']) ))
+			if (!$row || !count((array) $row['columns']) || ( @isset($row['settings']['disabled']) && intval($row['settings']['disabled']) ))
 			{
 				continue;
 			}
@@ -989,7 +996,7 @@ class SunFwMenu
 				// Make sure column is enabled and has data.
 				$column = isset($columns[$columnIndex]) ? $columns[$columnIndex] : null;
 
-				if (!$column || !@count((array) $column['blocks']) ||
+				if (!$column || !count((array) $column['blocks']) ||
 					 ( @isset($column['settings']['disabled']) && intval($column['settings']['disabled']) ))
 				{
 					continue;
@@ -1032,7 +1039,7 @@ class SunFwMenu
 					// Make sure block is enabled and has data.
 					$block = isset($blocks[$blockIndex]) ? $blocks[$blockIndex] : null;
 
-					if (!$block || !@count((array) $block['items']) ||
+					if (!$block || !count((array) $block['items']) ||
 						 ( @isset($block['settings']['disabled']) && intval($block['settings']['disabled']) ))
 					{
 						continue;
@@ -1091,7 +1098,7 @@ class SunFwMenu
 		// Add script declaration to document.
 		if (isset($scripts))
 		{
-			JFactory::getDocument()->addScriptDeclaration(
+			Factory::getDocument()->addScriptDeclaration(
 				'
 				jQuery(function($) {
 					$(document).ready(function() {
@@ -1123,9 +1130,9 @@ class SunFwMenu
 		$parentIDs = array();
 		$parentIDs[] = $parentID;
 
-		$menu = JFactory::getApplication()->getMenu();
+		$menu = Factory::getApplication()->getMenu();
 		$base = self::getActive();
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		$levels = $user->getAuthorisedViewLevels();
 
 		asort($levels);
@@ -1167,7 +1174,7 @@ class SunFwMenu
 				), $parentIDs);
 
 				// Exclude item with menu item option set to exclude from menu modules
-				if (( $item->params->get('menu_show', 1) == 0 ) || in_array($item->parent_id, $hidden_parents))
+				if (( $item->getParams()->get('menu_show', 1) == 0 ) || in_array($item->parent_id, $hidden_parents))
 				{
 					$hidden_parents[] = $item->id;
 
@@ -1211,7 +1218,7 @@ class SunFwMenu
 					break;
 
 					case 'alias':
-						$item->flink = 'index.php?Itemid=' . $item->params->get('aliasoptions');
+						$item->flink = 'index.php?Itemid=' . $item->getParams()->get('aliasoptions');
 					break;
 
 					default:
@@ -1221,19 +1228,19 @@ class SunFwMenu
 
 				if (strcasecmp(substr($item->flink, 0, 4), 'http') && ( strpos($item->flink, 'index.php?') !== false ))
 				{
-					$item->flink = JRoute::_($item->flink, true, $item->params->get('secure'));
+					$item->flink = Route::_($item->flink, true, $item->getParams()->get('secure'));
 				}
 				else
 				{
-					$item->flink = JRoute::_($item->flink);
+					$item->flink = Route::_($item->flink);
 				}
 
 				// We prevent the double encoding because for some reason the $item is shared for menu modules
 				// and we get double encoding when the cause of that is found the argument should be removed.
 				$item->title = htmlspecialchars($item->title, ENT_COMPAT, 'UTF-8', false);
-				$item->anchor_css = htmlspecialchars($item->params->get('menu-anchor_css', ''), ENT_COMPAT, 'UTF-8', false);
-				$item->anchor_title = htmlspecialchars($item->params->get('menu-anchor_title', ''), ENT_COMPAT, 'UTF-8', false);
-				$item->menu_image = $item->params->get('menu_image', '') ? htmlspecialchars($item->params->get('menu_image', ''),
+				$item->anchor_css = htmlspecialchars($item->getParams()->get('menu-anchor_css', ''), ENT_COMPAT, 'UTF-8', false);
+				$item->anchor_title = htmlspecialchars($item->getParams()->get('menu-anchor_title', ''), ENT_COMPAT, 'UTF-8', false);
+				$item->menu_image = $item->getParams()->get('menu_image', '') ? htmlspecialchars($item->getParams()->get('menu_image', ''),
 					ENT_COMPAT, 'UTF-8', false) : '';
 			}
 
@@ -1267,7 +1274,7 @@ class SunFwMenu
 		{
 			$class = 'item-' . $item->id;
 
-			if (( $item->id == $activeID ) or ( $item->type == 'alias' and $item->params->get('aliasoptions') == $activeID ))
+			if (( $item->id == $activeID ) or ( $item->type == 'alias' and $item->getParams()->get('aliasoptions') == $activeID ))
 			{
 				$class .= ' current';
 			}
@@ -1278,7 +1285,7 @@ class SunFwMenu
 			}
 			elseif ($item->type == 'alias')
 			{
-				$aliasToId = $item->params->get('aliasoptions');
+				$aliasToId = $item->getParams()->get('aliasoptions');
 
 				if (count((array) $path) > 0 && $aliasToId == $path[count((array) $path) - 1])
 				{

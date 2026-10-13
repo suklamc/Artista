@@ -9,6 +9,11 @@
 
 defined('JPATH_BASE') or die;
 
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\Factory;
+
 /**
  * Note that this layout opens a div with the page class suffix. If you do not use the category children
  * layout you need to close this div either by overriding this file or in your main layout.
@@ -19,19 +24,19 @@ $extension = $category->extension;
 $canEdit   = $params->get('access-edit');
 $className = substr($extension, 4);
 
-$dispatcher = JEventDispatcher::getInstance();
+$app = Factory::getApplication();
 
 $category->text = $category->description;
-$dispatcher->trigger('onContentPrepare', array($extension . '.categories', &$category, &$params, 0));
+$app->triggerEvent('onContentPrepare', array($extension . '.categories', &$category, &$params, 0));
 $category->description = $category->text;
 
-$results = $dispatcher->trigger('onContentAfterTitle', array($extension . '.categories', &$category, &$params, 0));
+$results = $app->triggerEvent('onContentAfterTitle', array($extension . '.categories', &$category, &$params, 0));
 $afterDisplayTitle = trim(implode("\n", $results));
 
-$results = $dispatcher->trigger('onContentBeforeDisplay', array($extension . '.categories', &$category, &$params, 0));
+$results = $app->triggerEvent('onContentBeforeDisplay', array($extension . '.categories', &$category, &$params, 0));
 $beforeDisplayContent = trim(implode("\n", $results));
 
-$results = $dispatcher->trigger('onContentAfterDisplay', array($extension . '.categories', &$category, &$params, 0));
+$results = $app->triggerEvent('onContentAfterDisplay', array($extension . '.categories', &$category, &$params, 0));
 $afterDisplayContent = trim(implode("\n", $results));
 
 /**
@@ -61,21 +66,21 @@ $tagsData = $category->tags->itemTags;
 
 		<?php if ($params->get('show_category_title', 1)) : ?>
 			<div class="page-header"><h2>
-				<?php echo JHtml::_('content.prepare', $category->title, '', $extension . '.category.title'); ?>
+				<?php echo HTMLHelper::_('content.prepare', $category->title, '', $extension . '.category.title'); ?>
 			</h2>
 			</div>
 		<?php endif; ?>
 		<?php echo $afterDisplayTitle; ?>
 
 		<?php if ($params->get('show_cat_tags', 1)) : ?>
-			<?php echo JLayoutHelper::render('joomla.content.tags', $tagsData); ?>
+			<?php echo LayoutHelper::render('joomla.content.tags', $tagsData); ?>
 		<?php endif; ?>
 		
 		<?php if ($beforeDisplayContent || $afterDisplayContent || $params->get('show_description', 1)) : ?>
 			<div class="category-desc">
 				<?php echo $beforeDisplayContent; ?>
 				<?php if ($params->get('show_description') && $category->description) : ?>
-					<?php echo JHtml::_('content.prepare', $category->description, '', $extension . '.category.description'); ?>
+					<?php echo HTMLHelper::_('content.prepare', $category->description, '', $extension . '.category.description'); ?>
 				<?php endif; ?>
 				<?php echo $afterDisplayContent; ?>
 				<div class="clr"></div>
@@ -87,7 +92,7 @@ $tagsData = $category->tags->itemTags;
 			<div class="cat-children">
 				<?php if ($params->get('show_category_heading_title_text', 1) == 1) : ?>
 					<h1>
-						<?php echo JText::_('JGLOBAL_SUBCATEGORIES'); ?>
+						<?php echo Text::_('JGLOBAL_SUBCATEGORIES'); ?>
 					</h1>
 				<?php endif; ?>
 				<?php echo $displayData->loadTemplate('children'); ?>

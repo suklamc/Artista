@@ -14,8 +14,11 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 // Get Joomla document object.
-$doc = JFactory::getDocument();
+$doc = Factory::getDocument();
 
 // Prepare current nodes for JSTree.
 if ($current = str_replace(array(
@@ -218,14 +221,14 @@ div.ajax-file-upload-red {
 			<div class="ui-layout-south">
 				<div>
 					<div id="jsn-media-upload-form">
-						<?php echo JText::_('SUNFW_SELECT_FILE'); ?>
+						<?php echo Text::_('SUNFW_SELECT_FILE'); ?>
 					</div>
-					<div id="start-upload" class="ajax-file-upload-green"><?php echo JText::_('SUNFW_START_UPLOAD'); ?></div>
+					<div id="start-upload" class="ajax-file-upload-green"><?php echo Text::_('SUNFW_START_UPLOAD'); ?></div>
 				</div>
 			</div>
 		</div>
 		<div class="ui-layout-west">
-			<div id="jsn-media-directory-tree" class="content-container"><?php echo JText::_('SUNFW_LOADING'); ?></div>
+			<div id="jsn-media-directory-tree" class="content-container"><?php echo Text::_('SUNFW_LOADING'); ?></div>
 		</div>
 	</div>
 
@@ -409,7 +412,7 @@ div.ajax-file-upload-red {
 				showFileCounter: false,
 				allowedTypes: '<?php echo $this->extensions; ?>',
 				fileName: 'file',
-				cancelStr: '<?php echo JText::_('SUNFW_CLEAR'); ?>',
+				cancelStr: '<?php echo Text::_('SUNFW_CLEAR'); ?>',
 				onSelect: function(files) {
 					// Remove previously selected file
 					$('.ajax-file-upload-statusbar').remove();

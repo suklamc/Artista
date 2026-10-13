@@ -16,6 +16,7 @@ namespace Leafo\ScssPhp\Exception;
  *
  * @author Oleksandr Savchenko <traveltino@gmail.com>
  */
+#[\AllowDynamicProperties]
 class ParserException extends \Exception
 {
 }

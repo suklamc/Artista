@@ -13,12 +13,18 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\Utilities\ArrayHelper;
+
 /**
  * Module selector widget.
  *
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwAjaxModuleSelector extends SunFwAjaxSelector
 {
 
@@ -33,7 +39,7 @@ class SunFwAjaxModuleSelector extends SunFwAjaxSelector
 		$this->filter_language = $this->input->getCmd('language', '');
 
 		// Load language file.
-		JFactory::getLanguage()->load('com_modules');
+		Factory::getLanguage()->load('com_modules');
 
 		parent::indexAction();
 	}
@@ -70,23 +76,23 @@ class SunFwAjaxModuleSelector extends SunFwAjaxSelector
 
 		// Build options.
 		$options = array(
-			JHtml::_('select.option', '', JText::_('COM_MODULES_OPTION_SELECT_POSITION'))
+			HTMLHelper::_('select.option', '', Text::_('COM_MODULES_OPTION_SELECT_POSITION'))
 		);
 
 		foreach ($positions as $position)
 		{
 			if (!$position)
 			{
-				$options[] = JHtml::_('select.option', 'none', JText::_('SUNFW_MODULE_POSITION_NONE'));
+				$options[] = HTMLHelper::_('select.option', 'none', Text::_('SUNFW_MODULE_POSITION_NONE'));
 			}
 			else
 			{
-				$options[] = JHtml::_('select.option', $position, $position);
+				$options[] = HTMLHelper::_('select.option', $position, $position);
 			}
 		}
 
 		// Render module positions select box.
-		echo JHTML::_('select.genericlist', $options, $name, $parameters, 'value', 'text', $selected);
+		echo HTMLHelper::_('select.genericlist', $options, $name, $parameters, 'value', 'text', $selected);
 	}
 
 	/**
@@ -111,7 +117,7 @@ class SunFwAjaxModuleSelector extends SunFwAjaxSelector
 			->group('element, name');
 
 		$modules = $this->dbo->setQuery($query)->loadObjectList();
-		$lang = JFactory::getLanguage();
+		$lang = Factory::getLanguage();
 
 		foreach ($modules as $i => $module)
 		{
@@ -120,24 +126,17 @@ class SunFwAjaxModuleSelector extends SunFwAjaxSelector
 
 			$lang->load("$extension.sys", JPATH_SITE, null, false, true) || $lang->load("$extension.sys", $source, null, false, true);
 
-			$modules[$i]->text = JText::_($module->text);
+			$modules[$i]->text = Text::_($module->text);
 		}
 
-		if (SunFwCompat::isJoomla(4))
-		{
-			$modules = Joomla\Utilities\ArrayHelper::sortObjects($modules, 'text', 1, true, true);
-		}
-		else
-		{
-			$modules = JArrayHelper::sortObjects($modules, 'text', 1, true, true);
-		}
+		$modules = ArrayHelper::sortObjects($modules, 'text', 1, true, true);
 
 		// Render module types select box.
 		$types = array_merge(array(
-			JHtml::_('select.option', '', JText::_('COM_MODULES_OPTION_SELECT_TYPE'))
+			HTMLHelper::_('select.option', '', Text::_('COM_MODULES_OPTION_SELECT_TYPE'))
 		), $modules);
 
-		echo JHTML::_('select.genericlist', $types, $name, $parameters, 'value', 'text', $selected);
+		echo HTMLHelper::_('select.genericlist', $types, $name, $parameters, 'value', 'text', $selected);
 	}
 
 	/**
@@ -232,7 +231,7 @@ class SunFwAjaxModuleSelector extends SunFwAjaxSelector
 		{
 			if ($language === 'current')
 			{
-				$query->where('a.language IN (' . $this->dbo->quote(JFactory::getLanguage()->getTag()) . ', "*")');
+				$query->where('a.language IN (' . $this->dbo->quote(Factory::getLanguage()->getTag()) . ', "*")');
 			}
 			else
 			{

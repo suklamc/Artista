@@ -13,8 +13,9 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-// Import necessary Joomla libraries
-jimport('joomla.filesystem.folder');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 
 /**
  * Handle Ajax requests from advanced params pane.
@@ -22,6 +23,7 @@ jimport('joomla.filesystem.folder');
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwAjaxSystem extends SunFwAjax
 {
 
@@ -48,61 +50,61 @@ class SunFwAjaxSystem extends SunFwAjax
 			'settings' => SunFwHelper::findTemplateAdminJsonSettings(
 				JPATH_ROOT . '/plugins/system/sunfw/assets/joomlashine/admin/js/system', 'settings.json', true),
 			'textMapping' => array(
-				'system' => JText::_('SUNFW_SYSTEM'),
-				'save-system' => JText::_('SUNFW_SAVE_SYSTEM'),
-				'general-group' => JText::_('SUNFW_GENERAL_SETTINGS_BUTTON_TEXT'),
-				'fav-icon' => JText::_('SUNFW_ADVANCED_FAVICON'),
-				'fav-icon-hint' => JText::_('SUNFW_ADVANCED_FAVICON_DESC'),
-				'cdn-url' => JText::_('SUNFW_ADVANCED_CDN_URL'),
-				'cdn-url-hint' => JText::_('SUNFW_ADVANCED_CDN_URL_DESC'),
-				'assets-compression' => JText::_('SUNFW_ADVANCED_ASSETS_COMPRESSION'),
-				'compression-target' => JText::_('SUNFW_ADVANCED_COMPRESSION_TARGET'),
-				'compression-target-hint' => JText::_('SUNFW_ADVANCED_COMPRESSION_TARGET_DESC'),
-				'compress-css' => JText::_('SUNFW_ADVANCED_COMPRESS_CSS'),
-				'compress-js' => JText::_('SUNFW_ADVANCED_COMPRESS_JS'),
-				'max-compression-size' => JText::_('SUNFW_ADVANCED_COMPRESSION_MAX_SIZE'),
-				'max-compression-size-hint' => JText::_('SUNFW_ADVANCED_COMPRESSION_MAX_SIZE_DESC'),
-				'cache-directory' => JText::_('SUNFW_ADVANCED_CACHE_DIRECTORY'),
-				'cache-directory-hint' => JText::_('SUNFW_ADVANCED_CACHE_DIRECTORY_DESC'),
-				'verify' => JText::_('SUNFW_VERIFY'),
-				'exclude-from-compression' => JText::_('SUNFW_ADVANCED_EXLUCDE_FROM_COMPRESSION'),
-				'exclude-from-compression-hint' => JText::_('SUNFW_ADVANCED_EXLUCDE_FROM_COMPRESSION_DESC'),
-				'minify-html' => JText::_('SUNFW_ADVANCED_MINIFY_HTML'),
-				'minify-html-hint' => JText::_('SUNFW_ADVANCED_MINIFY_HTML_DESC'),
-				'move-js-to-bottom' => JText::_('SUNFW_ADVANCED_MOVE_JS_TO_BOTTOM'),
-				'move-js-to-bottom-hint' => JText::_('SUNFW_ADVANCED_MOVE_JS_TO_BOTTOM_DESC'),
-				'custom-code' => JText::_('SUNFW_ADVANCED_CUSTOM_CODE'),
-				'at-begin-of-head-tag' => JText::_('SUNFW_ADVANCED_CUSTOM_AFTER_OPENING_HEAD_TAG'),
-				'at-begin-of-head-tag-hint' => JText::_('SUNFW_ADVANCED_CUSTOM_AFTER_OPENING_HEAD_TAG_DESC'),
-				'at-end-of-head-tag' => JText::_('SUNFW_ADVANCED_CUSTOM_BEFORE_ENDING_HEAD_TAG'),
-				'at-end-of-head-tag-hint' => JText::_('SUNFW_ADVANCED_CUSTOM_BEFORE_ENDING_HEAD_TAG_DESC'),
-				'at-begin-of-body-tag' => JText::_('SUNFW_ADVANCED_CUSTOM_AFTER_OPENING_BODY_TAG'),
-				'at-begin-of-body-tag-hint' => JText::_('SUNFW_ADVANCED_CUSTOM_AFTER_OPENING_BODY_TAG_DESC'),
-				'at-end-of-body-tag' => JText::_('SUNFW_ADVANCED_CUSTOM_BEFORE_ENDING_BODY_TAG'),
-				'at-end-of-body-tag-hint' => JText::_('SUNFW_ADVANCED_CUSTOM_BEFORE_ENDING_BODY_TAG_DESC'),
-				'custom-files' => JText::_('SUNFW_ADVANCED_CUSTOM_FILES'),
-				'custom-css-files' => JText::_('SUNFW_ADVANCED_CUSTOM_FIELS_CSS'),
-				'custom-css-files-hint' => JText::_('SUNFW_ADVANCED_CUSTOM_FIELS_CSS_DESC'),
-				'custom-js-files' => JText::_('SUNFW_ADVANCED_CUSTOM_FIELS_JS'),
-				'custom-js-files-hint' => JText::_('SUNFW_ADVANCED_CUSTOM_FIELS_JS_DESC'),
+				'system' => Text::_('SUNFW_SYSTEM'),
+				'save-system' => Text::_('SUNFW_SAVE_SYSTEM'),
+				'general-group' => Text::_('SUNFW_GENERAL_SETTINGS_BUTTON_TEXT'),
+				'fav-icon' => Text::_('SUNFW_ADVANCED_FAVICON'),
+				'fav-icon-hint' => Text::_('SUNFW_ADVANCED_FAVICON_DESC'),
+				'cdn-url' => Text::_('SUNFW_ADVANCED_CDN_URL'),
+				'cdn-url-hint' => Text::_('SUNFW_ADVANCED_CDN_URL_DESC'),
+				'assets-compression' => Text::_('SUNFW_ADVANCED_ASSETS_COMPRESSION'),
+				'compression-target' => Text::_('SUNFW_ADVANCED_COMPRESSION_TARGET'),
+				'compression-target-hint' => Text::_('SUNFW_ADVANCED_COMPRESSION_TARGET_DESC'),
+				'compress-css' => Text::_('SUNFW_ADVANCED_COMPRESS_CSS'),
+				'compress-js' => Text::_('SUNFW_ADVANCED_COMPRESS_JS'),
+				'max-compression-size' => Text::_('SUNFW_ADVANCED_COMPRESSION_MAX_SIZE'),
+				'max-compression-size-hint' => Text::_('SUNFW_ADVANCED_COMPRESSION_MAX_SIZE_DESC'),
+				'cache-directory' => Text::_('SUNFW_ADVANCED_CACHE_DIRECTORY'),
+				'cache-directory-hint' => Text::_('SUNFW_ADVANCED_CACHE_DIRECTORY_DESC'),
+				'verify' => Text::_('SUNFW_VERIFY'),
+				'exclude-from-compression' => Text::_('SUNFW_ADVANCED_EXLUCDE_FROM_COMPRESSION'),
+				'exclude-from-compression-hint' => Text::_('SUNFW_ADVANCED_EXLUCDE_FROM_COMPRESSION_DESC'),
+				'minify-html' => Text::_('SUNFW_ADVANCED_MINIFY_HTML'),
+				'minify-html-hint' => Text::_('SUNFW_ADVANCED_MINIFY_HTML_DESC'),
+				'move-js-to-bottom' => Text::_('SUNFW_ADVANCED_MOVE_JS_TO_BOTTOM'),
+				'move-js-to-bottom-hint' => Text::_('SUNFW_ADVANCED_MOVE_JS_TO_BOTTOM_DESC'),
+				'custom-code' => Text::_('SUNFW_ADVANCED_CUSTOM_CODE'),
+				'at-begin-of-head-tag' => Text::_('SUNFW_ADVANCED_CUSTOM_AFTER_OPENING_HEAD_TAG'),
+				'at-begin-of-head-tag-hint' => Text::_('SUNFW_ADVANCED_CUSTOM_AFTER_OPENING_HEAD_TAG_DESC'),
+				'at-end-of-head-tag' => Text::_('SUNFW_ADVANCED_CUSTOM_BEFORE_ENDING_HEAD_TAG'),
+				'at-end-of-head-tag-hint' => Text::_('SUNFW_ADVANCED_CUSTOM_BEFORE_ENDING_HEAD_TAG_DESC'),
+				'at-begin-of-body-tag' => Text::_('SUNFW_ADVANCED_CUSTOM_AFTER_OPENING_BODY_TAG'),
+				'at-begin-of-body-tag-hint' => Text::_('SUNFW_ADVANCED_CUSTOM_AFTER_OPENING_BODY_TAG_DESC'),
+				'at-end-of-body-tag' => Text::_('SUNFW_ADVANCED_CUSTOM_BEFORE_ENDING_BODY_TAG'),
+				'at-end-of-body-tag-hint' => Text::_('SUNFW_ADVANCED_CUSTOM_BEFORE_ENDING_BODY_TAG_DESC'),
+				'custom-files' => Text::_('SUNFW_ADVANCED_CUSTOM_FILES'),
+				'custom-css-files' => Text::_('SUNFW_ADVANCED_CUSTOM_FIELS_CSS'),
+				'custom-css-files-hint' => Text::_('SUNFW_ADVANCED_CUSTOM_FIELS_CSS_DESC'),
+				'custom-js-files' => Text::_('SUNFW_ADVANCED_CUSTOM_FIELS_JS'),
+				'custom-js-files-hint' => Text::_('SUNFW_ADVANCED_CUSTOM_FIELS_JS_DESC'),
 
-			    'system-fav-icon-popover-content' => JText::_('SUNFW_ADVANCED_FAVICON_POPOVER_CONTENT'),
-			    'system-cdn-url-popover-content' => JText::_('SUNFW_ADVANCED_CDN_URL_POPOVER_CONTENT'),
-			    'system-compression-target-popover-content' => JText::_('SUNFW_ADVANCED_COMPRESSION_TARGET_POPOVER_CONTENT'),
-			    'system-max-compression-size-popover-content' => JText::_('SUNFW_ADVANCED_COMPRESSION_MAX_SIZE_POPOVER_CONTENT'),
-			    'system-cache-directory-popover-content' => JText::_('SUNFW_ADVANCED_CACHE_DIRECTORY_POPOVER_CONTENT'),
-			    'system-exclude-from-compression-popover-content' => JText::_('SUNFW_ADVANCED_EXLUCDE_FROM_COMPRESSION_POPOVER_CONTENT'),
-			    'system-minify-html-popover-content' => JText::_('SUNFW_ADVANCED_MINIFY_HTML_POPOVER_CONTENT'),
-			    'system-move-js-to-bottom-popover-content' => JText::_('SUNFW_ADVANCED_MOVE_JS_TO_BOTTOM_POPOVER_CONTENT'),
-			    'system-at-begin-of-head-tag-popover-content' => JText::_('SUNFW_ADVANCED_CUSTOM_AFTER_OPENING_HEAD_TAG_POPOVER_CONTENT'),
-			    'system-at-end-of-head-tag-popover-content' => JText::_('SUNFW_ADVANCED_CUSTOM_BEFORE_ENDING_HEAD_TAG_POPOVER_CONTENT'),
-			    'system-at-begin-of-body-tag-popover-content' => JText::_('SUNFW_ADVANCED_CUSTOM_AFTER_OPENING_BODY_TAG_POPOVER_CONTENT'),
-			    'system-at-end-of-body-tag-popover-content' => JText::_('SUNFW_ADVANCED_CUSTOM_BEFORE_ENDING_BODY_TAG_POPOVER_CONTENT'),
-			    'system-custom-css-files-popover-content' => JText::_('SUNFW_ADVANCED_CUSTOM_FIELS_CSS_POPOVER_CONTENT'),
-			    'system-custom-js-files-popover-content' => JText::_('SUNFW_ADVANCED_CUSTOM_FIELS_JS_POPOVER_CONTENT'),
-			    'system-custom-css-files-invalid-file-format-message' => JText::_('SUNFW_ADVANCED_CUSTOM_FIELS_CSS_INVALID_FILE_FORMAT_MESSAGE'),
-			    'add-buton-label' => JText::_('SUNFW_ADD_BUTTON_LABEL'),
-			    'enter-file-name-or-file-url' => JText::_('SUNFW_ENTER_A_FILE_NAME_OR_A_FILE_URL')
+			    'system-fav-icon-popover-content' => Text::_('SUNFW_ADVANCED_FAVICON_POPOVER_CONTENT'),
+			    'system-cdn-url-popover-content' => Text::_('SUNFW_ADVANCED_CDN_URL_POPOVER_CONTENT'),
+			    'system-compression-target-popover-content' => Text::_('SUNFW_ADVANCED_COMPRESSION_TARGET_POPOVER_CONTENT'),
+			    'system-max-compression-size-popover-content' => Text::_('SUNFW_ADVANCED_COMPRESSION_MAX_SIZE_POPOVER_CONTENT'),
+			    'system-cache-directory-popover-content' => Text::_('SUNFW_ADVANCED_CACHE_DIRECTORY_POPOVER_CONTENT'),
+			    'system-exclude-from-compression-popover-content' => Text::_('SUNFW_ADVANCED_EXLUCDE_FROM_COMPRESSION_POPOVER_CONTENT'),
+			    'system-minify-html-popover-content' => Text::_('SUNFW_ADVANCED_MINIFY_HTML_POPOVER_CONTENT'),
+			    'system-move-js-to-bottom-popover-content' => Text::_('SUNFW_ADVANCED_MOVE_JS_TO_BOTTOM_POPOVER_CONTENT'),
+			    'system-at-begin-of-head-tag-popover-content' => Text::_('SUNFW_ADVANCED_CUSTOM_AFTER_OPENING_HEAD_TAG_POPOVER_CONTENT'),
+			    'system-at-end-of-head-tag-popover-content' => Text::_('SUNFW_ADVANCED_CUSTOM_BEFORE_ENDING_HEAD_TAG_POPOVER_CONTENT'),
+			    'system-at-begin-of-body-tag-popover-content' => Text::_('SUNFW_ADVANCED_CUSTOM_AFTER_OPENING_BODY_TAG_POPOVER_CONTENT'),
+			    'system-at-end-of-body-tag-popover-content' => Text::_('SUNFW_ADVANCED_CUSTOM_BEFORE_ENDING_BODY_TAG_POPOVER_CONTENT'),
+			    'system-custom-css-files-popover-content' => Text::_('SUNFW_ADVANCED_CUSTOM_FIELS_CSS_POPOVER_CONTENT'),
+			    'system-custom-js-files-popover-content' => Text::_('SUNFW_ADVANCED_CUSTOM_FIELS_JS_POPOVER_CONTENT'),
+			    'system-custom-css-files-invalid-file-format-message' => Text::_('SUNFW_ADVANCED_CUSTOM_FIELS_CSS_INVALID_FILE_FORMAT_MESSAGE'),
+			    'add-buton-label' => Text::_('SUNFW_ADD_BUTTON_LABEL'),
+			    'enter-file-name-or-file-url' => Text::_('SUNFW_ENTER_A_FILE_NAME_OR_A_FILE_URL')
 			)
 		);
 
@@ -182,7 +184,7 @@ class SunFwAjaxSystem extends SunFwAjax
 				}
 
 				// Remove entire cache directory
-				!is_dir($cacheDirectory . '/' . $this->templateName) or JFolder::delete($cacheDirectory . '/' . $this->templateName);
+				!is_dir($cacheDirectory . '/' . $this->templateName) or SunFwFolder::delete($cacheDirectory . '/' . $this->templateName);
 			}
 		}
 		catch (Exception $e)
@@ -191,7 +193,7 @@ class SunFwAjaxSystem extends SunFwAjax
 		}
 
 		$this->setResponse(array(
-			'message' => JText::_('SUNFW_SYSTEM_CONFIG_SAVED_SUCCESSFULLY')
+			'message' => Text::_('SUNFW_SYSTEM_CONFIG_SAVED_SUCCESSFULLY')
 		));
 	}
 
@@ -203,7 +205,7 @@ class SunFwAjaxSystem extends SunFwAjax
 		{
 			$this->setResponse(array(
 				'pass' => false,
-				'message' => JText::_('SUNFW_INVALID_REQUEST')
+				'message' => Text::_('SUNFW_INVALID_REQUEST')
 			));
 
 			return;
@@ -219,7 +221,7 @@ class SunFwAjaxSystem extends SunFwAjax
 		{
 			$this->setResponse(array(
 				'pass' => false,
-				'message' => JText::_('SUNFW_DIRECTORY_NOT_FOUND')
+				'message' => Text::_('SUNFW_DIRECTORY_NOT_FOUND')
 			));
 
 			return;
@@ -231,20 +233,20 @@ class SunFwAjaxSystem extends SunFwAjax
 		{
 			$this->setResponse(array(
 				'pass' => false,
-				'message' => JText::_('SUNFW_DIRECTORY_OUT_OF_ROOT')
+				'message' => Text::_('SUNFW_DIRECTORY_OUT_OF_ROOT')
 			));
 
 			return;
 		}
 
 		// Check if directory is writable
-		$config = JFactory::getConfig();
+		$config = Factory::getConfig();
 
 		if (!$config->get('ftp_enable') and !is_writable($folder))
 		{
 			$this->setResponse(array(
 				'pass' => false,
-				'message' => JText::_('SUNFW_DIRECTORY_NOT_WRITABLE')
+				'message' => Text::_('SUNFW_DIRECTORY_NOT_WRITABLE')
 			));
 
 			return;
@@ -252,7 +254,7 @@ class SunFwAjaxSystem extends SunFwAjax
 
 		$this->setResponse(array(
 			'pass' => true,
-			'message' => JText::_('SUNFW_DIRECTORY_READY')
+			'message' => Text::_('SUNFW_DIRECTORY_READY')
 		));
 	}
 }

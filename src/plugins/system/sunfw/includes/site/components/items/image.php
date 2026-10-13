@@ -12,7 +12,10 @@
 
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
-$app = JFactory::getApplication();
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+$app = Factory::getApplication();
 $sitename = $app->get('sitename');
 $class = isset($component['settings']['prefix-class']) ? $component['settings']['prefix-class'] : '';
 $class = trim($class);
@@ -22,7 +25,7 @@ $visible_in = isset($component['settings']['visible_in']) ? $component['settings
 
 if ($image != '')
 {
-	$pathRoot = JURI::root();
+	$pathRoot = Uri::root();
 	$urlPattern = '/^(http|https)/';
 	preg_match($urlPattern, $image, $m);
 	if (count((array) $m))

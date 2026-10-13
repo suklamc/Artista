@@ -9,6 +9,8 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Language\Text;
+
 /**
  * This is a file to add template specific chrome to pagination rendering.
  *
@@ -150,27 +152,27 @@ function pagination_item_active(&$item)
 	$class = '';
 
 	// Check for "Start" item
-	if ($item->text == JText::_('JLIB_HTML_START'))
+	if ($item->text == Text::_('JLIB_HTML_START'))
 	{
-		$display = JText::_('JLIB_HTML_START');
+		$display = Text::_('JLIB_HTML_START');
 	}
 
 	// Check for "Prev" item
-	if ($item->text == JText::_('JPREV'))
+	if ($item->text == Text::_('JPREV'))
 	{
-		$display = JText::_('JPREV');
+		$display = Text::_('JPREV');
 	}
 
 	// Check for "Next" item
-	if ($item->text == JText::_('JNEXT'))
+	if ($item->text == Text::_('JNEXT'))
 	{
-		$display = JText::_('JNEXT');
+		$display = Text::_('JNEXT');
 	}
 
 	// Check for "End" item
-	if ($item->text == JText::_('JLIB_HTML_END'))
+	if ($item->text == Text::_('JLIB_HTML_END'))
 	{
-		$display = JText::_('JLIB_HTML_END');
+		$display = Text::_('JLIB_HTML_END');
 	}
 
 	// If the display object isn't set already, just render the item with its text
@@ -195,27 +197,27 @@ function pagination_item_active(&$item)
 function pagination_item_inactive(&$item)
 {
 	// Check for "Start" item
-	if ($item->text == JText::_('JLIB_HTML_START'))
+	if ($item->text == Text::_('JLIB_HTML_START'))
 	{
-		return '<li class="disabled"><a>' . JText::_('JLIB_HTML_START') . '</a></li>';
+		return '<li class="disabled"><a>' . Text::_('JLIB_HTML_START') . '</a></li>';
 	}
 
 	// Check for "Prev" item
-	if ($item->text == JText::_('JPREV'))
+	if ($item->text == Text::_('JPREV'))
 	{
-		return '<li class="disabled"><a>' .JText::_('JPREV'). '</a></li>';
+		return '<li class="disabled"><a>' .Text::_('JPREV'). '</a></li>';
 	}
 
 	// Check for "Next" item
-	if ($item->text == JText::_('JNEXT'))
+	if ($item->text == Text::_('JNEXT'))
 	{
-		return '<li class="disabled"><a>' . JText::_('JNEXT') . '</a></li>';
+		return '<li class="disabled"><a>' . Text::_('JNEXT') . '</a></li>';
 	}
 
 	// Check for "End" item
-	if ($item->text == JText::_('JLIB_HTML_END'))
+	if ($item->text == Text::_('JLIB_HTML_END'))
 	{
-		return '<li class="disabled"><a>'. JText::_('JLIB_HTML_END') .'</a></li>';
+		return '<li class="disabled"><a>'. Text::_('JLIB_HTML_END') .'</a></li>';
 	}
 
 	// Check if the item is the active page

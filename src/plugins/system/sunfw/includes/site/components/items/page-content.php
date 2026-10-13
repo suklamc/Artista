@@ -13,12 +13,14 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+
 // If hide on front-page, check if the current page is front-page.
 if (array_key_exists('show_on_front_page', $component['settings']) && !intval($component['settings']['show_on_front_page']))
 {
-	$app = JFactory::getApplication();
+	$app = Factory::getApplication();
 	$menu = $app->getMenu();
-	$lang = JFactory::getLanguage();
+	$lang = Factory::getLanguage();
 	
 	if ($menu->getActive() == $menu->getDefault($lang->getTag()))
 	{

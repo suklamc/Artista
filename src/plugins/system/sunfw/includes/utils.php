@@ -13,12 +13,17 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Environment\Browser;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 /**
  * General Utils class.
  *
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwUtils
 {
 
@@ -71,7 +76,7 @@ class SunFwUtils
 	 */
 	public static function checkSH404SEF()
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->clear();
 		$query->select('COUNT(*)');
@@ -145,7 +150,7 @@ class SunFwUtils
 	{
 		if (isset($item->tree[0]) && isset($item->tree[1]))
 		{
-			$db = JFactory::getDbo();
+			$db = Factory::getDbo();
 			$q = $db->getQuery(true);
 			
 			$q->select('lft, rgt');
@@ -218,7 +223,7 @@ class SunFwUtils
 				{
 					if (version_compare(PHP_VERSION, $content['system']['php']['minimum_version']) < 0)
 					{
-						$msg[] = JText::sprintf('SUNFW_SYSTEM_REQUIRMENT_PHP', $content['system']['php']['minimum_version']);
+						$msg[] = Text::sprintf('SUNFW_SYSTEM_REQUIRMENT_PHP', $content['system']['php']['minimum_version']);
 					}
 				}
 			}
@@ -233,7 +238,7 @@ class SunFwUtils
 	 */
 	public static function checkBrowserRequirements()
 	{
-		$jbrowser = JBrowser::getInstance();
+		$jbrowser = Browser::getInstance();
 		$version = $jbrowser->getVersion();
 		$browser = $jbrowser->getBrowser();
 		$agent = $jbrowser->getAgentString();
@@ -281,7 +286,7 @@ class SunFwUtils
 					$minimumVersion = $content['browsers'][$browser]['minimum_version'];
 					if (version_compare($version, $minimumVersion) < 0)
 					{
-						$msg[] = JText::_('SUNFW_SYSTEM_REQUIRMENT_BROWSER');
+						$msg[] = Text::_('SUNFW_SYSTEM_REQUIRMENT_BROWSER');
 					}
 				}
 			}

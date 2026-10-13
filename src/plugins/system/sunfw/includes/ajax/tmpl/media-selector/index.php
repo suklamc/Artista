@@ -14,8 +14,12 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
 // Get Joomla document object.
-$doc = JFactory::getDocument();
+$doc = Factory::getDocument();
 
 // @formatter:off
 ?>
@@ -43,7 +47,7 @@ $doc = JFactory::getDocument();
 		(function renderMediaSelector() {
 			if (window.BBMediaSelector) {
 				const config = {
-					baseURL: '<?php echo JUri::root(); ?>',
+					baseURL: '<?php echo Uri::root(); ?>',
 					getAllFiles: '<?php echo "{$this->baseUrl}&action=getListFiles"; ?>',
 					uploadFile: '<?php echo "{$this->baseUrl}&action=uploadFile"; ?>',
 					createFolder: '<?php echo "{$this->baseUrl}&action=createFolder"; ?>',
@@ -59,8 +63,8 @@ $doc = JFactory::getDocument();
 				);
 
 				var
-				updater = '<?php echo JFactory::getApplication()->input->getString('handler'); ?>',
-				fieldid = '<?php echo JFactory::getApplication()->input->getString('fieldid'); ?>';
+				updater = '<?php echo Factory::getApplication()->input->getString('handler'); ?>',
+				fieldid = '<?php echo Factory::getApplication()->input->getString('fieldid'); ?>';
 
 				if ( window.parent && (updater != '' || fieldid != '' || window.parent.jInsertFieldValue) ) {
 					var
@@ -92,7 +96,7 @@ $doc = JFactory::getDocument();
 
 						// Make sure there is a selection.
 						if ( ! selected ) {
-							return alert('<?php echo JText::_('SUNFW_MEDIA_SELECTOR_NO_FILE_SELECTED'); ?>');
+							return alert('<?php echo Text::_('SUNFW_MEDIA_SELECTOR_NO_FILE_SELECTED'); ?>');
 						}
 
 						try {

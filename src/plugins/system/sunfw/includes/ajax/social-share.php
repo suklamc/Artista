@@ -13,12 +13,16 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
 /**
  * Handle Ajax requests from social share pane.
  *
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwAjaxSocialShare extends SunFwAjax
 {
 
@@ -32,7 +36,7 @@ class SunFwAjaxSocialShare extends SunFwAjax
 	public function getAction($return = false)
 	{
 		// Get root URL.
-		$root = JUri::root(true);
+		$root = Uri::root(true);
 
 		/**
 		 * Get social share data.
@@ -48,33 +52,33 @@ class SunFwAjaxSocialShare extends SunFwAjax
 			'settings' => SunFwHelper::findTemplateAdminJsonSettings(
 				JPATH_ROOT . '/plugins/system/sunfw/assets/joomlashine/admin/js/social-share', 'settings.json', true),
 			'textMapping' => array(
-				'social-share' => JText::_('SUNFW_SOCIAL_SHARE'),
-				'save-social-share' => JText::_('SUNFW_SAVE_SOCIAL_SHARE'),
-				'social-share-content-title' => JText::_('SUNFW_SOCIAL_SHARE_PREVIEW_TITLE'),
-				'social-share-not-enabled' => JText::_('SUNFW_SOCIAL_SHARE_NOT_ENABLED_MESSAGE'),
-				'social-share-settings' => JText::_('SUNFW_SOCIAL_SHARE_SETTINGS'),
-				'enable-social-share' => JText::_('SUNFW_ENABLE_SOCIAL_SHARE'),
-				'enable-social-share-hint' => JText::_('SUNFW_ENABLE_SOCIAL_SHARE_HINT'),
-				'social-share-text' => JText::_('SUNFW_SOCIAL_SHARE_TEXT'),
-				'social-share-text-hint' => JText::_('SUNFW_SOCIAL_SHARE_TEXT_HINT'),
-				'social-share-buttons' => JText::_('SUNFW_SOCIAL_SHARE_BUTTONS'),
-				'social-share-buttons-hint' => JText::_('SUNFW_SOCIAL_SHARE_BUTTONS_HINT'),
-				'social-share-buttons-position' => JText::_('SUNFW_SOCIAL_SHARE_BUTTONS_POSITION'),
-				'social-share-buttons-position-hint' => JText::_('SUNFW_SOCIAL_SHARE_BUTTONS_POSITION_HINT'),
-				'top-left' => JText::_('SUNFW_TOP_LEFT'),
-				'top-center' => JText::_('SUNFW_TOP_CENTER'),
-				'top-right' => JText::_('SUNFW_TOP_RIGHT'),
-				'bottom-left' => JText::_('SUNFW_BOTTOM_LEFT'),
-				'bottom-center' => JText::_('SUNFW_BOTTOM_CENTER'),
-				'bottom-right' => JText::_('SUNFW_BOTTOM_RIGHT'),
-				'social-share-category' => JText::_('SUNFW_SOCIAL_SHARE_CATEGORY'),
-				'social-share-category-hint' => JText::_('SUNFW_SOCIAL_SHARE_CATEGORY_HINT'),
-				'select-content-category' => JText::_('SUNFW_SELECT_CONTENT_CATEGORY'),
-			    'enable-social-share-popover-content' => JText::_('SUNFW_ENABLE_SOCIAL_SHARE_POPOVER_CONTENT'),
-			    'social-share-text-popover-content' => JText::_('SUNFW_SOCIAL_SHARE_TEXT_POPOVER_CONTENT'),
-			    'social-share-buttons-popover-content' => JText::_('SUNFW_SOCIAL_SHARE_BUTTONS_POPOVER_CONTENT'),
-			    'social-share-buttons-position-popover-content' => JText::_('SUNFW_SOCIAL_SHARE_BUTTONS_POSITION_POPOVER_CONTENT'),
-			    'social-share-category-popover-content' => JText::_('SUNFW_SOCIAL_SHARE_CATEGORY_POPOVER_CONTENT'),
+				'social-share' => Text::_('SUNFW_SOCIAL_SHARE'),
+				'save-social-share' => Text::_('SUNFW_SAVE_SOCIAL_SHARE'),
+				'social-share-content-title' => Text::_('SUNFW_SOCIAL_SHARE_PREVIEW_TITLE'),
+				'social-share-not-enabled' => Text::_('SUNFW_SOCIAL_SHARE_NOT_ENABLED_MESSAGE'),
+				'social-share-settings' => Text::_('SUNFW_SOCIAL_SHARE_SETTINGS'),
+				'enable-social-share' => Text::_('SUNFW_ENABLE_SOCIAL_SHARE'),
+				'enable-social-share-hint' => Text::_('SUNFW_ENABLE_SOCIAL_SHARE_HINT'),
+				'social-share-text' => Text::_('SUNFW_SOCIAL_SHARE_TEXT'),
+				'social-share-text-hint' => Text::_('SUNFW_SOCIAL_SHARE_TEXT_HINT'),
+				'social-share-buttons' => Text::_('SUNFW_SOCIAL_SHARE_BUTTONS'),
+				'social-share-buttons-hint' => Text::_('SUNFW_SOCIAL_SHARE_BUTTONS_HINT'),
+				'social-share-buttons-position' => Text::_('SUNFW_SOCIAL_SHARE_BUTTONS_POSITION'),
+				'social-share-buttons-position-hint' => Text::_('SUNFW_SOCIAL_SHARE_BUTTONS_POSITION_HINT'),
+				'top-left' => Text::_('SUNFW_TOP_LEFT'),
+				'top-center' => Text::_('SUNFW_TOP_CENTER'),
+				'top-right' => Text::_('SUNFW_TOP_RIGHT'),
+				'bottom-left' => Text::_('SUNFW_BOTTOM_LEFT'),
+				'bottom-center' => Text::_('SUNFW_BOTTOM_CENTER'),
+				'bottom-right' => Text::_('SUNFW_BOTTOM_RIGHT'),
+				'social-share-category' => Text::_('SUNFW_SOCIAL_SHARE_CATEGORY'),
+				'social-share-category-hint' => Text::_('SUNFW_SOCIAL_SHARE_CATEGORY_HINT'),
+				'select-content-category' => Text::_('SUNFW_SELECT_CONTENT_CATEGORY'),
+			    'enable-social-share-popover-content' => Text::_('SUNFW_ENABLE_SOCIAL_SHARE_POPOVER_CONTENT'),
+			    'social-share-text-popover-content' => Text::_('SUNFW_SOCIAL_SHARE_TEXT_POPOVER_CONTENT'),
+			    'social-share-buttons-popover-content' => Text::_('SUNFW_SOCIAL_SHARE_BUTTONS_POPOVER_CONTENT'),
+			    'social-share-buttons-position-popover-content' => Text::_('SUNFW_SOCIAL_SHARE_BUTTONS_POSITION_POPOVER_CONTENT'),
+			    'social-share-category-popover-content' => Text::_('SUNFW_SOCIAL_SHARE_CATEGORY_POPOVER_CONTENT'),
 
 			)
 		);
@@ -147,7 +151,7 @@ class SunFwAjaxSocialShare extends SunFwAjax
 		}
 
 		$this->setResponse(array(
-			'message' => JText::_('SUNFW_SOCIAL_SHARE_SAVED_SUCCESSFULLY')
+			'message' => Text::_('SUNFW_SOCIAL_SHARE_SAVED_SUCCESSFULLY')
 		));
 	}
 }

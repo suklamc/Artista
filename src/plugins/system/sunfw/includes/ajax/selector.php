@@ -13,22 +13,28 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+
 /**
  * Menu item selector widget.
  *
  * @package  SUN Framework
  * @since    1.0.0
  */
+#[\AllowDynamicProperties]
 class SunFwAjaxSelector extends SunFwAjax
 {
 
 	public function indexAction()
 	{
 		// Get Joomla document object.
-		$doc = JFactory::getDocument();
+		$doc = Factory::getDocument();
 
 		// Get base URLs.
-		$root = JURI::root(true);
+		$root = Uri::root(true);
 
 		// Load required stylesheets.
 		$doc->addStylesheet("{$root}/administrator/templates/" . (PlgSystemSunFw::$template ? PlgSystemSunFw::$template->template : $this->app->getTemplate()) . '/css/template.css');
@@ -42,7 +48,7 @@ class SunFwAjaxSelector extends SunFwAjax
 
 		// Load required scripts.
 		SunFwCompat::loadJquery();
-		JHtml::_('behavior.core');
+		HTMLHelper::_('behavior.core');
 
 		// Get items based on specified filters.
 		if (!isset($this->items))
@@ -64,13 +70,13 @@ class SunFwAjaxSelector extends SunFwAjax
 	 */
 	public function renderStatusOptions($name, $selected, $parameters = '')
 	{
-		echo JHTML::_('select.genericlist',
+		echo HTMLHelper::_('select.genericlist',
 			array(
-				JHtml::_('select.option', '', JText::_('JOPTION_SELECT_PUBLISHED')),
-				JHtml::_('select.option', '-2', JText::_('JTRASHED')),
-				JHtml::_('select.option', '0', JText::_('JUNPUBLISHED')),
-				JHtml::_('select.option', '1', JText::_('JPUBLISHED')),
-				JHtml::_('select.option', '*', JText::_('JALL'))
+				HTMLHelper::_('select.option', '', Text::_('JOPTION_SELECT_PUBLISHED')),
+				HTMLHelper::_('select.option', '-2', Text::_('JTRASHED')),
+				HTMLHelper::_('select.option', '0', Text::_('JUNPUBLISHED')),
+				HTMLHelper::_('select.option', '1', Text::_('JPUBLISHED')),
+				HTMLHelper::_('select.option', '*', Text::_('JALL'))
 			), $name, $parameters, 'value', 'text', $selected);
 	}
 
@@ -85,9 +91,9 @@ class SunFwAjaxSelector extends SunFwAjax
 	 */
 	public function renderAccessOptions($name, $selected, $parameters = '')
 	{
-		echo JHtml::_('access.level', $name, $selected, $parameters,
+		echo HTMLHelper::_('access.level', $name, $selected, $parameters,
 			array(
-				JHtml::_('select.option', '', JText::_('JOPTION_SELECT_ACCESS'))
+				HTMLHelper::_('select.option', '', Text::_('JOPTION_SELECT_ACCESS'))
 			));
 	}
 
@@ -102,12 +108,12 @@ class SunFwAjaxSelector extends SunFwAjax
 	 */
 	public function renderLanguageOptions($name, $selected, $parameters = '')
 	{
-		echo JHTML::_('select.genericlist',
+		echo HTMLHelper::_('select.genericlist',
 			array_merge(
 				array(
-					JHtml::_('select.option', '', JText::_('JOPTION_SELECT_LANGUAGE')),
-					JHtml::_('select.option', '*', JText::_('JALL'))
-				), JHtml::_('contentlanguage.existing')), $name, $parameters, 'value', 'text', $selected);
+					HTMLHelper::_('select.option', '', Text::_('JOPTION_SELECT_LANGUAGE')),
+					HTMLHelper::_('select.option', '*', Text::_('JALL'))
+				), HTMLHelper::_('contentlanguage.existing')), $name, $parameters, 'value', 'text', $selected);
 	}
 
 	/**

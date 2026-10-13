@@ -16,6 +16,7 @@ namespace Leafo\ScssPhp\Compiler;
  *
  * @author Anthon Pang <anthon.pang@gmail.com>
  */
+#[\AllowDynamicProperties]
 class Environment
 {
     /**

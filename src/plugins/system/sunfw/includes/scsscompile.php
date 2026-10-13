@@ -21,7 +21,10 @@ defined('_JEXEC') or die('Restricted access');
  */
 
 use Leafo\ScssPhp\Compiler;
+use Joomla\CMS\Language\Text;
+use Joomla\Filesystem\Path;
 
+#[\AllowDynamicProperties]
 class SunFwScsscompile
 {
 
@@ -210,12 +213,12 @@ class SunFwScsscompile
 	 */
 	private function saveCssFile($templateName, $compiledFileName, $string_css)
 	{
-		$file = JPath::clean(JPATH_SITE . "/templates/{$templateName}/" . $compiledFileName . ".css");
+		$file = Path::clean(JPATH_SITE . "/templates/{$templateName}/" . $compiledFileName . ".css");
 		
-		if (!JFile::exists($file))
+		if (!SunFwFile::exists($file))
 		{
 			$content = '';
-			$rw = JFile::write($file, $content);
+			$rw = SunFwFile::write($file, $content);
 			
 			if (!$rw)
 			{
@@ -230,20 +233,20 @@ class SunFwScsscompile
 			
 			chown($file, $user);
 			
-			if (!JPath::setPermissions($file, '0644'))
+			if (!Path::setPermissions($file, '0644'))
 			{
-				throw new Exception(JText::sprintf('SUNFW_FILE_NOT_WRITABLE', $compiledFileName . ".css"));
+				throw new Exception(Text::sprintf('SUNFW_FILE_NOT_WRITABLE', $compiledFileName . ".css"));
 			}
 			
-			if (!JPath::isOwner($file))
+			if (!Path::isOwner($file))
 			{
-				throw new Exception(JText::_('SUNFW_CHECK_FILE_OWNERSHIP'));
+				throw new Exception(Text::_('SUNFW_CHECK_FILE_OWNERSHIP'));
 			}
 		}
 		
-		if (!JFile::write($file, $string_css))
+		if (!SunFwFile::write($file, $string_css))
 		{
-			throw new Exception(JText::sprintf('SUNFW_ERROR_FAILED_TO_SAVE_FILENAME', '*.css'));
+			throw new Exception(Text::sprintf('SUNFW_ERROR_FAILED_TO_SAVE_FILENAME', '*.css'));
 		}
 		
 		return true;

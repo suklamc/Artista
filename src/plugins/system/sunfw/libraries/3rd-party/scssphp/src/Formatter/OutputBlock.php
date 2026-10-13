@@ -16,6 +16,7 @@ namespace Leafo\ScssPhp\Formatter;
  *
  * @author Anthon Pang <anthon.pang@gmail.com>
  */
+#[\AllowDynamicProperties]
 class OutputBlock
 {
     /**
